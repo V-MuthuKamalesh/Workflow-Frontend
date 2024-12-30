@@ -1,4 +1,13 @@
+import BasicAuthSignUp from "@/app/_components/auth/BasicAuthSignUp";
+import Google from "@/app/_components/svg/Google";
 import Link from "next/link";
+
+export function generateMetadata() {
+  return {
+    title: "WorkFlow | Signup",
+    description: "WorkFlow Signup Page",
+  };
+}
 
 export default function SignUpPage() {
   return (
@@ -11,8 +20,9 @@ export default function SignUpPage() {
           Get started - it&apos;s free. No Credit card needed.
         </p>
 
-        <button className="w-full border border-gray-200 rounded-sm py-2 hover:bg-gray-100">
-          Continue with Google
+        <button className="w-full border border-gray-200 rounded-sm py-2 hover:bg-gray-100 flex items-center justify-center space-x-1">
+          <Google />
+          <span>Continue with Google</span>
         </button>
 
         <div className="flex items-center my-4 w-full">
@@ -21,16 +31,7 @@ export default function SignUpPage() {
           <hr className="flex-grow border-gray-300" />
         </div>
 
-        <form className="flex flex-col items-center justify-center space-y-4 w-full">
-          <input
-            className="w-full outline-none border border-gray-200 p-2 rounded-sm"
-            type="email"
-            placeholder="name@company.com"
-          />
-          <button className="w-full text-white bg-blue-600 hover:bg-blue-700 border border-gray-200 rounded-sm py-2">
-            Continue
-          </button>
-        </form>
+        <BasicAuthSignUp />
 
         <p className="mt-10 text-sm text-center">
           By proceeding, you agree to the{" "}
