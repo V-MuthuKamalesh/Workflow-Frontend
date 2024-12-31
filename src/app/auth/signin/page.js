@@ -1,5 +1,7 @@
 import BasicAuthSignIn from "@/app/_components/auth/BasicAuthSignIn";
 import Google from "@/app/_components/svg/Google";
+import GoogleAuthButton from "@/app/_components/UI/GoogleAuthButton";
+import SeparatorLine from "@/app/_components/UI/SeparatorLine";
 import Link from "next/link";
 
 export function generateMetadata() {
@@ -16,21 +18,12 @@ export default function SignInPage() {
         <h1 className="text-3xl md:text-4xl font-light text-center">
           Log in to your account
         </h1>
-
         <BasicAuthSignIn />
-
-        <div className="flex items-center my-6 w-full">
-          <hr className="flex-grow border-gray-300" />
-          <p className="px-2 text-gray-600 text-xs md:text-sm">
-            Or Sign in with
-          </p>
-          <hr className="flex-grow border-gray-300" />
-        </div>
-
-        <button className="w-full md:w-1/4 border border-gray-200 rounded-sm py-2 hover:bg-gray-100 flex items-center justify-center space-x-2">
-          <Google />
-          <span className="text-sm md:text-base">Google</span>
-        </button>
+        <SeparatorLine text="Or Sign in with" />
+        <GoogleAuthButton
+          text="Google"
+          className="w-full md:w-1/4 border border-gray-200 rounded-sm py-2 hover:bg-gray-100 flex items-center justify-center space-x-2"
+        />
       </div>
 
       <p className="mt-4 text-xs md:text-sm text-center">

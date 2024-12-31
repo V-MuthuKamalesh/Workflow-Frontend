@@ -2,6 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Button from "../UI/Button";
+import Input from "../UI/Input";
 
 export default function BasicAuthSignIn() {
   const [formData, setFormData] = useState({
@@ -39,11 +41,8 @@ export default function BasicAuthSignIn() {
       onSubmit={handleSubmit}
       className="w-full max-w-sm flex flex-col items-center mt-8"
     >
-      <p className="text-sm md:text-base text-left w-full">
-        Your Email Address
-      </p>
-      <input
-        className="w-full outline-none border border-gray-300 p-2 rounded-sm mt-1 mb-4 text-sm md:text-base"
+      <Input
+        title="Your Email Address"
         type="email"
         placeholder="name@company.com"
         name="email"
@@ -51,12 +50,11 @@ export default function BasicAuthSignIn() {
         onChange={handleFormDataChange}
         required
       />
-
-      <p className="text-sm md:text-base text-left w-full">Your Password</p>
-      <input
-        className="w-full outline-none border border-gray-300 p-2 rounded-sm mt-1 mb-4 text-sm md:text-base"
+      <Input
+        title="Your Password"
         type="password"
         placeholder="Password"
+        minLength="5"
         name="password"
         value={formData.password}
         onChange={handleFormDataChange}
@@ -67,9 +65,7 @@ export default function BasicAuthSignIn() {
         <span className="text-red-600 text-xs">Invalid Credentials</span>
       )}
 
-      <button className="w-full text-white bg-blue-600 hover:bg-blue-700 rounded-sm py-2 text-sm md:text-base">
-        Log In
-      </button>
+      <Button buttonText="Log In" />
     </form>
   );
 }

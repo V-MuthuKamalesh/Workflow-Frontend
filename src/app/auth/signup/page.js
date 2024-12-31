@@ -1,5 +1,7 @@
 import BasicAuthSignUp from "@/app/_components/auth/BasicAuthSignUp";
 import Google from "@/app/_components/svg/Google";
+import GoogleAuthButton from "@/app/_components/UI/GoogleAuthButton";
+import SeparatorLine from "@/app/_components/UI/SeparatorLine";
 import Link from "next/link";
 
 export function generateMetadata() {
@@ -19,18 +21,11 @@ export default function SignUpPage() {
         <p className="text-base md:text-lg mb-8 text-center">
           Get started - it&apos;s free. No Credit card needed.
         </p>
-
-        <button className="w-full border border-gray-200 rounded-sm py-2 hover:bg-gray-100 flex items-center justify-center space-x-1">
-          <Google />
-          <span>Continue with Google</span>
-        </button>
-
-        <div className="flex items-center my-4 w-full">
-          <hr className="flex-grow border-gray-300" />
-          <p className="px-2 text-sm md:text-base">Or</p>
-          <hr className="flex-grow border-gray-300" />
-        </div>
-
+        <GoogleAuthButton
+          text="Continue with Google"
+          className="w-full border border-gray-200 rounded-sm py-2 hover:bg-gray-100 flex items-center justify-center space-x-1"
+        />
+        <SeparatorLine text="Or" />
         <BasicAuthSignUp />
 
         <p className="mt-10 text-sm text-center">

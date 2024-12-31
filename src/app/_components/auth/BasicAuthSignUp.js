@@ -2,6 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Button from "../UI/Button";
+import Input from "../UI/Input";
 
 export default function BasicAuthSignUp() {
   const [email, setEmail] = useState("");
@@ -15,13 +17,14 @@ export default function BasicAuthSignUp() {
 
     const response = { status: 200 }; // Response from server
 
-    // Email already exists
+    // Email already exists in the database
     if (response.status === 409) {
       setError(true);
       return;
     }
 
-    // If email not exists
+    // If email not exists in the database
+    localStorage.setItem("email", email);
     router.push("/users/account-creation");
   }
 
@@ -35,7 +38,7 @@ export default function BasicAuthSignUp() {
       onSubmit={handleEmailSubmit}
       className="flex flex-col items-center justify-center space-y-4 w-full"
     >
-      <input
+      <Input
         className="w-full outline-none border border-gray-300 p-2 rounded-sm"
         type="email"
         placeholder="name@company.com"
@@ -48,9 +51,7 @@ export default function BasicAuthSignUp() {
       {error && (
         <span className="text-red-600 text-xs">Email Already Exists!</span>
       )}
-      <button className="w-full text-white bg-blue-600 hover:bg-blue-700 border border-gray-200 rounded-sm py-2">
-        Continue
-      </button>
+      <Button buttonText="Continue" />
     </form>
   );
 }
