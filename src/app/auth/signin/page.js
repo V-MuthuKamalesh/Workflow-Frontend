@@ -1,6 +1,5 @@
 import BasicAuthSignIn from "@/app/_components/auth/BasicAuthSignIn";
-import Google from "@/app/_components/svg/Google";
-import GoogleAuthButton from "@/app/_components/UI/GoogleAuthButton";
+import GoogleAuthButton from "@/app/_components/googleAuth/GoogleAuthButton";
 import SeparatorLine from "@/app/_components/UI/SeparatorLine";
 import Link from "next/link";
 
@@ -22,6 +21,7 @@ export default function SignInPage() {
         <SeparatorLine text="Or Sign in with" />
         <GoogleAuthButton
           text="Google"
+          type="login"
           className="w-full md:w-1/4 border border-gray-200 rounded-sm py-2 hover:bg-gray-100 flex items-center justify-center space-x-2"
         />
       </div>

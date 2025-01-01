@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Roboto } from "next/font/google";
 
 import "./globals.css";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const roboto = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
@@ -27,7 +28,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${roboto.className} ${geistMono.variable} antialiased`}>
-        {children}
+        <GoogleOAuthProvider clientId={process.env.CLIENT_ID}>
+          {children}
+        </GoogleOAuthProvider>
       </body>
     </html>
   );

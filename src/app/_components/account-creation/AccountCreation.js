@@ -4,13 +4,16 @@ import { useState } from "react";
 import Input from "../UI/Input";
 import Button from "../UI/Button";
 import { workflowBackend } from "@/app/_utils/axios/axiosConfig";
+import { useRouter } from "next/navigation";
 
 export default function AccountCreation() {
   const [formData, setFormData] = useState({
     fullName: "",
     password: "",
   });
-  
+  const [errorMessage, setErrorMessage] = useState("");
+  const router = useRouter();
+
   function handleChange(event) {
     setFormData((prevData) => ({
       ...prevData,
@@ -29,8 +32,10 @@ export default function AccountCreation() {
       });
 
       console.log(response);
+      localStorage.removeItem("email");
+      router.push("/auth/signin");
     } catch (error) {
-      console.error(error.response.data.message);
+      setErrorMessage("Something went wrong. Please try again.");
     }
 
     setFormData({
@@ -45,6 +50,9 @@ export default function AccountCreation() {
         onSubmit={handleSubmit}
         className="w-full max-w-lg bg-white shadow-md rounded-lg p-6 sm:p-8"
       >
+        {errorMessage !== "" && (
+          <span className="text-red-600 text-xs">{errorMessage}</span>
+        )}
         <h1 className="text-2xl sm:text-3xl mb-4">Create your account</h1>
 
         <Input

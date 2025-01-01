@@ -1,6 +1,5 @@
 import BasicAuthSignUp from "@/app/_components/auth/BasicAuthSignUp";
-import Google from "@/app/_components/svg/Google";
-import GoogleAuthButton from "@/app/_components/UI/GoogleAuthButton";
+import GoogleAuthButton from "@/app/_components/googleAuth/GoogleAuthButton";
 import SeparatorLine from "@/app/_components/UI/SeparatorLine";
 import Link from "next/link";
 
@@ -23,6 +22,7 @@ export default function SignUpPage() {
         </p>
         <GoogleAuthButton
           text="Continue with Google"
+          type="login"
           className="w-full border border-gray-200 rounded-sm py-2 hover:bg-gray-100 flex items-center justify-center space-x-1"
         />
         <SeparatorLine text="Or" />
