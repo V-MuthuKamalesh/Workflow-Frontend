@@ -4,33 +4,36 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Button from "../UI/Button";
 import Input from "../UI/Input";
+import { workflowBackend } from "@/app/_utils/axios/axiosConfig";
 
 export default function BasicAuthSignUp() {
   const [email, setEmail] = useState("");
-  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
 
   async function handleEmailSubmit(event) {
     event.preventDefault();
 
-    // TODO: Backend Email Verification
+    // Backend Email Verification
+    try {
+      const response = await workflowBackend.post("/users/email", { email });
+      console.log(response);
 
-    const response = { status: 200 }; // Response from server
-
-    // Email already exists in the database
-    if (response.status === 409) {
-      setError(true);
-      return;
+      localStorage.setItem("email", email);
+      router.push("/users/account-creation");
+    } catch (error) {
+      console.log(error);
+      if (error.response?.status === 409) {
+        setErrorMessage("Email already exists. Please try another one.");
+      } else {
+        setErrorMessage("Something went wrong. Please try again.");
+      }
     }
-
-    // If email not exists in the database
-    localStorage.setItem("email", email);
-    router.push("/users/account-creation");
   }
 
   function handleEmailChange(event) {
     setEmail(event.target.value);
-    setError(false);
+    setErrorMessage("");
   }
 
   return (
@@ -48,8 +51,8 @@ export default function BasicAuthSignUp() {
         // autoComplete="off"
         required
       />
-      {error && (
-        <span className="text-red-600 text-xs">Email Already Exists!</span>
+      {errorMessage !== "" && (
+        <span className="text-red-600 text-xs">{errorMessage}</span>
       )}
       <Button buttonText="Continue" />
     </form>

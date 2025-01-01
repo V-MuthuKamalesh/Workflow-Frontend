@@ -3,13 +3,14 @@
 import { useState } from "react";
 import Input from "../UI/Input";
 import Button from "../UI/Button";
+import { workflowBackend } from "@/app/_utils/axios/axiosConfig";
 
 export default function AccountCreation() {
   const [formData, setFormData] = useState({
     fullName: "",
     password: "",
   });
-
+  
   function handleChange(event) {
     setFormData((prevData) => ({
       ...prevData,
@@ -17,10 +18,20 @@ export default function AccountCreation() {
     }));
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
-    console.log(formData);
+    try {
+      const response = await workflowBackend.post("/users/signup", {
+        email: localStorage.getItem("email"),
+        password: formData.password,
+        fullname: formData.fullName,
+      });
+
+      console.log(response);
+    } catch (error) {
+      console.error(error.response.data.message);
+    }
 
     setFormData({
       fullName: "",
