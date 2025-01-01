@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Input from "../UI/Input";
 import Button from "../UI/Button";
-import { workflowBackend } from "@/app/_utils/axios/axiosConfig";
+import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 import { useRouter } from "next/navigation";
 
 export default function AccountCreation() {

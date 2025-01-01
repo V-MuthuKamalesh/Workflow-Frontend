@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Button from "../UI/Button";
 import Input from "../UI/Input";
-import { workflowBackend } from "@/app/_utils/axios/axiosConfig";
+import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 
 export default function BasicAuthSignUp() {
   const [email, setEmail] = useState("");
