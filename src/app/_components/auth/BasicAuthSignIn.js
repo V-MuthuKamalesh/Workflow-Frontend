@@ -20,9 +20,13 @@ export default function BasicAuthSignIn() {
     try {
       const response = await workflowBackend.post("/users/login", formData);
 
-      console.log(response);
+      const userLoginInfo = {
+        username: response.data.userName,
+        token: response.data.token,
+      };
 
       if (response.status === 200) {
+        localStorage.setItem("userLoginInfo", JSON.stringify(userLoginInfo));
         router.push("/");
       }
     } catch (error) {

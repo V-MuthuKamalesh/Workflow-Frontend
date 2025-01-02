@@ -11,14 +11,23 @@ export default function GoogleAuthButton({ text, className, type }) {
 
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      const userInfo = await fetchUserInfo(
+      const userInfoFromGoogle = await fetchUserInfo(
         tokenResponse.token_type,
         tokenResponse.access_token
       );
 
-      const response = await workflowBackend.post("/users/oauth", userInfo);
+      const response = await workflowBackend.post(
+        "/users/oauth",
+        userInfoFromGoogle
+      );
+
+      const userLoginInfo = {
+        username: response.data.userName,
+        token: response.data.token,
+      };
 
       if (response.status === 200) {
+        localStorage.setItem("userLoginInfo", JSON.stringify(userLoginInfo));
         router.push("/");
       }
     },
