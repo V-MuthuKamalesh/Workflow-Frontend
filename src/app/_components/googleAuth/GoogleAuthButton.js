@@ -13,10 +13,7 @@ export default function GoogleAuthButton({ text, className, type }) {
         tokenResponse.access_token
       );
 
-      const response = await workflowBackend.post("/users/oauth", {
-        email: userInfo.email,
-        name: userInfo.name,
-      });
+      const response = await workflowBackend.post("/users/oauth", userInfo);
 
       const data = await response.json();
 

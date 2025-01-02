@@ -3,7 +3,6 @@ import { Roboto } from "next/font/google";
 
 import "./globals.css";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import Header from "./_components/header/Header";
 
 const roboto = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
