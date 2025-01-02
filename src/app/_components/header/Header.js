@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Header() {
   return (
-    <header className="bg-white text-gray-700 h-14 flex items-center justify-between px-6 md:px-24">
+    <header className="bg-white text-gray-700 h-14 flex items-center justify-between px-6 md:px-24 sticky top-0 z-50">
       <nav className="flex items-center justify-between w-full">
         <h1 className="text-slate-800 text-3xl font-bold">WorkFlow</h1>
 
