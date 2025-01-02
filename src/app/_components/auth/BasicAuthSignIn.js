@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Button from "../UI/Button";
 import Input from "../UI/Input";
+import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 
 export default function BasicAuthSignIn() {
   const [formData, setFormData] = useState({
@@ -13,20 +14,20 @@ export default function BasicAuthSignIn() {
   const [error, setError] = useState(false);
   const router = useRouter();
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
-    // TODO: Backend Signin
-    const response = { status: 200 };
+    try {
+      const response = await workflowBackend.post("/users/login", formData);
 
-    setFormData({ email: "", password: "" });
+      console.log(response);
 
-    if (response.status === 409) {
+      if (response.status === 200) {
+        router.push("/");
+      }
+    } catch (error) {
       setError(true);
-      return;
     }
-
-    router.push("/dashboard");
   }
 
   function handleFormDataChange(event) {
