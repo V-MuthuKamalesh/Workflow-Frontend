@@ -1,5 +1,5 @@
 import BasicAuthSignIn from "@/app/_components/auth/BasicAuthSignIn";
-import GoogleAuthButton from "@/app/_components/googleAuth/GoogleAuthButton";
+import GoogleAuthButton from "@/app/_components/auth/GoogleAuthButton";
 import SeparatorLine from "@/app/_components/UI/SeparatorLine";
 import Link from "next/link";
 

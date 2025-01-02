@@ -10,7 +10,7 @@ export default function HomePage() {
             Streamline Your Goals with Our WorkFlow <br /> A Project Management
             Platform
           </h1>
-          <p>
+          <p className="text-center">
             Our innovative platform offers a robust solution to help you stay
             organized, focused, and on track to achieve your strategic
             objectives.
