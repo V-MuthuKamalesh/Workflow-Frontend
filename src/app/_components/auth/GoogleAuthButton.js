@@ -21,13 +21,13 @@ export default function GoogleAuthButton({ text, className, type }) {
         userInfoFromGoogle
       );
 
-      const userLoginInfo = {
-        username: response.data.userName,
-        token: response.data.token,
-      };
-
       if (response.status === 200) {
-        localStorage.setItem("userLoginInfo", JSON.stringify(userLoginInfo));
+        Cookies.set("authToken", response.data.token, {
+          path: "http://localhost:3001/",
+          secure: true,
+          sameSite: "strict",
+          expires: 1,
+        });
         router.push("/");
       }
     },
