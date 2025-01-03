@@ -1,7 +1,7 @@
 export default async function DashboardPage({ params }) {
-  const { module } = await params;
+  const { view } = await params;
 
-  console.log(module);
+  console.log(view);
 
   return <section className="h-screen"></section>;
 }
