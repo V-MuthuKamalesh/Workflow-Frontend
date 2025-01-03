@@ -5,6 +5,7 @@ import Google from "../svg/Google";
 import { fetchUserInfo } from "@/app/_utils/api/googleAuth";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 import { useRouter } from "next/navigation";
+import { setCookies } from "@/app/_utils/helpers/cookies";
 
 export default function GoogleAuthButton({ text, className, type }) {
   const router = useRouter();
@@ -21,13 +22,10 @@ export default function GoogleAuthButton({ text, className, type }) {
         userInfoFromGoogle
       );
 
+      console.log(response);
+
       if (response.status === 200) {
-        Cookies.set("authToken", response.data.token, {
-          path: "http://localhost:3001/",
-          secure: true,
-          sameSite: "strict",
-          expires: 1,
-        });
+        setCookies("authToken", response.data.token, 1);
         router.push("/");
       }
     },

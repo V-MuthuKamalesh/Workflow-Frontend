@@ -6,6 +6,7 @@ import Button from "../UI/Button";
 import Input from "../UI/Input";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 import Cookies from "js-cookie";
+import { setCookies } from "@/app/_utils/helpers/cookies";
 
 export default function BasicAuthSignIn() {
   const [formData, setFormData] = useState({
@@ -21,13 +22,10 @@ export default function BasicAuthSignIn() {
     try {
       const response = await workflowBackend.post("/users/login", formData);
 
+      console.log(response);
+
       if (response.status === 200) {
-        Cookies.set("authToken", response.data.token, {
-          path: "http://localhost:3001/",
-          secure: true,
-          sameSite: "strict",
-          expires: 1,
-        });
+        setCookies("authToken", response.data.token, 1);
         router.push("/");
       }
     } catch (error) {
