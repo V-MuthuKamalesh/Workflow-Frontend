@@ -10,6 +10,7 @@ export default function BoardCard({ workspaceName, boardName }) {
         alt="board"
         height={500}
         width={500}
+        priority
       />
       <div className="flex flex-col space-y-1 mt-2 ml-2">
         <h1 className="text-lg font-medium flex items-center justify-between">

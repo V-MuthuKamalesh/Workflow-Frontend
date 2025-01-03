@@ -1,6 +1,7 @@
 "use client";
 
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
+import Cookies from "js-cookie";
 import { useState } from "react";
 
 export default function WorkspaceModal({ onClose }) {
@@ -9,7 +10,7 @@ export default function WorkspaceModal({ onClose }) {
   async function handleWorkspaceCreation() {
     try {
       const response = await workflowBackend.post("/work/createWorkspace", {
-        createdBy: localStorage.getItem("userId"),
+        createdBy: Cookies.get("userId"),
         workspaceName,
       });
 
