@@ -1,12 +1,25 @@
 "use client";
 
+import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 import { useState } from "react";
 
 export default function WorkspaceModal({ onClose }) {
   const [workspaceName, setWorkspaceName] = useState("");
 
-  function handleWorkspaceCreation() {
-    console.log("Workspace");
+  async function handleWorkspaceCreation() {
+    try {
+      const response = await workflowBackend.post("/work/createWorkspace", {
+        createdBy: localStorage.getItem("userId"),
+        workspaceName,
+      });
+
+      if (response.status === 201) {
+        console.log("Workspace created", response.data);
+        onClose();
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
