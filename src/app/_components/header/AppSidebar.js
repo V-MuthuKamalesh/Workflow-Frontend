@@ -16,6 +16,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
+import CreateWorkspaceButton from "../workspaces/CreateWorkspaceButton";
 
 const items = [
   {
@@ -67,6 +68,7 @@ export default function AppSidebar({ moduleName }) {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <CreateWorkspaceButton />
               <SidebarMenuItem>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
