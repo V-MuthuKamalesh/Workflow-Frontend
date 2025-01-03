@@ -51,6 +51,7 @@ export default function AppSidebar({ module }) {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
+          <h1 className="text-slate-800 text-3xl font-bold ml-20">WorkFlow</h1>
           <SidebarGroupLabel>{module}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>

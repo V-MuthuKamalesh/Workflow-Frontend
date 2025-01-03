@@ -1,6 +1,6 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import AppSidebar from "@/app/_components/UI/AppSidebar";
-import Header from "@/app/_components/header/Header";
+import AppSidebar from "@/app/_components/header/AppSidebar";
+import AppHeader from "@/app/_components/header/AppHeader";
 
 export default async function Layout({ children, params }) {
   const { module } = await params;
@@ -11,12 +11,17 @@ export default async function Layout({ children, params }) {
     .join(" ");
 
   return (
-    <SidebarProvider>
-      <AppSidebar module={moduleName} />
-      <main>
-        <SidebarTrigger />
-        {children}
-      </main>
-    </SidebarProvider>
+    <div className="flex flex-col min-h-screen bg-gray-200">
+      <AppHeader />
+      <div className="flex flex-1">
+        <SidebarProvider>
+          <AppSidebar module={moduleName} />
+          <main className="flex-1">
+            <SidebarTrigger />
+            {children}
+          </main>
+        </SidebarProvider>
+      </div>
+    </div>
   );
 }
