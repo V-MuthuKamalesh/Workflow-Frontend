@@ -23,6 +23,7 @@ export default function GoogleAuthButton({ text, className, type }) {
       );
 
       if (response.status === 200) {
+        localStorage.setItem("fullName", response.data.userName);
         setCookies("authToken", response.data.token, 1);
         router.push("/");
       }

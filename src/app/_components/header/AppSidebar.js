@@ -46,13 +46,15 @@ const workspaces = [
   },
 ];
 
-export default function AppSidebar({ module }) {
+export default function AppSidebar({ moduleName }) {
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
           <h1 className="text-slate-800 text-3xl font-bold ml-20">WorkFlow</h1>
-          <SidebarGroupLabel>{module}</SidebarGroupLabel>
+          <SidebarGroupLabel className="my-5 py-6 hover:bg-gray-100">
+            {moduleName}
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (

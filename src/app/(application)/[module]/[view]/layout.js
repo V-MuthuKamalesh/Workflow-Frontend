@@ -15,7 +15,7 @@ export default async function Layout({ children, params }) {
       <AppHeader />
       <div className="flex flex-1">
         <SidebarProvider>
-          <AppSidebar module={moduleName} />
+          <AppSidebar moduleName={moduleName} />
           <main className="flex-1">
             <SidebarTrigger />
             {children}
