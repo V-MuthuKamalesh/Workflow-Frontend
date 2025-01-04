@@ -1,4 +1,4 @@
-import RecentBoards from "@/app/_components/boards/RecentBoards";
+import BoardsDisplay from "@/app/_components/boards/BoardsDisplay";
 import Welcome from "@/app/_components/UI/Welcome";
 
 export default async function ViewPage({ params }) {
@@ -9,7 +9,7 @@ export default async function ViewPage({ params }) {
   return (
     <section className="min-h-96 bg-blue-50 mb-5 mx-5 rounded-3xl">
       <Welcome />
-      <RecentBoards />
+      <BoardsDisplay />
     </section>
   );
 }

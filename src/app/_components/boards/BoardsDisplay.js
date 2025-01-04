@@ -1,6 +1,6 @@
 import BoardCard from "./BoardCard";
 
-export default function RecentBoards() {
+export default function BoardsDisplay() {
   const boards = [
     {
       id: 1,
@@ -31,7 +31,7 @@ export default function RecentBoards() {
 
   return (
     <div className="mt-10">
-      <h1 className="ml-32 text-xl font-medium">Recent Boards</h1>
+      <h1 className="ml-32 text-xl font-medium">Boards</h1>
       <div className="mt-3 grid grid-cols-3 mx-32">
         {boards.map((board) => (
           <BoardCard
