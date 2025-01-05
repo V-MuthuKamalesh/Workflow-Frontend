@@ -29,21 +29,16 @@ const items = [
     url: "/work-management/favorites",
     icon: Star,
   },
-  {
-    title: "Workspaces",
-    url: "/work-management/workspaces",
-    icon: SquareChartGantt,
-  },
 ];
 
 const workspaces = [
   {
     title: "Acme Inc",
-    url: "/work-management/workspaces/acme-inc",
+    url: "/work-management/workspace/acme-inc",
   },
   {
     title: "Acme Corp",
-    url: "/work-management/workspaces/acme-corp",
+    url: "/work-management/workspace/acme-corp",
   },
 ];
 

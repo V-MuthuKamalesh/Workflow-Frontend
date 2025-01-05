@@ -1,11 +1,7 @@
 "use client";
 
 import { useSelector, useDispatch } from "react-redux";
-import {
-  editTask,
-  addGroup,
-  addTask,
-} from "@/lib/redux/feautures/boardSlice.js";
+import { editTask, addTask } from "@/lib/redux/feautures/boardSlice.js";
 import { useState } from "react";
 import AddGroupButton from "./AddGroupButton";
 import AddNewTask from "./AddNewTask";
@@ -28,7 +24,9 @@ export default function Groups() {
   function handleAddTask(groupId, event) {
     if (event.key === "Enter") {
       const fields =
-        boardData.groups.find((g) => g.groupId === groupId)?.entries[0] || {};
+        boardData.groups.find((group) => group.groupId === groupId)
+          ?.entries[0] || {};
+
       const newTask = Object.keys(fields).reduce((task, field) => {
         task[field] = newTaskData[groupId]?.[field] || "";
         return task;
