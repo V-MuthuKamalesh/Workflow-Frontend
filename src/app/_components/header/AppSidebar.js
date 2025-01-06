@@ -1,5 +1,7 @@
-import { ChevronDown, Home, SquareChartGantt, Star } from "lucide-react";
+"use client";
 
+import { useEffect, useState } from "react";
+import { ChevronDown, Home, Star } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -17,6 +19,14 @@ import {
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
 import CreateWorkspaceButton from "../workspaces/CreateWorkspaceButton";
+import { io } from "socket.io-client";
+
+const moduleColors = {
+  "work-management": "bg-blue-50",
+  dev: "bg-green-50",
+  crm: "bg-yellow-50",
+  service: "bg-purple-50",
+};
 
 const items = [
   {
@@ -31,21 +41,40 @@ const items = [
   },
 ];
 
-const workspaces = [
-  {
-    title: "Acme Inc",
-    url: "/work-management/workspace/acme-inc",
-  },
-  {
-    title: "Acme Corp",
-    url: "/work-management/workspace/acme-corp",
-  },
-];
+export default function AppSidebar({ module }) {
+  const [workspaces, setWorkspaces] = useState([]);
+  const [error, setError] = useState(null);
 
-export default function AppSidebar({ moduleName }) {
+  const moduleName = module
+    .split("-")
+    .map((str) => str.charAt(0).toUpperCase() + str.slice(1))
+    .join(" ");
+
+  const bgColor = moduleColors[module] || "bg-gray-50";
+
+  useEffect(() => {
+    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
+
+    socket.emit("getWorkspaces", null, (data) => {
+      if (data) {
+        setWorkspaces(data);
+      } else {
+        setError("Failed to fetch workspaces");
+      }
+    });
+
+    socket.on("connect_error", (err) => {
+      setError(`Connection error: ${err.message}`);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
   return (
     <Sidebar>
-      <SidebarContent>
+      <SidebarContent className={`${bgColor}`}>
         <SidebarGroup>
           <h1 className="text-slate-800 text-3xl font-bold ml-20">WorkFlow</h1>
           <SidebarGroupLabel className="my-5 py-6 hover:bg-gray-100">
@@ -72,16 +101,22 @@ export default function AppSidebar({ moduleName }) {
                       <ChevronDown className="ml-auto" />
                     </SidebarMenuButton>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-[--radix-popper-anchor-width] flex flex-col mt-2">
-                    {workspaces.map((workspace) => (
-                      <Link
-                        key={workspace.title}
-                        href={workspace.url}
-                        className="border border-gray-300 rounded-md mb-3 p-2 hover:bg-gray-300 transition duration-150"
-                      >
-                        {workspace.title}
-                      </Link>
-                    ))}
+                  <DropdownMenuContent className="w-[--radix-popper-anchor-width] flex flex-col mt-2 max-h-60 overflow-y-auto scrollbar-hidden">
+                    {error ? (
+                      <div className="text-red-500">{error}</div>
+                    ) : workspaces.length === 0 ? (
+                      <div>No workspaces available</div>
+                    ) : (
+                      workspaces.map((workspace) => (
+                        <Link
+                          key={workspace.workspaceId}
+                          href={`/${module}/workspace/${workspace.workspaceId}`}
+                          className="border border-gray-300 rounded-md mb-3 p-2 hover:bg-gray-300 transition duration-150"
+                        >
+                          {workspace.workspaceName}
+                        </Link>
+                      ))
+                    )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </SidebarMenuItem>

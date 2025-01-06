@@ -11,3 +11,7 @@ export function greetBasedOnTime() {
     return "Good night,";
   }
 }
+
+export function convertFromCamelCasetoNormalText(str) {
+  return str.replace(/([a-z])([A-Z])/g, "$1 $2");
+}

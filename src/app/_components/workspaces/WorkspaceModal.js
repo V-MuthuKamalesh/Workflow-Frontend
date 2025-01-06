@@ -1,25 +1,41 @@
 "use client";
 
-import { workflowBackend } from "@/app/_utils/api/axiosConfig";
+import { useState, useEffect } from "react";
+import { io } from "socket.io-client";
 import Cookies from "js-cookie";
-import { useState } from "react";
 
 export default function WorkspaceModal({ onClose }) {
   const [workspaceName, setWorkspaceName] = useState("");
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    const newSocket = io("http://localhost:4000/", {
+      transports: ["websocket"],
+    });
+
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, []);
 
   async function handleWorkspaceCreation() {
-    try {
-      const response = await workflowBackend.post("/work/createWorkspace", {
-        createdBy: Cookies.get("userId"),
-        workspaceName,
-      });
+    if (!workspaceName || !socket) return;
 
-      if (response.status === 201) {
-        console.log("Workspace created", response.data);
-        onClose();
-      }
+    try {
+      socket.emit(
+        "createWorkspace",
+        {
+          createdBy: Cookies.get("userId"),
+          workspaceName,
+        },
+        (data) => {
+          console.log(data);
+        }
+      );
     } catch (error) {
-      console.error(error);
+      console.error("Error during workspace creation:", error);
     }
   }
 

@@ -6,7 +6,7 @@ export default async function Welcome() {
   const fullName = cookieStore.get("fullName")?.value;
 
   return (
-    <div className="bg-white rounded-t-3xl py-5 px-10">
+    <div className="bg-white rounded-tl-3xl py-5 px-10">
       <h1 className="text-xl font-semibold">
         {greetBasedOnTime()} {fullName || "Unknown User"}!
       </h1>

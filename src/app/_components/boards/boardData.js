@@ -6,18 +6,18 @@ export const boardInfo = {
     {
       groupId: 101,
       groupName: "UI/UX Tasks",
-      entries: [
+      items: [
         {
-          item: "Design Mockups",
-          person: "Alice Johnson",
+          itemName: "Design Mockups",
+          assignedTo: ["Alice Johnson"],
           status: "In Progress",
-          date: "2025-01-02",
+          dueDate: "2025-01-02",
         },
         {
-          item: "Wireframes",
-          person: "Alice Johnson",
+          itemName: "Wireframes",
+          assignedTo: ["Alice Johnson"],
           status: "Completed",
-          date: "2025-01-01",
+          dueDate: "2025-01-01",
         },
       ],
     },

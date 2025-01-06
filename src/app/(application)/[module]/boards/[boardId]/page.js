@@ -1,10 +1,13 @@
 import { boardInfo } from "@/app/_components/boards/boardData";
 import Groups from "@/app/_components/groups/Groups";
+import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 
-export default function BoardPage() {
+export default async function BoardPage({ params }) {
+  const { boardId } = await params;
+
   return (
-    <section className="min-h-96 bg-white mx-5 pb-10 rounded-t-3xl">
-      <Groups boardInfo={boardInfo} />
-    </section>
+    <>
+      <Groups boardId={boardId} />
+    </>
   );
 }

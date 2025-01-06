@@ -1,3 +1,5 @@
+import { convertFromCamelCasetoNormalText } from "@/app/_utils/helpers/helper";
+
 export default function AddNewTask({
   group,
   newTaskData,
@@ -6,13 +8,13 @@ export default function AddNewTask({
 }) {
   return (
     <tr>
-      {Object.keys(group.entries[0] || {}).map((field) => (
+      {Object.keys(group.items[0] || {}).map((field) => (
         <td key={field} className="border border-gray-300 px-4 py-2">
           <input
-            type={field === "date" ? "date" : "text"}
-            placeholder={`Enter ${field}`}
+            type={field === "dueDate" ? "date" : "text"}
+            placeholder={`Enter ${convertFromCamelCasetoNormalText(field)}`}
             value={newTaskData[group.groupId]?.[field] || ""}
-            className="w-full bg-transparent focus:outline-none focus:ring focus:ring-blue-200"
+            className="capitalize w-full bg-transparent focus:outline-none focus:ring focus:ring-blue-200"
             onChange={(event) =>
               handleNewTaskInput(group.groupId, field, event.target.value)
             }
