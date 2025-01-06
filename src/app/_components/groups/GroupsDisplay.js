@@ -4,12 +4,15 @@ import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import AddNewTask from "./AddNewTask";
 import { convertFromCamelCasetoNormalText } from "@/app/_utils/helpers/helper";
+import AddGroupButton from "./AddGroupButton";
 
-export default function Groups({ boardId }) {
+export default function GroupsDisplay({ boardId }) {
   const [boardData, setBoardData] = useState({ groups: [] });
   const [newTaskData, setNewTaskData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const displayedFields = ["itemName", "assignedTo", "status", "dueDate"];
 
   useEffect(() => {
     const socket = io("http://localhost:4000/", { transports: ["websocket"] });
@@ -41,6 +44,8 @@ export default function Groups({ boardId }) {
     return <div className="ml-32 text-red-500">{error}</div>;
   }
 
+  console.log(boardData);
+
   function handleNewTaskInput(groupId, field, value) {
     setNewTaskData((prevData) => ({
       ...prevData,
@@ -53,11 +58,7 @@ export default function Groups({ boardId }) {
 
   function handleAddTask(groupId, event) {
     if (event.key === "Enter") {
-      const fields =
-        boardData.groups.find((group) => group.groupId === groupId)?.items[0] ||
-        {};
-
-      const newTask = Object.keys(fields).reduce((task, field) => {
+      const newTask = displayedFields.reduce((task, field) => {
         task[field] =
           newTaskData[groupId]?.[field] || (field === "assignedToId" ? [] : "");
         return task;
@@ -97,22 +98,17 @@ export default function Groups({ boardId }) {
     });
   }
 
-  function handleAddGroup() {
-    const defaultEntryStructure = boardData.groups[0]?.items[0] || {
-      itemName: "",
-      assignedToId: [],
-      status: "",
-      dueDate: "",
-    };
-
+  const handleAddGroup = () => {
     const newGroup = {
       groupId: Date.now().toString(),
       groupName: `New Group ${boardData.groups.length + 1}`,
       items: [
-        Object.keys(defaultEntryStructure).reduce((entry, field) => {
-          entry[field] = field === "assignedToId" ? [] : "";
-          return entry;
-        }, {}),
+        {
+          itemName: "",
+          assignedToId: [],
+          status: "",
+          dueDate: "",
+        },
       ],
     };
 
@@ -120,10 +116,10 @@ export default function Groups({ boardId }) {
       ...prevBoardData,
       groups: [...prevBoardData.groups, newGroup],
     }));
-  }
+  };
 
   return (
-    <div className="p-4">
+    <div className="px-16 py-8">
       <h1 className="text-2xl font-bold mb-5">
         {boardData.workspaceName} - {boardData.boardName}
       </h1>
@@ -134,7 +130,7 @@ export default function Groups({ boardId }) {
             <table className="table-auto w-full border-collapse border border-gray-300">
               <thead>
                 <tr className="bg-gray-100">
-                  {Object.keys(group.items[0] || {}).map((field) => (
+                  {displayedFields.map((field) => (
                     <th
                       key={field}
                       className="border border-gray-300 px-4 py-2 capitalize"
@@ -147,7 +143,7 @@ export default function Groups({ boardId }) {
               <tbody>
                 {group.items.map((item, itemIndex) => (
                   <tr key={itemIndex} className="hover:bg-gray-50">
-                    {Object.keys(item).map((field) => (
+                    {displayedFields.map((field) => (
                       <td
                         className="border border-gray-300 px-4 py-2"
                         key={field}
@@ -202,12 +198,7 @@ export default function Groups({ boardId }) {
           </div>
         ))}
       </div>
-      <button
-        className="mt-8 px-6 py-3 bg-green-500 text-white rounded-md hover:bg-green-600"
-        onClick={handleAddGroup}
-      >
-        Add Group
-      </button>
+      <AddGroupButton handleAddGroup={handleAddGroup} />
     </div>
   );
 }
