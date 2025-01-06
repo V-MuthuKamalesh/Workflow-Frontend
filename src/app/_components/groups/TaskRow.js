@@ -17,7 +17,7 @@ export default function TaskRow({ item, fields, statusOptions, onEditTask }) {
   return (
     <tr className="hover:bg-gray-50">
       {fields.map((field) => (
-        <td key={field} className="border border-gray-300 px-4 py-2">
+        <td key={field} className="border border-gray-300 px-4 py-2 w-96">
           {field === "status" ? (
             <StatusComponent
               currentStatus={item[field]}
@@ -30,7 +30,7 @@ export default function TaskRow({ item, fields, statusOptions, onEditTask }) {
               value={
                 field === "dueDate" ? item[field]?.split("T")[0] : item[field]
               }
-              className="w-full bg-transparent border border-gray-300 rounded-md focus:outline-none "
+              className="w-full bg-transparent border border-gray-300 rounded-md focus:outline-none"
               onChange={(e) => onEditTask(field, e.target.value)}
               onKeyDown={(e) => handleKeyDown(e, field)}
               onBlur={handleBlur}

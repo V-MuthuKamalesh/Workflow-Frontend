@@ -88,7 +88,7 @@ export default function Group({ group, socket, setBoardData }) {
             onChange={handleGroupNameChange}
             onKeyDown={handleKeyDown}
             onBlur={handleGroupNameSave}
-            className="px-2 w-full bg-transparent focus:outline-none focus:ring"
+            className="px-2 w-full bg-transparent focus:outline-none focus:ring focus:ring-gray-400 focus:rounded-md"
             autoFocus
           />
         ) : (
