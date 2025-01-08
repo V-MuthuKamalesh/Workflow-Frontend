@@ -19,6 +19,7 @@ export default function BoardsDisplay({ module, workspaceId }) {
         setError(response.error);
         setLoading(false);
       } else {
+        console.log(response);
         setWorkspaceName(response.workspaceName);
         setBoards(response.boards || []);
         setLoading(false);
@@ -32,25 +33,22 @@ export default function BoardsDisplay({ module, workspaceId }) {
 
   if (loading) {
     return (
-      <div className="text-gray-500 ml-32 text-lg italic pt-7 flex items-center justify-center">
-        Loading boards...
-      </div>
+      <div className="text-gray-500 text-lg italic flex items-center">Loading boards...</div>
     );
   }
 
   if (error) {
-    return <div className="text-red-500 ml-32">{error}</div>;
+    return <div className="text-red-500">{error}</div>;
   }
 
   return (
-    <div className="pt-7">
-      <h1 className="ml-32 text-xl font-medium">Boards</h1>
+    <>
       {boards.length === 0 ? (
-        <span className="ml-32 text-gray-500 text-lg italic">
+        <span className="text-gray-500 text-lg italic">
           No boards found in {workspaceName}.
         </span>
       ) : (
-        <div className="mt-3 grid grid-cols-3 mx-32">
+        <div className="mt-3 grid grid-cols-4">
           {boards.map((board) => (
             <Link key={board.boardId} href={`/${module}/boards/${board.boardId}`}>
               <BoardCard boardName={board.boardName} workspaceName={workspaceName} />
@@ -58,6 +56,6 @@ export default function BoardsDisplay({ module, workspaceId }) {
           ))}
         </div>
       )}
-    </div>
+    </>
   );
 }

@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function BoardCard({ workspaceName, boardName }) {
   return (
-    <div className="max-w-sm border border-gray-300 rounded-md p-4 mb-10 hover:shadow-xl transition duration-100">
+    <div className="max-w-xs border border-gray-300 rounded-md p-4 mb-10 hover:shadow-xl transition duration-100">
       <Image
         className="rounded-md"
         src={"/board.webp"}

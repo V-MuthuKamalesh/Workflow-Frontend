@@ -34,6 +34,8 @@ export default function WorkspaceModal({ onClose }) {
           console.log(data);
         }
       );
+
+      onClose();
     } catch (error) {
       console.error("Error during workspace creation:", error);
     }
