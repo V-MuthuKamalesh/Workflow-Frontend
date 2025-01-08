@@ -52,14 +52,8 @@ export default function BoardsDisplay({ module, workspaceId }) {
       ) : (
         <div className="mt-3 grid grid-cols-3 mx-32">
           {boards.map((board) => (
-            <Link
-              key={board.boardId}
-              href={`/${module}/boards/${board.boardId}`}
-            >
-              <BoardCard
-                boardName={board.boardName}
-                workspaceName={workspaceName}
-              />
+            <Link key={board.boardId} href={`/${module}/boards/${board.boardId}`}>
+              <BoardCard boardName={board.boardName} workspaceName={workspaceName} />
             </Link>
           ))}
         </div>

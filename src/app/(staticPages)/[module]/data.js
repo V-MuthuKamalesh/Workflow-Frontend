@@ -6,10 +6,10 @@ export const moduleStaticPagesData = [
       "Speed up your sales cycle with an intuitive, AI-powered CRM that your team will love.",
     imageUrl: "/crm.webp",
     colorSchemes: {
-      bg: "bg-blue-50",
-      border: "border-blue-50",
-      text: "text-blue-400",
-      hoverBg: "bg-blue-400",
+      bg: "bg-yellow-50",
+      border: "border-yellow-50",
+      text: "text-yellow-400",
+      hoverBg: "bg-yellow-400",
     },
   },
   {
@@ -19,10 +19,10 @@ export const moduleStaticPagesData = [
       "Empower service teams to deliver exceptional support experiences faster with smart automations that leverage the power of AI.",
     imageUrl: "/service.webp",
     colorSchemes: {
-      bg: "bg-red-50",
-      border: "border-red-50",
-      text: "text-red-400",
-      hoverBg: "bg-red-400",
+      bg: "bg-purple-50",
+      border: "border-purple-50",
+      text: "text-purple-400",
+      hoverBg: "bg-purple-400",
     },
   },
   {
@@ -45,10 +45,10 @@ export const moduleStaticPagesData = [
       "Gain the clarity and control you need to connect your everyday work to business goals across projects and processes.",
     imageUrl: "/work-management.webp",
     colorSchemes: {
-      bg: "bg-yellow-50",
-      border: "border-yellow-50",
-      text: "text-yellow-400",
-      hoverBg: "bg-yellow-400",
+      bg: "bg-red-50",
+      border: "border-red-50",
+      text: "text-red-400",
+      hoverBg: "bg-red-400",
     },
   },
 ];

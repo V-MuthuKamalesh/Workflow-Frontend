@@ -19,6 +19,7 @@ export default function BasicAuthSignIn() {
     event.preventDefault();
 
     try {
+      console.log(formData);
       const response = await workflowBackend.post("/users/login", formData);
 
       console.log(response);
@@ -42,10 +43,7 @@ export default function BasicAuthSignIn() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="w-full max-w-sm flex flex-col items-center mt-8"
-    >
+    <form onSubmit={handleSubmit} className="w-full max-w-sm flex flex-col items-center mt-8">
       <Input
         title="Your Email Address"
         type="email"
@@ -66,9 +64,7 @@ export default function BasicAuthSignIn() {
         required
       />
 
-      {error && (
-        <span className="text-red-600 text-xs">Invalid Credentials</span>
-      )}
+      {error && <span className="text-red-600 text-xs">Invalid Credentials</span>}
 
       <Button buttonText="Log In" />
     </form>

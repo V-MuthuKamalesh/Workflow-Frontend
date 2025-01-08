@@ -5,10 +5,9 @@ import { moduleStaticPagesData } from "./data.js";
 export default async function ModulePageUI({ params }) {
   const { module } = await params;
 
-  const { title, description, imageUrl, colorSchemes } =
-    moduleStaticPagesData.filter(
-      (moduleData) => moduleData.module === module
-    )[0];
+  const { title, description, imageUrl, colorSchemes } = moduleStaticPagesData.filter(
+    (moduleData) => moduleData.module === module
+  )[0];
 
   return (
     <section
@@ -20,21 +19,13 @@ export default async function ModulePageUI({ params }) {
           <p className="text-center">{description}</p>
         </div>
         <Link
-          href={`/${module}/dashboard`}
+          href={`/${module}/home`}
           className={`font-semibold relative my-10 py-4 px-8 rounded-full border ${colorSchemes.text} overflow-hidden group`}
         >
           <span className={`absolute inset-0 w-full h-full bg-black`}></span>
-          <span className={`relative z-10 transition-colors duration-300`}>
-            Get Started
-          </span>
+          <span className={`relative z-10 transition-colors duration-300`}>Get Started</span>
         </Link>
-        <Image
-          src={imageUrl}
-          alt={`${module} tool`}
-          width={1000}
-          height={1000}
-          priority
-        />
+        <Image src={imageUrl} alt={`${module} tool`} width={1000} height={1000} priority />
       </div>
     </section>
   );

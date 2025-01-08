@@ -1,9 +1,9 @@
-import { SquareChartGantt, Star } from "lucide-react";
+import { ArrowRight, SquareChartGantt, Star } from "lucide-react";
 import Image from "next/image";
 
 export default function BoardCard({ workspaceName, boardName }) {
   return (
-    <div className="max-w-sm border border-gray-300 rounded-md p-4 mb-10 hover:shadow-lg transition duration-100">
+    <div className="max-w-sm border border-gray-300 rounded-md p-4 mb-10 hover:shadow-xl transition duration-100">
       <Image
         className="rounded-md"
         src={"/board.webp"}
@@ -20,8 +20,8 @@ export default function BoardCard({ workspaceName, boardName }) {
           </div>
           <Star />
         </h1>
-        <p>
-          Workspace {"->"} {workspaceName}
+        <p className="flex items-center space-x-1">
+          <span>Workspace</span> <ArrowRight /> <span>{workspaceName}</span>
         </p>
       </div>
     </div>

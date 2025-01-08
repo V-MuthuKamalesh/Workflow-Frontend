@@ -11,5 +11,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/:module/dashboard"],
+  matcher: ["/:module/home"],
 };

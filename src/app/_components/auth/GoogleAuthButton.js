@@ -17,10 +17,7 @@ export default function GoogleAuthButton({ text, className, type }) {
         tokenResponse.access_token
       );
 
-      const response = await workflowBackend.post(
-        "/users/oauth",
-        userInfoFromGoogle
-      );
+      const response = await workflowBackend.post("/users/oauth", userInfoFromGoogle);
 
       if (response.status === 200) {
         setCookies("fullName", response.data.userName);

@@ -73,18 +73,13 @@ const SidebarProvider = React.forwardRef(
 
     // Helper to toggle the sidebar.
     const toggleSidebar = React.useCallback(() => {
-      return isMobile
-        ? setOpenMobile((open) => !open)
-        : setOpen((open) => !open);
+      return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open);
     }, [isMobile, setOpen, setOpenMobile]);
 
     // Adds a keyboard shortcut to toggle the sidebar.
     React.useEffect(() => {
       const handleKeyDown = (event) => {
-        if (
-          event.key === SIDEBAR_KEYBOARD_SHORTCUT &&
-          (event.metaKey || event.ctrlKey)
-        ) {
+        if (event.key === SIDEBAR_KEYBOARD_SHORTCUT && (event.metaKey || event.ctrlKey)) {
           event.preventDefault();
           toggleSidebar();
         }
@@ -230,29 +225,27 @@ const Sidebar = React.forwardRef(
 );
 Sidebar.displayName = "Sidebar";
 
-const SidebarTrigger = React.forwardRef(
-  ({ className, onClick, ...props }, ref) => {
-    const { toggleSidebar } = useSidebar();
+const SidebarTrigger = React.forwardRef(({ className, onClick, ...props }, ref) => {
+  const { toggleSidebar } = useSidebar();
 
-    return (
-      <Button
-        ref={ref}
-        data-sidebar="trigger"
-        variant="ghost"
-        size="icon"
-        className={cn("h-7 w-7", className)}
-        onClick={(event) => {
-          onClick?.(event);
-          toggleSidebar();
-        }}
-        {...props}
-      >
-        <PanelLeft />
-        <span className="sr-only">Toggle Sidebar</span>
-      </Button>
-    );
-  }
-);
+  return (
+    <Button
+      ref={ref}
+      data-sidebar="trigger"
+      variant="ghost"
+      size="icon"
+      className={cn("h-7 w-7", className)}
+      onClick={(event) => {
+        onClick?.(event);
+        toggleSidebar();
+      }}
+      {...props}
+    >
+      <PanelLeft />
+      <span className="sr-only">Toggle Sidebar</span>
+    </Button>
+  );
+});
 SidebarTrigger.displayName = "SidebarTrigger";
 
 const SidebarRail = React.forwardRef(({ className, ...props }, ref) => {
@@ -374,24 +367,22 @@ const SidebarGroup = React.forwardRef(({ className, ...props }, ref) => {
 });
 SidebarGroup.displayName = "SidebarGroup";
 
-const SidebarGroupLabel = React.forwardRef(
-  ({ className, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "div";
+const SidebarGroupLabel = React.forwardRef(({ className, asChild = false, ...props }, ref) => {
+  const Comp = asChild ? Slot : "div";
 
-    return (
-      <Comp
-        ref={ref}
-        data-sidebar="group-label"
-        className={cn(
-          "duration-200 flex h-8 shrink-0 items-center rounded-md px-2 text-xl font-medium text-sidebar-foreground/70 outline-none ring-sidebar-ring transition-[margin,opa] ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
-          "group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
-          className
-        )}
-        {...props}
-      />
-    );
-  }
-);
+  return (
+    <Comp
+      ref={ref}
+      data-sidebar="group-label"
+      className={cn(
+        "duration-200 flex h-8 shrink-0 items-center rounded-md px-2 text-xl font-medium text-sidebar-foreground/70 outline-none ring-sidebar-ring transition-[margin,opa] ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
+        "group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
+        className
+      )}
+      {...props}
+    />
+  );
+});
 SidebarGroupLabel.displayName = "SidebarGroupLabel";
 
 const SidebarGroupAction = React.forwardRef(
@@ -580,10 +571,7 @@ const SidebarMenuSkeleton = React.forwardRef(
         {...props}
       >
         {showIcon && (
-          <Skeleton
-            className="size-4 rounded-md"
-            data-sidebar="menu-skeleton-icon"
-          />
+          <Skeleton className="size-4 rounded-md" data-sidebar="menu-skeleton-icon" />
         )}
         <Skeleton
           className="h-4 flex-1 max-w-[--skeleton-width]"

@@ -7,7 +7,6 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -22,7 +21,7 @@ import CreateWorkspaceButton from "../workspaces/CreateWorkspaceButton";
 import { io } from "socket.io-client";
 
 const moduleColors = {
-  "work-management": "bg-blue-50",
+  "work-management": "bg-red-50",
   dev: "bg-green-50",
   crm: "bg-yellow-50",
   service: "bg-purple-50",
@@ -31,7 +30,7 @@ const moduleColors = {
 const items = [
   {
     title: "Home",
-    url: "/work-management/dashboard",
+    url: "/work-management/home",
     icon: Home,
   },
   {
@@ -76,10 +75,7 @@ export default function AppSidebar({ module }) {
     <Sidebar>
       <SidebarContent className={`${bgColor}`}>
         <SidebarGroup>
-          <h1 className="text-slate-800 text-3xl font-bold ml-20">WorkFlow</h1>
-          <SidebarGroupLabel className="my-5 py-6 hover:bg-gray-100">
-            {moduleName}
-          </SidebarGroupLabel>
+          <div className="mt-16"></div>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -111,7 +107,7 @@ export default function AppSidebar({ module }) {
                         <Link
                           key={workspace.workspaceId}
                           href={`/${module}/workspace/${workspace.workspaceId}`}
-                          className="border border-gray-300 rounded-md mb-3 p-2 hover:bg-gray-300 transition duration-150"
+                          className="border border-gray-300 rounded-md mb-3 p-2 hover:bg-gray-200 transition duration-150"
                         >
                           {workspace.workspaceName}
                         </Link>
