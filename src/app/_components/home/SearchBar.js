@@ -21,27 +21,27 @@ export default function SearchBar() {
     : [];
 
   return (
-    <div className="mx-32 my-5 relative">
+    <div className="relative mx-auto mt-5 max-w-4xl">
       <div className="relative">
         <input
           type="text"
           placeholder="Search projects, tasks, or team members..."
-          className="w-full border border-gray-400 rounded-lg py-2 px-4"
+          className="w-full border border-gray-300 rounded-full py-3 px-5 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setTimeout(() => setIsFocused(false), 150)}
         />
-        <Search className="absolute top-2 right-3" size={20} />
+        <Search className="absolute top-3 right-4 text-gray-500" size={24} />
       </div>
 
       {isFocused && query && (
-        <div className="absolute w-full bg-white border border-gray-400 rounded-lg mt-1 shadow-lg z-10">
+        <div className="absolute w-full bg-white border border-gray-300 rounded-lg mt-2 shadow-lg z-10">
           {filteredData.length > 0 ? (
             filteredData.map((item, index) => (
               <div
                 key={index}
-                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                className="px-4 py-2 hover:bg-blue-100 cursor-pointer transition"
                 onMouseDown={() => alert(`You selected: ${item}`)}
               >
                 {item}

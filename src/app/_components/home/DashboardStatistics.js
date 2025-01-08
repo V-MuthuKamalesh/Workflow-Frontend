@@ -2,7 +2,7 @@ import { BarChart, CheckSquare, Users } from "lucide-react";
 
 export default function DashboardStats() {
   return (
-    <div className="grid grid-cols-3 gap-4 mx-32 my-10">
+    <div className="grid grid-cols-3 gap-6 mx-auto max-w-4xl">
       <StatCard Icon={BarChart} title="Active Projects" value={5} />
       <StatCard Icon={CheckSquare} title="Tasks Completed" value={42} />
       <StatCard Icon={Users} title="Team Members" value={8} />
@@ -12,11 +12,11 @@ export default function DashboardStats() {
 
 function StatCard({ Icon, title, value }) {
   return (
-    <div className="p-5 border border-gray-400 rounded-xl shadow-lg flex items-center space-x-4">
-      <Icon size={40} />
+    <div className="p-6 border border-gray-300 rounded-2xl shadow-lg bg-gradient-to-r from-blue-50 to-white flex items-center space-x-4">
+      <Icon size={40} className="text-blue-500" />
       <div>
-        <h2 className="text-lg font-semibold">{title}</h2>
-        <p className="text-2xl">{value}</p>
+        <h3 className="text-lg font-semibold">{title}</h3>
+        <p className="text-2xl font-bold text-gray-800">{value}</p>
       </div>
     </div>
   );

@@ -14,9 +14,10 @@ export default async function ViewPage({ params }) {
 
   return (
     <>
-      <Welcome />
+      <Welcome view={view} module={module} />
       {view === "home" ? (
-        <div className="pb-3">
+        <div className="pb-3 space-y-8">
+          {" "}
           <SearchBar />
           <ContactSales />
           <QuickAccess />
@@ -25,7 +26,9 @@ export default async function ViewPage({ params }) {
           <RecentActivity />
         </div>
       ) : view === "favorites" ? (
-        <FavoriteWorkspacesAndBoards />
+        <div className="mt-8">
+          <FavoriteWorkspacesAndBoards />
+        </div>
       ) : (
         <></>
       )}

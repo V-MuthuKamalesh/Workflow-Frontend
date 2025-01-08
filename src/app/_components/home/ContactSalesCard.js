@@ -3,20 +3,20 @@ import Link from "next/link";
 
 export default function ContactSales() {
   return (
-    <div className="h-16 mx-32 my-10 border border-gray-400 rounded-xl hover:cursor-pointer hover:shadow-xl flex items-center justify-between px-5 py-10">
-      <div className="flex items-center space-x-2">
-        <BadgePercent size={55} />
-        <div className="space-y-1">
-          <h2 className="font-semibold text-lg">Talk to our sales experts</h2>
-          <p>Discover what Workflow can do to your business</p>
+    <div className="mx-auto max-w-4xl p-5 border border-gray-300 rounded-2xl shadow-lg hover:shadow-2xl transition bg-gradient-to-r from-blue-50 to-white">
+      <div className="flex items-center space-x-5">
+        <BadgePercent size={60} className="text-blue-500" />
+        <div className="flex-1">
+          <h2 className="text-lg font-semibold">Talk to our sales experts</h2>
+          <p className="text-gray-600">Discover what Workflow can do for your business.</p>
         </div>
+        <Link
+          href="/contact/sales"
+          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
+        >
+          Contact Sales
+        </Link>
       </div>
-      <Link
-        className="border border-gray-400 py-1 px-2 hover:bg-gray-300 rounded-md"
-        href={"/contact/sales"}
-      >
-        Contact Sales
-      </Link>
     </div>
   );
 }
