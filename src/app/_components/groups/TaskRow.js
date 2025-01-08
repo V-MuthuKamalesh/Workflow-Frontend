@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import StatusComponent from "../UI/StatusComponent";
-import { Avatar, Tooltip } from "@mui/material";
+import { Avatar, Tooltip, Chip } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { stringAvatar } from "@/app/_utils/helpers/helper";
 
 export default function TaskRow({ item, fields, statusOptions, onEditTask }) {
@@ -18,6 +19,13 @@ export default function TaskRow({ item, fields, statusOptions, onEditTask }) {
     setEditingField(null);
   };
 
+  const handleRemoveAssignee = (assigneeId) => {
+    const updatedAssignees = item.assignedToId.filter(
+      (assignee) => assignee.id !== assigneeId
+    );
+    onEditTask("assignedToId", updatedAssignees);
+  };
+
   return (
     <tr className="hover:bg-gray-50">
       {fields.map((field) => (
@@ -29,31 +37,58 @@ export default function TaskRow({ item, fields, statusOptions, onEditTask }) {
               onStatusChange={(newStatus) => onEditTask(field, newStatus)}
             />
           ) : field === "assignedToId" ? (
-            <div className="flex items-center space-x-2">
-              {item[field]?.map((assignee, index) => (
-                <Tooltip
-                  key={index}
-                  title={
-                    <div className="text-sm">
-                      <p>
-                        <strong>Name:</strong> {assignee.fullname || "Unknown"}
-                      </p>
-                      <p>
-                        <strong>Email:</strong> {assignee.email}
-                      </p>
-                    </div>
-                  }
-                  arrow
-                  placement="top"
+            editingField === field ? (
+              <div className="flex flex-wrap gap-2">
+                {item[field]?.map((assignee) => (
+                  <Chip
+                    key={assignee.id}
+                    avatar={
+                      <Avatar {...stringAvatar(assignee.fullname)}>
+                        {assignee.email.charAt(0).toUpperCase()}
+                      </Avatar>
+                    }
+                    label={assignee.email}
+                    onDelete={() => handleRemoveAssignee(assignee.id)}
+                    deleteIcon={<CloseIcon />}
+                    className="bg-gray-100 shadow-sm hover:bg-gray-200"
+                  />
+                ))}
+                <span
+                  className="text-blue-600 cursor-pointer ml-2"
+                  onClick={() => setEditingField(null)}
                 >
-                  <div className="flex items-center space-x-2 bg-gray-100 rounded-md shadow-sm hover:bg-gray-200 transition">
+                  Done
+                </span>
+              </div>
+            ) : (
+              <div
+                key={`assignedToId-${field}`} // Add a unique key here if this is part of a dynamic list
+                className="flex items-center space-x-2 cursor-pointer"
+                onClick={() => setEditingField(field)}
+              >
+                {item[field]?.map((assignee) => (
+                  <Tooltip
+                    key={`tooltip-${assignee.id}`} // Ensure each Tooltip has a unique key
+                    title={
+                      <div className="text-sm">
+                        <p>
+                          <strong>Name:</strong> {assignee.fullname || "Unknown"}
+                        </p>
+                        <p>
+                          <strong>Email:</strong> {assignee.email}
+                        </p>
+                      </div>
+                    }
+                    arrow
+                    placement="top"
+                  >
                     <Avatar {...stringAvatar(assignee.fullname)}>
                       {assignee.email.charAt(0).toUpperCase()}
                     </Avatar>
-                  </div>
-                </Tooltip>
-              ))}
-            </div>
+                  </Tooltip>
+                ))}
+              </div>
+            )
           ) : editingField === field ? (
             <input
               type={field === "dueDate" ? "date" : "text"}

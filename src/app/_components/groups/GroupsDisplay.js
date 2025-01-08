@@ -43,20 +43,35 @@ export default function GroupsDisplay({ boardId }) {
     const newGroup = {
       groupId: Date.now().toString(),
       groupName: `New Group ${boardData.groups.length + 1}`,
-      items: [{ itemName: "", assignedToId: [], status: "", dueDate: "" }],
+      items: [],
     };
 
-    setBoardData((prev) => ({
-      ...prev,
-      groups: [...prev.groups, newGroup],
-    }));
+    socket.emit("addGroupToBoard", { boardId, group: newGroup }, (updatedGroup) => {
+      if (!updatedGroup) {
+        console.error("No response from server.");
+        return;
+      }
+
+      if (updatedGroup.error) {
+        console.error(updatedGroup.error);
+      } else {
+        setBoardData((prev) => ({
+          ...prev,
+          groups: [...prev.groups, updatedGroup],
+        }));
+      }
+    });
   };
 
   return (
     <div className="px-16 py-8">
-      <h1 className="text-2xl font-bold mb-5">
-        {boardData.workspaceName} - {boardData.boardName}
-      </h1>
+      <div className="flex items-center justify-between mb-5">
+        <h1 className="text-2xl font-bold">
+          {boardData.workspaceName} - {boardData.boardName}
+        </h1>
+        <AddGroupButton handleAddGroup={handleAddGroup} />
+      </div>
+
       <div className="space-y-14">
         {boardData.groups.map((group) => (
           <Group
@@ -67,7 +82,6 @@ export default function GroupsDisplay({ boardId }) {
           />
         ))}
       </div>
-      <AddGroupButton handleAddGroup={handleAddGroup} />
     </div>
   );
 }

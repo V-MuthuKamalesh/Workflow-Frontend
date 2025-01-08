@@ -45,10 +45,10 @@ export const moduleStaticPagesData = [
       "Gain the clarity and control you need to connect your everyday work to business goals across projects and processes.",
     imageUrl: "/work-management.webp",
     colorSchemes: {
-      bg: "bg-red-50",
-      border: "border-red-50",
-      text: "text-red-400",
-      hoverBg: "bg-red-400",
+      bg: "bg-teal-50",
+      border: "border-teal-50",
+      text: "text-teal-400",
+      hoverBg: "bg-teal-400",
     },
   },
 ];

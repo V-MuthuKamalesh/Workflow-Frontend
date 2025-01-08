@@ -11,7 +11,7 @@ export default async function Welcome({ view, module }) {
   };
 
   const moduleColors = {
-    "work-management": "from-red-600 to-red-400",
+    "work-management": "from-teal-600 to-teal-400",
     dev: "from-green-600 to-green-400",
     crm: "from-yellow-600 to-yellow-400",
     service: "from-purple-600 to-purple-400",

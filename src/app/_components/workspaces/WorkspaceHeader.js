@@ -1,6 +1,6 @@
 export default function WorkspaceHeader({ module, workspaceName }) {
   const moduleColors = {
-    "work-management": "from-blue-600 to-blue-400",
+    "work-management": "from-teal-600 to-teal-400",
     dev: "from-green-600 to-green-400",
     crm: "from-yellow-600 to-yellow-400",
     service: "from-purple-600 to-purple-400",
