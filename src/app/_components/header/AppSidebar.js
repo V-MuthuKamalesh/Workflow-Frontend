@@ -22,7 +22,7 @@ import { io } from "socket.io-client";
 import Cookies from "js-cookie";
 
 const moduleColors = {
-  "work-management": "bg-red-50",
+  "work-management": "bg-teal-50",
   dev: "bg-green-50",
   crm: "bg-yellow-50",
   service: "bg-purple-50",
@@ -59,6 +59,7 @@ export default function AppSidebar({ module }) {
     socket.emit("getWorkspaces", { token: Cookies.get("authToken") }, (data) => {
       if (data) {
         setWorkspaces(data);
+        console.log(data);
         if (data.length > 0) {
           setSelectedWorkspace(data[0].workspaceId);
         }

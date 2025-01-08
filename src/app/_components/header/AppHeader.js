@@ -1,7 +1,7 @@
 import { Bell, User, UserPlus, Search } from "lucide-react";
 
 const moduleColors = {
-  "work-management": "bg-red-100",
+  "work-management": "bg-teal-100",
   dev: "bg-green-100",
   crm: "bg-yellow-100",
   service: "bg-purple-100",

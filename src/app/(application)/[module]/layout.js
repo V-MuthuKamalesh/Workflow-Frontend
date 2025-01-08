@@ -3,14 +3,14 @@ import AppSidebar from "@/app/_components/header/AppSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 const moduleColors = {
-  "work-management": "bg-red-100",
+  "work-management": "bg-teal-100",
   dev: "bg-green-100",
   crm: "bg-yellow-100",
   service: "bg-purple-100",
 };
 
 const moduleBackgrounds = {
-  "work-management": "bg-red-50",
+  "work-management": "bg-teal-50",
   dev: "bg-green-50",
   crm: "bg-yellow-50",
   service: "bg-purple-50",

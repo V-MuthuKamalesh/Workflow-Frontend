@@ -1,5 +1,9 @@
+"use client";
+
 import { useState } from "react";
 import StatusComponent from "../UI/StatusComponent";
+import { Avatar, Tooltip } from "@mui/material";
+import { stringAvatar } from "@/app/_utils/helpers/helper";
 
 export default function TaskRow({ item, fields, statusOptions, onEditTask }) {
   const [editingField, setEditingField] = useState(null);
@@ -17,19 +21,43 @@ export default function TaskRow({ item, fields, statusOptions, onEditTask }) {
   return (
     <tr className="hover:bg-gray-50">
       {fields.map((field) => (
-        <td key={field} className="border border-gray-300 px-4 py-2 w-96">
+        <td key={field} className="border border-gray-300 px-2 py-2 w-96">
           {field === "status" ? (
             <StatusComponent
               currentStatus={item[field]}
               statusOptions={statusOptions}
               onStatusChange={(newStatus) => onEditTask(field, newStatus)}
             />
+          ) : field === "assignedToId" ? (
+            <div className="flex items-center space-x-2">
+              {item[field]?.map((assignee, index) => (
+                <Tooltip
+                  key={index}
+                  title={
+                    <div className="text-sm">
+                      <p>
+                        <strong>Name:</strong> {assignee.fullname || "Unknown"}
+                      </p>
+                      <p>
+                        <strong>Email:</strong> {assignee.email}
+                      </p>
+                    </div>
+                  }
+                  arrow
+                  placement="top"
+                >
+                  <div className="flex items-center space-x-2 bg-gray-100 rounded-md shadow-sm hover:bg-gray-200 transition">
+                    <Avatar {...stringAvatar(assignee.fullname)}>
+                      {assignee.email.charAt(0).toUpperCase()}
+                    </Avatar>
+                  </div>
+                </Tooltip>
+              ))}
+            </div>
           ) : editingField === field ? (
             <input
               type={field === "dueDate" ? "date" : "text"}
-              value={
-                field === "dueDate" ? item[field]?.split("T")[0] : item[field]
-              }
+              value={field === "dueDate" ? item[field]?.split("T")[0] : item[field]}
               className="w-full bg-transparent border border-gray-300 rounded-md focus:outline-none"
               onChange={(e) => onEditTask(field, e.target.value)}
               onKeyDown={(e) => handleKeyDown(e, field)}
@@ -48,8 +76,6 @@ export default function TaskRow({ item, fields, statusOptions, onEditTask }) {
                     month: "short",
                     year: "numeric",
                   })
-                : field === "assignedToId"
-                ? item[field].map((a) => a.email).join(", ")
                 : item[field]}
             </span>
           )}

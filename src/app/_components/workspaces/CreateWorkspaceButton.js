@@ -16,7 +16,7 @@ export default function CreateWorkspaceButton() {
     <>
       <SidebarMenuItem>
         <SidebarMenuButton asChild>
-          <button onClick={handleWorkspaceCreation}>
+          <button className="hover:bg-gray-300" onClick={handleWorkspaceCreation}>
             <span>Add Workspace</span>
             <Plus className="ml-auto" />
           </button>
