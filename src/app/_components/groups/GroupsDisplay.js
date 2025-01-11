@@ -40,25 +40,45 @@ export default function GroupsDisplay({ boardId }) {
   }
 
   const handleAddGroup = () => {
-    const newGroup = {
-      groupId: Date.now().toString(),
-      groupName: `New Group ${boardData.groups.length + 1}`,
-      items: [],
+    const newItem = {
+      itemName: "item",
+      assignedToId: [],
+      status: "",
+      dueDate: new Date(),
     };
 
-    socket.emit("addGroupToBoard", { boardId, group: newGroup }, (updatedGroup) => {
-      if (!updatedGroup) {
+    socket.emit("createItem", { item: newItem }, (response) => {
+      console.log("createItem response:", response);
+      if (!response) {
         console.error("No response from server.");
         return;
       }
 
-      if (updatedGroup.error) {
-        console.error(updatedGroup.error);
+      if (response.error) {
+        console.error(response.error);
       } else {
-        setBoardData((prev) => ({
-          ...prev,
-          groups: [...prev.groups, updatedGroup],
-        }));
+        const newGroup = {
+          groupName: `New Group ${boardData.groups.length + 1}`,
+          items: [response.itemId],
+        };
+
+        socket.emit(
+          "addGroupToBoard",
+          { boardId, group: newGroup },
+          (updatedBoard) => {
+            console.log("addGroupToBoard response:", updatedBoard);
+            if (!updatedBoard) {
+              console.error("No response from server.");
+              return;
+            }
+
+            if (updatedBoard.error) {
+              console.error(updatedBoard.error);
+            } else {
+              setBoardData(updatedBoard);
+            }
+          }
+        );
       }
     });
   };

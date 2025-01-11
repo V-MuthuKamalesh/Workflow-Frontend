@@ -1,6 +1,7 @@
 import { useState } from "react";
 import GroupHeader from "./GroupHeader";
 import TaskRow from "./TaskRow";
+import AddTask from "./AddTask";
 
 export default function Group({ group, socket, setBoardData }) {
   const [editingGroupName, setEditingGroupName] = useState(false);
@@ -109,12 +110,14 @@ export default function Group({ group, socket, setBoardData }) {
           {group.items.map((item, index) => (
             <TaskRow
               key={index}
+              groupId={group.groupdId}
               item={item}
               fields={displayedFields}
               statusOptions={statusOptions}
               onEditTask={(field, value) => handleEditTask(index, field, value)}
             />
           ))}
+          <AddTask groupId={group.groupId} />
         </tbody>
       </table>
     </div>

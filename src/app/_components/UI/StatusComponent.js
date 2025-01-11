@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 
-export default function StatusComponent({ currentStatus, statusOptions, onStatusChange }) {
+export default function StatusComponent({
+  currentStatus,
+  statusOptions,
+  onStatusChange,
+}) {
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
   const statusColors = {
@@ -35,7 +39,7 @@ export default function StatusComponent({ currentStatus, statusOptions, onStatus
   return (
     <div className="relative">
       <button
-        className={`px-3 py-2 rounded-lg font-medium w-full ${
+        className={`px-3 rounded-lg font-medium w-full ${
           statusColors[currentStatus] || statusColors["Set Status"]
         }`}
         onClick={toggleDropdown}
