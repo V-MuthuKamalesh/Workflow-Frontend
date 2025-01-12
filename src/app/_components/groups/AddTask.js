@@ -57,7 +57,7 @@ export default function AddTask({ groupId }) {
         />
         <button
           onClick={handleAddTask}
-          className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md"
+          className="ml-2 px-2 py-1 bg-blue-500 text-white rounded-md"
         >
           Add Task
         </button>

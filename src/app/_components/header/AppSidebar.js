@@ -22,10 +22,10 @@ import { io } from "socket.io-client";
 import Cookies from "js-cookie";
 
 const moduleColors = {
-  "work-management": "bg-teal-50",
+  "work-management": "bg-purple-50",
   dev: "bg-green-50",
   crm: "bg-yellow-50",
-  service: "bg-purple-50",
+  service: "bg-teal-50",
 };
 
 export default function AppSidebar({ module }) {
@@ -56,17 +56,21 @@ export default function AppSidebar({ module }) {
   useEffect(() => {
     const socket = io("http://localhost:4000/", { transports: ["websocket"] });
 
-    socket.emit("getWorkspaces", { token: Cookies.get("authToken") }, (data) => {
-      if (data) {
-        setWorkspaces(data);
-        console.log(data);
-        if (data.length > 0) {
-          setSelectedWorkspace(data[0].workspaceId);
+    socket.emit(
+      "getWorkspaces",
+      { token: Cookies.get("authToken") },
+      (data) => {
+        if (data) {
+          setWorkspaces(data);
+          console.log(data);
+          if (data.length > 0) {
+            setSelectedWorkspace(data[0].workspaceId);
+          }
+        } else {
+          setError("Failed to fetch workspaces");
         }
-      } else {
-        setError("Failed to fetch workspaces");
       }
-    });
+    );
 
     socket.on("connect_error", (err) => {
       setError(`Connection error: ${err.message}`);
@@ -108,17 +112,25 @@ export default function AppSidebar({ module }) {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-[--radix-popper-anchor-width] flex flex-col mt-2 max-h-60 overflow-y-auto scrollbar-hidden absolute z-10">
                     {error ? (
-                      <div className="text-red-500 text-center p-2">{error}</div>
+                      <div className="text-red-500 text-center p-2">
+                        {error}
+                      </div>
                     ) : workspaces.length === 0 ? (
-                      <div className="text-center p-2">No workspaces available</div>
+                      <div className="text-center p-2">
+                        No workspaces available
+                      </div>
                     ) : (
                       workspaces.map((workspace) => (
                         <Link
                           key={workspace.workspaceId}
                           href={`/${module}/workspace/${workspace.workspaceId}`}
-                          onClick={() => setSelectedWorkspace(workspace.workspaceId)}
+                          onClick={() =>
+                            setSelectedWorkspace(workspace.workspaceId)
+                          }
                           className={`border border-gray-300 rounded-md mb-3 p-2 hover:bg-gray-200 transition duration-150 ${
-                            selectedWorkspace === workspace.workspaceId ? "bg-gray-300" : ""
+                            selectedWorkspace === workspace.workspaceId
+                              ? "bg-gray-300"
+                              : ""
                           }`}
                         >
                           {workspace.workspaceName}
@@ -134,7 +146,8 @@ export default function AppSidebar({ module }) {
                     <span className="text-sm">
                       {
                         workspaces.find(
-                          (workspace) => workspace.workspaceId === selectedWorkspace
+                          (workspace) =>
+                            workspace.workspaceId === selectedWorkspace
                         )?.workspaceName
                       }
                     </span>

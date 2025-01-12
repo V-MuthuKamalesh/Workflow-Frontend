@@ -7,14 +7,12 @@ import { useState, useEffect } from "react";
 export default function Header() {
   const [authToken, setAuthToken] = useState(null);
 
-  // Check if authToken exists when the component mounts
   useEffect(() => {
-    const token = Cookies.get("authToken"); // Get authToken cookie
-    setAuthToken(token); // Update state with token value
+    const token = Cookies.get("authToken");
+    setAuthToken(token);
   }, []);
 
   const handleLogout = () => {
-    // Clear the authToken cookie and update state
     Cookies.remove("authToken");
     setAuthToken(null);
   };

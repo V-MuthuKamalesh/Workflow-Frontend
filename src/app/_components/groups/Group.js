@@ -1,7 +1,7 @@
 "use client";
 
 import { useDispatch } from "react-redux";
-import { updateGroup } from "@/redux/feautres/boardSlice.js";
+import { setBoardData, updateGroup } from "@/redux/feautres/boardSlice.js";
 import TaskRow from "./TaskRow";
 import AddTask from "./AddTask";
 import GroupHeader from "./GroupHeader";
@@ -43,9 +43,25 @@ export default function Group({ group }) {
     handleGroupNameSave(groupName);
     setEditingGroupName(false);
   };
+
+  const handleDeleteGroup = (groupId) => {
+    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
+
+    socket.emit("removeGroupFromBoard", { groupId }, (response) => {
+      if (!response) {
+        console.error("Error deleting task.");
+        return;
+      }
+
+      console.log(response);
+
+      // dispatch(setBoardData(response));
+    });
+  };
+
   return (
     <div className="mb-6">
-      <div className="text-xl font-semibold mb-2">
+      <div className="flex justify-between items-center font-semibold mb-2">
         {editingGroupName ? (
           <input
             type="text"
@@ -53,19 +69,26 @@ export default function Group({ group }) {
             onChange={(event) => setGroupName(event.target.value)}
             onKeyDown={handleKeyDown}
             onBlur={handleBlur}
-            className="px-2 w-full bg-transparent focus:outline-none focus:ring focus:ring-gray-400 focus:rounded-md"
+            className="px-2 w-full bg-transparent text-xl focus:outline-none focus:ring focus:ring-gray-400 focus:rounded-md"
             autoFocus
           />
         ) : (
           <span
             onClick={() => setEditingGroupName(true)}
-            className="cursor-pointer border border-transparent rounded-md hover:border-gray-400 px-2 py-1 transition"
+            className="cursor-pointer border border-transparent text-xl rounded-md hover:border-gray-400 px-2 py-1 transition"
             title="Click to edit"
           >
             {groupName}
           </span>
         )}
+        <button
+          className="bg-red-500 text-white px-2 py-1 rounded-md shadow-md hover:bg-red-600 hover:shadow-lg transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-1"
+          onClick={() => handleDeleteGroup(group.groupId)}
+        >
+          Delete Group
+        </button>
       </div>
+
       <table className="table-auto w-full border-collapse border border-gray-300">
         <tbody>
           <GroupHeader fields={fields} />

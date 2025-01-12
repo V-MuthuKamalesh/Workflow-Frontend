@@ -1,12 +1,15 @@
 "use client";
 
+import { Plus } from "lucide-react";
+
 export default function AddGroupButton({ onAddGroup }) {
   return (
     <button
-      className="px-6 py-3 bg-green-500 text-white rounded-md hover:bg-green-600"
+      className="mt-10 px-6 py-3 flex items-center space-x-1 bg-green-500 text-white rounded-md hover:bg-green-600"
       onClick={onAddGroup}
     >
-      Add Group
+      <span>Add Group</span>
+      <Plus />
     </button>
   );
 }

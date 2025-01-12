@@ -76,7 +76,6 @@ export default function GroupsDisplay({ boardId }) {
         <h1 className="text-2xl font-bold">
           {boardData.workspaceName} - {boardData.boardName}
         </h1>
-        <AddGroupButton onAddGroup={handleAddGroup} />
       </div>
 
       <div className="space-y-14">
@@ -84,6 +83,8 @@ export default function GroupsDisplay({ boardId }) {
           <Group key={group.groupId} group={group} />
         ))}
       </div>
+
+      <AddGroupButton onAddGroup={handleAddGroup} />
     </div>
   );
 }

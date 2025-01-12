@@ -3,17 +3,17 @@ import AppSidebar from "@/app/_components/header/AppSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 const moduleColors = {
-  "work-management": "bg-teal-100",
+  "work-management": "bg-purple-100",
   dev: "bg-green-100",
   crm: "bg-yellow-100",
-  service: "bg-purple-100",
+  service: "bg-teal-100",
 };
 
 const moduleBackgrounds = {
-  "work-management": "bg-teal-50",
+  "work-management": "bg-purple-50",
   dev: "bg-green-50",
   crm: "bg-yellow-50",
-  service: "bg-purple-50",
+  service: "bg-teal-50",
 };
 
 export default async function Layout({ children, params }) {
@@ -30,7 +30,9 @@ export default async function Layout({ children, params }) {
           <AppSidebar module={module} />
           <main className="flex-1">
             <SidebarTrigger />
-            <section className={`min-h-96 ${sectionBgColor} mb-5 ml-7 -mt-7 rounded-l-3xl`}>
+            <section
+              className={`min-h-96 ${sectionBgColor} mb-5 ml-7 -mt-7 rounded-l-3xl`}
+            >
               {children}
             </section>
           </main>
