@@ -1,56 +1,66 @@
 "use client";
 
+import { addItemToGroup } from "@/redux/feautres/boardSlice";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { io } from "socket.io-client";
 
-export default function AddTask(groupId) {
-  const [newTaskName, setNewTaskName] = useState("");
+export default function AddTask({ groupId }) {
+  const [taskName, setTaskName] = useState("");
+  const dispatch = useDispatch();
 
   const handleAddTask = () => {
-    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
-
-    if (!newTaskName.trim()) {
+    if (!taskName.trim()) {
       alert("Task name cannot be empty.");
       return;
     }
 
+    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
+
     const newItem = {
-      itemName: newTaskName,
+      itemName: taskName,
       assignedToId: [],
-      status: "Pending",
-      dueDate: new Date(),
+      status: "",
+      dueDate: new Date().toISOString(),
     };
 
     socket.emit("addItemToGroup", { groupId, item: newItem }, (response) => {
-      if (response?.error) {
-        console.error("Error creating item:", response.error);
+      if (!response) {
+        console.error("Error adding task to group.");
         return;
       }
 
       console.log(response);
 
-      setNewTaskName("");
+      const newItem = {
+        itemId: response._id,
+        itemName: response.itemName,
+        assignedToId: response.assignedToId,
+        status: response.status,
+        dueDate: response.dueDate,
+      };
+
+      dispatch(addItemToGroup({ groupId, item: newItem }));
+      setTaskName("");
     });
   };
 
   return (
-    <tr className="hover:bg-gray-50">
-      <td className="border border-gray-300 px-1 py-1 w-96">
-        <div className="flex items-center space-x-2">
-          <input
-            type="text"
-            placeholder="Enter task name..."
-            value={newTaskName}
-            onChange={(e) => setNewTaskName(e.target.value)}
-            className="max-w-lg bg-transparent border border-gray-300 rounded-md px-2 py-1 focus:outline-none"
-          />
-          <button
-            onClick={handleAddTask}
-            className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600"
-          >
-            Add Task
-          </button>
-        </div>
+    <tr>
+      <td colSpan="3">
+        <input
+          type="text"
+          placeholder="New task..."
+          value={taskName}
+          onChange={(event) => setTaskName(event.target.value)}
+          className="border border-gray-300 rounded-md px-2 py-1"
+        />
+        <button
+          onClick={handleAddTask}
+          className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md"
+        >
+          Add Task
+        </button>
       </td>
     </tr>
   );

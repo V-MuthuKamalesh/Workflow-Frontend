@@ -6,8 +6,6 @@ import WorkspaceMembers from "@/app/_components/workspaces/WorkspaceMembers";
 export default async function WorkspacePage({ params }) {
   const { module, workspaceId } = await params;
 
-  // const workspaceId = "677e095706a0ca6001a163f6";
-
   return (
     <div className="min-h-screen bg-gray-100">
       <WorkspaceHeader module={module} workspaceName={"My Workspace"} />

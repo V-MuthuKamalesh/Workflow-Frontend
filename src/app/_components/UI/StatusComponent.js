@@ -2,11 +2,16 @@
 
 import { useState } from "react";
 
-export default function StatusComponent({
-  currentStatus,
-  statusOptions,
-  onStatusChange,
-}) {
+const statusOptions = [
+  "Ready to start",
+  "In Progress",
+  "Waiting for review",
+  "Pending Deploy",
+  "Done",
+  "Stuck",
+];
+
+export default function StatusComponent({ currentStatus, onStatusChange }) {
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
   const statusColors = {

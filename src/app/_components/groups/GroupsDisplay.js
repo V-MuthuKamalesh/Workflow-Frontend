@@ -1,31 +1,62 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Group from "./Group";
 import AddGroupButton from "./AddGroupButton";
+import { fetchBoardData, setBoardData } from "@/redux/feautres/boardSlice.js";
+import { io } from "socket.io-client";
 
 export default function GroupsDisplay({ boardId }) {
-  const [boardData, setBoardData] = useState({ groups: [] });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  const socket = io("http://localhost:4000/", { transports: ["websocket"] });
+  const {
+    data: boardData,
+    loading,
+    error,
+  } = useSelector((state) => state.board);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    socket.emit("getBoardById", { boardId }, (response) => {
-      setLoading(false);
-      if (response.error) {
-        setError(response.error);
-      } else {
-        setBoardData(response);
-      }
-    });
+    dispatch(fetchBoardData(boardId));
+  }, [boardId, dispatch]);
 
-    return () => {
-      socket.disconnect();
+  const handleAddGroup = () => {
+    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
+
+    const newItem = {
+      itemName: "item",
+      assignedToId: [],
+      status: "",
+      dueDate: new Date(),
     };
-  }, [boardId]);
+
+    socket.emit("createItem", { item: newItem }, (response) => {
+      if (!response) {
+        console.error("Error creating item.");
+        return;
+      }
+
+      const newItemId = response.itemId;
+      const newGroup = {
+        groupName: `New Group ${boardData.groups.length + 1}`,
+        items: [newItemId],
+      };
+
+      socket.emit(
+        "addGroupToBoard",
+        { boardId, group: newGroup },
+        (response) => {
+          if (!response) {
+            console.error("Error adding group to board.");
+            return;
+          }
+
+          dispatch(setBoardData(response));
+        }
+      );
+    });
+  };
+
+  console.log(boardData);
 
   if (loading) {
     return (
@@ -39,67 +70,18 @@ export default function GroupsDisplay({ boardId }) {
     return <div className="ml-32 text-red-500">{error}</div>;
   }
 
-  const handleAddGroup = () => {
-    const newItem = {
-      itemName: "item",
-      assignedToId: [],
-      status: "",
-      dueDate: new Date(),
-    };
-
-    socket.emit("createItem", { item: newItem }, (response) => {
-      console.log("createItem response:", response);
-      if (!response) {
-        console.error("No response from server.");
-        return;
-      }
-
-      if (response.error) {
-        console.error(response.error);
-      } else {
-        const newGroup = {
-          groupName: `New Group ${boardData.groups.length + 1}`,
-          items: [response.itemId],
-        };
-
-        socket.emit(
-          "addGroupToBoard",
-          { boardId, group: newGroup },
-          (updatedBoard) => {
-            console.log("addGroupToBoard response:", updatedBoard);
-            if (!updatedBoard) {
-              console.error("No response from server.");
-              return;
-            }
-
-            if (updatedBoard.error) {
-              console.error(updatedBoard.error);
-            } else {
-              setBoardData(updatedBoard);
-            }
-          }
-        );
-      }
-    });
-  };
-
   return (
     <div className="px-16 py-8">
       <div className="flex items-center justify-between mb-5">
         <h1 className="text-2xl font-bold">
           {boardData.workspaceName} - {boardData.boardName}
         </h1>
-        <AddGroupButton handleAddGroup={handleAddGroup} />
+        <AddGroupButton onAddGroup={handleAddGroup} />
       </div>
 
       <div className="space-y-14">
         {boardData.groups.map((group) => (
-          <Group
-            key={group.groupId}
-            group={group}
-            socket={socket}
-            setBoardData={setBoardData}
-          />
+          <Group key={group.groupId} group={group} />
         ))}
       </div>
     </div>

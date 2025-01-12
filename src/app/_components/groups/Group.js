@@ -1,84 +1,48 @@
-import { useState } from "react";
-import GroupHeader from "./GroupHeader";
+"use client";
+
+import { useDispatch } from "react-redux";
+import { updateGroup } from "@/redux/feautres/boardSlice.js";
 import TaskRow from "./TaskRow";
 import AddTask from "./AddTask";
+import GroupHeader from "./GroupHeader";
+import { io } from "socket.io-client";
+import { useState } from "react";
 
-export default function Group({ group, socket, setBoardData }) {
+const fields = ["itemName", "assignedToId", "status", "dueDate"];
+
+export default function Group({ group }) {
   const [editingGroupName, setEditingGroupName] = useState(false);
   const [groupName, setGroupName] = useState(group.groupName);
+  const dispatch = useDispatch();
 
-  const displayedFields = ["itemName", "assignedToId", "status", "dueDate"];
-  const statusOptions = [
-    "Ready to start",
-    "In Progress",
-    "Waiting for review",
-    "Pending Deploy",
-    "Done",
-    "Stuck",
-  ];
+  const handleGroupNameSave = (newName) => {
+    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
 
-  const handleEditTask = (entryIndex, field, value) => {
-    setBoardData((prev) => {
-      const updatedGroups = prev.groups.map((grp) => {
-        if (grp.groupId === group.groupId) {
-          const updatedItems = grp.items.map((item, index) => {
-            if (index === entryIndex) {
-              const updatedItem = { ...item, [field]: value };
-
-              socket.emit(
-                "updateItemInGroup",
-                { itemId: item.itemId, updateData: updatedItem },
-                (response) => {
-                  if (response.error) {
-                    console.error(response.error);
-                  }
-                }
-              );
-
-              return updatedItem;
-            }
-            return item;
-          });
-
-          return { ...grp, items: updatedItems };
-        }
-        return grp;
-      });
-
-      return { ...prev, groups: updatedGroups };
-    });
-  };
-
-  const handleGroupNameChange = (e) => {
-    setGroupName(e.target.value);
-  };
-
-  const handleGroupNameSave = () => {
     socket.emit(
       "updateGroupInBoard",
-      { groupId: group.groupId, updateData: { groupName } },
+      { groupId: group.groupId, updateData: { groupName: newName } },
       (response) => {
-        if (response.error) {
-          console.error(response.error);
-        } else {
-          setEditingGroupName(false);
-          setBoardData((prev) => {
-            const updatedGroups = prev.groups.map((grp) =>
-              grp.groupId === group.groupId ? { ...grp, groupName } : grp
-            );
-            return { ...prev, groups: updatedGroups };
-          });
+        if (!response) {
+          console.error("Error updating group name.");
+          return;
         }
+
+        console.log(response);
       }
     );
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleGroupNameSave();
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleGroupNameSave(groupName);
+      setEditingGroupName(false);
     }
   };
 
+  const handleBlur = () => {
+    handleGroupNameSave(groupName);
+    setEditingGroupName(false);
+  };
   return (
     <div className="mb-6">
       <div className="text-xl font-semibold mb-2">
@@ -86,9 +50,9 @@ export default function Group({ group, socket, setBoardData }) {
           <input
             type="text"
             value={groupName}
-            onChange={handleGroupNameChange}
+            onChange={(event) => setGroupName(event.target.value)}
             onKeyDown={handleKeyDown}
-            onBlur={handleGroupNameSave}
+            onBlur={handleBlur}
             className="px-2 w-full bg-transparent focus:outline-none focus:ring focus:ring-gray-400 focus:rounded-md"
             autoFocus
           />
@@ -103,19 +67,10 @@ export default function Group({ group, socket, setBoardData }) {
         )}
       </div>
       <table className="table-auto w-full border-collapse border border-gray-300">
-        <thead>
-          <GroupHeader fields={displayedFields} />
-        </thead>
         <tbody>
+          <GroupHeader fields={fields} />
           {group.items.map((item, index) => (
-            <TaskRow
-              key={index}
-              groupId={group.groupdId}
-              item={item}
-              fields={displayedFields}
-              statusOptions={statusOptions}
-              onEditTask={(field, value) => handleEditTask(index, field, value)}
-            />
+            <TaskRow key={index} item={item} fields={fields} />
           ))}
           <AddTask groupId={group.groupId} />
         </tbody>
