@@ -11,13 +11,15 @@ import { fetchBoardsByWorkspaceId } from "@/redux/feautres/workspaceSlice";
 
 export default function WorkspaceDisplay({ module, workspaceId }) {
   const dispatch = useDispatch();
-  const { workspaceName, loading, error } = useSelector(
+  const { workspaceName, members, loading, error } = useSelector(
     (state) => state.workspace
   );
 
   useEffect(() => {
     dispatch(fetchBoardsByWorkspaceId(workspaceId));
   }, [workspaceId, dispatch]);
+
+  console.log(members);
 
   if (loading) {
     return (
@@ -41,7 +43,7 @@ export default function WorkspaceDisplay({ module, workspaceId }) {
 
       <div className="container mx-auto px-4 py-8 space-y-8">
         <section className="bg-white rounded-lg shadow-lg p-6 space-y-10">
-          <WorkspaceMembers workspaceId={workspaceId} />
+          <WorkspaceMembers members={members} />
 
           <div className="space-y-8">
             <div>

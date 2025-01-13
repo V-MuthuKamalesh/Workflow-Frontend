@@ -2,24 +2,26 @@
 
 import { useState } from "react";
 
-export default function WorkspaceMembers({ workspaceId }) {
-  const [activeTab, setActiveTab] = useState("Admin");
+export default function WorkspaceMembers({ members }) {
+  const [activeTab, setActiveTab] = useState("admin");
 
-  const members = {
-    Admin: [{ name: "John Doe", role: "Admin" }],
-    Member: [
-      { name: "Jane Smith", role: "Member" },
-      { name: "Tom Johnson", role: "Member" },
-    ],
-    Guest: [{ name: "Emily Davis", role: "Guest" }],
-  };
+  // Organize members by role
+  const groupedMembers = members.reduce(
+    (acc, member) => {
+      acc[member.role].push(member);
+      return acc;
+    },
+    { admin: [], member: [] }
+  );
 
   return (
     <div className="mt-6">
-      <h3 className="text-2xl font-semibold text-gray-800 mb-4">Workspace Members</h3>
+      <h3 className="text-2xl font-semibold text-gray-800 mb-4">
+        Workspace Members
+      </h3>
 
       <div className="flex space-x-4 border-b mb-4">
-        {Object.keys(members).map((role) => (
+        {Object.keys(groupedMembers).map((role) => (
           <button
             key={role}
             onClick={() => setActiveTab(role)}
@@ -29,19 +31,19 @@ export default function WorkspaceMembers({ workspaceId }) {
                 : "text-gray-600 hover:text-blue-500"
             } transition duration-200`}
           >
-            {role}
+            {role.charAt(0).toUpperCase() + role.slice(1)}
           </button>
         ))}
       </div>
 
-      <ul className="">
-        {members[activeTab].map((member, index) => (
-          <li
-            key={index}
-            className="flex justify-between items-center p-2 bg-white rounded-lg"
-          >
-            <div className="flex items-center space-x-3">
-              <span className="font-medium text-gray-800">{member.name}</span>
+      <ul>
+        {groupedMembers[activeTab].map((member, index) => (
+          <li key={index} className="p-2 bg-white rounded-lg shadow-sm mb-2">
+            <div className="space-x-3">
+              <span className="font-medium text-gray-800">
+                {member.fullname}
+              </span>
+              <span className="text-gray-500 text-sm">{member.email}</span>
             </div>
           </li>
         ))}

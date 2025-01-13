@@ -1,6 +1,6 @@
 "use client";
 
-import { setWorkspaceData } from "@/redux/feautres/workspaceSlice";
+import { removeBoard } from "@/redux/feautres/workspaceSlice";
 import { Trash2 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { io } from "socket.io-client";
@@ -19,7 +19,7 @@ export default function DeleteBoard({ boardId }) {
         return;
       }
 
-      dispatch(setWorkspaceData(response));
+      dispatch(removeBoard(boardId));
     });
   };
 
