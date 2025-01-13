@@ -5,7 +5,6 @@ import { useState } from "react";
 export default function WorkspaceMembers({ members }) {
   const [activeTab, setActiveTab] = useState("admin");
 
-  // Organize members by role
   const groupedMembers = members.reduce(
     (acc, member) => {
       acc[member.role].push(member);
@@ -38,7 +37,7 @@ export default function WorkspaceMembers({ members }) {
 
       <ul>
         {groupedMembers[activeTab].map((member, index) => (
-          <li key={index} className="p-2 bg-white rounded-lg shadow-sm mb-2">
+          <li key={index} className="p-2 bg-white mb-2">
             <div className="space-x-3">
               <span className="font-medium text-gray-800">
                 {member.fullname}
