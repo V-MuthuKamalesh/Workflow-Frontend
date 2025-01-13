@@ -1,12 +1,12 @@
-export default function WorkspaceHeader({ module, workspaceName }) {
-  const moduleColors = {
-    "work-management": "from-purple-600 to-purple-400",
-    dev: "from-green-600 to-green-400",
-    crm: "from-yellow-600 to-yellow-400",
-    service: "from-teal-600 to-teal-400",
-    default: "from-gray-600 to-gray-400",
-  };
+const moduleColors = {
+  "work-management": "from-purple-600 to-purple-400",
+  dev: "from-green-600 to-green-400",
+  crm: "from-yellow-600 to-yellow-400",
+  service: "from-teal-600 to-teal-400",
+  default: "from-gray-600 to-gray-400",
+};
 
+export default function WorkspaceHeader({ module, workspaceName }) {
   const bgColor = moduleColors[module] || moduleColors.default;
 
   return (
@@ -19,9 +19,9 @@ export default function WorkspaceHeader({ module, workspaceName }) {
           {module.replace("-", " ")}
         </p>
       </div>
-      <button className="bg-gray-800 text-white py-2 px-6 rounded-lg hover:bg-gray-700 transition-colors duration-300 flex items-center gap-2">
+      {/* <button className="bg-gray-800 text-white py-2 px-6 rounded-lg hover:bg-gray-700 transition-colors duration-300 flex items-center gap-2">
         <span>Edit Workspace</span>
-      </button>
+      </button> */}
     </div>
   );
 }

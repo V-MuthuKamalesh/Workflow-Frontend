@@ -1,9 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { ChangeCircleRounded } from "@mui/icons-material";
-import { Bell, User, UserPlus, Search } from "lucide-react";
 import ModuleSwitcher from "./ModuleSwitcher";
+import { UserPlus } from "lucide-react";
+import {
+  ChangeCircleRounded,
+  Notifications,
+  Person,
+  Search,
+} from "@mui/icons-material";
+import UserProfile from "./UserProfile";
 
 const moduleColors = {
   "work-management": "bg-purple-100",
@@ -14,6 +20,7 @@ const moduleColors = {
 
 export default function AppHeader({ module }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const bgColor = moduleColors[module] || "bg-gray-50";
 
@@ -33,15 +40,15 @@ export default function AppHeader({ module }) {
 
         <div className="flex items-center space-x-4 cursor-pointer">
           <div className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200 transition duration-200">
-            <UserPlus className="text-gray-600" size={20} />
+            <UserPlus className="text-gray-600" fontSize="medium" />
           </div>
 
           <div className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200 transition duration-200">
-            <Bell className="text-gray-600" size={20} />
+            <Notifications className="text-gray-600" fontSize="medium" />
           </div>
 
           <div className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200 transition duration-200">
-            <Search className="text-gray-600" size={20} />
+            <Search className="text-gray-600" fontSize="medium" />
           </div>
 
           <div
@@ -55,8 +62,11 @@ export default function AppHeader({ module }) {
             />
           </div>
 
-          <div className="flex items-center justify-center p-2 rounded-full bg-gray-200 transition duration-200">
-            <User className="text-gray-600" size={20} />
+          <div
+            className="flex items-center justify-center p-2 rounded-full bg-gray-200 transition duration-200"
+            onClick={() => setIsProfileOpen(true)}
+          >
+            <Person className="text-gray-600" fontSize="medium" />
           </div>
         </div>
       </nav>
@@ -64,6 +74,11 @@ export default function AppHeader({ module }) {
       <ModuleSwitcher
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
+      />
+
+      <UserProfile
+        isProfileOpen={isProfileOpen}
+        setIsProfileOpen={setIsProfileOpen}
       />
     </header>
   );

@@ -10,7 +10,7 @@ import { useState } from "react";
 
 const fields = ["itemName", "assignedToId", "status", "dueDate"];
 
-export default function Group({ group }) {
+export default function Group({ boardId, group }) {
   const [editingGroupName, setEditingGroupName] = useState(false);
   const [groupName, setGroupName] = useState(group.groupName);
   const dispatch = useDispatch();
@@ -26,8 +26,6 @@ export default function Group({ group }) {
           console.error("Error updating group name.");
           return;
         }
-
-        console.log(response);
       }
     );
   };
@@ -53,9 +51,7 @@ export default function Group({ group }) {
         return;
       }
 
-      console.log(response);
-
-      // dispatch(setBoardData(response));
+      dispatch(setBoardData(response));
     });
   };
 
@@ -69,7 +65,7 @@ export default function Group({ group }) {
             onChange={(event) => setGroupName(event.target.value)}
             onKeyDown={handleKeyDown}
             onBlur={handleBlur}
-            className="px-2 w-full bg-transparent text-xl focus:outline-none focus:ring focus:ring-gray-400 focus:rounded-md"
+            className="px-2 bg-transparent text-xl focus:outline-none focus:ring focus:ring-gray-400 focus:rounded-md"
             autoFocus
           />
         ) : (

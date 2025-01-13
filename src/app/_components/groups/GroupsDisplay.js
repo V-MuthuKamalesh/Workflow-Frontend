@@ -56,8 +56,6 @@ export default function GroupsDisplay({ boardId }) {
     });
   };
 
-  console.log(boardData);
-
   if (loading) {
     return (
       <div className="text-gray-500 ml-32 text-lg italic pt-7 flex items-center justify-center">
@@ -80,7 +78,7 @@ export default function GroupsDisplay({ boardId }) {
 
       <div className="space-y-14">
         {boardData.groups.map((group) => (
-          <Group key={group.groupId} group={group} />
+          <Group key={group.groupId} boardId={boardId} group={group} />
         ))}
       </div>
 

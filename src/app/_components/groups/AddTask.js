@@ -30,8 +30,6 @@ export default function AddTask({ groupId }) {
         return;
       }
 
-      console.log(response);
-
       const newItem = {
         itemId: response._id,
         itemName: response.itemName,
