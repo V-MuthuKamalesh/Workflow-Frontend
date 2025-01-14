@@ -8,6 +8,7 @@ import BoardsDisplay from "../boards/BoardsDisplay";
 import ActivityFeed from "./ActivityFeed";
 import { useEffect } from "react";
 import { fetchBoardsByWorkspaceId } from "@/redux/feautres/workspaceSlice";
+import { setCookies } from "@/app/_utils/helpers/cookies";
 
 export default function WorkspaceDisplay({ module, workspaceId }) {
   const dispatch = useDispatch();
@@ -17,9 +18,8 @@ export default function WorkspaceDisplay({ module, workspaceId }) {
 
   useEffect(() => {
     dispatch(fetchBoardsByWorkspaceId(workspaceId));
+    setCookies("workspaceId", workspaceId);
   }, [workspaceId, dispatch]);
-
-  console.log(members);
 
   if (loading) {
     return (
@@ -39,7 +39,11 @@ export default function WorkspaceDisplay({ module, workspaceId }) {
 
   return (
     <>
-      <WorkspaceHeader module={module} workspaceName={workspaceName} />
+      <WorkspaceHeader
+        module={module}
+        workspaceId={workspaceId}
+        workspaceName={workspaceName}
+      />
 
       <div className="container mx-auto px-4 py-8 space-y-8">
         <section className="bg-white rounded-lg shadow-lg p-6 space-y-10">

@@ -6,6 +6,8 @@ import Group from "./Group";
 import AddGroupButton from "./AddGroupButton";
 import { fetchBoardData, setBoardData } from "@/redux/feautres/boardSlice.js";
 import { io } from "socket.io-client";
+import { fetchBoardsByWorkspaceId } from "@/redux/feautres/workspaceSlice";
+import Cookies from "js-cookie";
 
 export default function GroupsDisplay({ boardId }) {
   const {
@@ -16,6 +18,7 @@ export default function GroupsDisplay({ boardId }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(fetchBoardsByWorkspaceId(Cookies.get("workspaceId")));
     dispatch(fetchBoardData(boardId));
   }, [boardId, dispatch]);
 
@@ -39,6 +42,7 @@ export default function GroupsDisplay({ boardId }) {
       const newGroup = {
         groupName: `New Group ${boardData.groups.length + 1}`,
         items: [newItemId],
+        New,
       };
 
       socket.emit(
@@ -55,6 +59,8 @@ export default function GroupsDisplay({ boardId }) {
       );
     });
   };
+
+  console.log(boardData);
 
   if (loading) {
     return (
