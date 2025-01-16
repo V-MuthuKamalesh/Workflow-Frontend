@@ -52,7 +52,7 @@ export default function WorkspaceDisplay({ module, workspaceId }) {
           <div className="space-y-8">
             <div>
               <h1 className="text-2xl font-semibold">Create Board</h1>
-              <CreateBoard workspaceId={workspaceId} />
+              <CreateBoard module={module} workspaceId={workspaceId} />
             </div>
 
             <div>

@@ -19,15 +19,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
 import { Plus } from "lucide-react";
 
-export default function TaskRow({ item, fields }) {
+export default function TaskRow({ module, boardType, item, fields }) {
+  const { data: boardData } = useSelector((state) => state.board);
   const [editingField, setEditingField] = useState(null);
-  const [openAddAssignee, setOpenAddAssignee] = useState(false);
+  const [openAddAssignee, setOpenAddAssignee] = useState({
+    open: false,
+    assigneeType: null,
+  });
   const [selectedMember, setSelectedMember] = useState(null);
   const { members } = useSelector((state) => state.workspace);
   const dispatch = useDispatch();
 
-  const handleKeyDown = (e, field) => {
-    if (e.key === "Enter") {
+  console.log(boardData);
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
       setEditingField(null);
     }
   };
@@ -46,6 +52,7 @@ export default function TaskRow({ item, fields }) {
       {
         itemId: item.itemId,
         updateData: updatedItem,
+        type: boardType,
       },
       (response) => {
         if (!response) {
@@ -57,7 +64,7 @@ export default function TaskRow({ item, fields }) {
     dispatch(updateTaskField({ taskId: item.itemId, field, value }));
   };
 
-  const handleRemoveAssignee = (assigneeId) => {
+  const handleRemoveAssignee = (assigneeId, assigneeType) => {
     const socket = io("http://localhost:4000/", { transports: ["websocket"] });
 
     socket.emit(
@@ -65,6 +72,7 @@ export default function TaskRow({ item, fields }) {
       {
         itemId: item.itemId,
         userId: assigneeId,
+        type: assigneeType,
       },
       (response) => {
         if (!response) {
@@ -74,7 +82,7 @@ export default function TaskRow({ item, fields }) {
         dispatch(
           updateTaskField({
             taskId: item.itemId,
-            field: "assignedToId",
+            field: assigneeType,
             value: response.assignedToId,
           })
         );
@@ -90,6 +98,7 @@ export default function TaskRow({ item, fields }) {
       {
         itemId: item.itemId,
         userId: selectedMember.userId,
+        type: openAddAssignee.assigneeType,
       },
       (response) => {
         if (!response) {
@@ -99,7 +108,7 @@ export default function TaskRow({ item, fields }) {
         dispatch(
           updateTaskField({
             taskId: item.itemId,
-            field: "assignedToId",
+            field: openAddAssignee.assigneeType,
             value: response.assignedToId,
           })
         );
@@ -107,7 +116,93 @@ export default function TaskRow({ item, fields }) {
     );
 
     setSelectedMember(null);
-    setOpenAddAssignee(false);
+    setOpenAddAssignee({ open: false, assigneeType: null });
+  };
+
+  const getFieldDisplay = (field) => {
+    if (field === "status") {
+      return (
+        <StatusComponent
+          currentStatus={item[field]}
+          onStatusChange={(newStatus) => handleEditTask(field, newStatus)}
+        />
+      );
+    }
+
+    if (
+      field === "assignedToId" ||
+      field === "reporter" ||
+      field === "developer"
+    ) {
+      return (
+        <div className="flex flex-wrap gap-1">
+          {item[field]?.map((assignee) => (
+            <Tooltip
+              key={assignee.userId}
+              title={
+                <div>
+                  <strong>Name:</strong> {assignee.fullname || "Unknown"}
+                  <br />
+                  {/* <strong>Email:</strong> {assignee.email} */}
+                </div>
+              }
+              arrow
+            >
+              <Chip
+                avatar={
+                  // <Avatar>{assignee.email.charAt(0).toUpperCase()}</Avatar>
+                  <Avatar>M</Avatar>
+                }
+                onDelete={() => handleRemoveAssignee(assignee.userId, field)}
+                className="bg-gray-100 shadow-sm hover:bg-gray-200"
+              />
+            </Tooltip>
+          ))}
+          <Chip
+            avatar={<Plus />}
+            label="Add"
+            className="cursor-pointer bg-blue-100 hover:bg-blue-200"
+            onClick={() =>
+              setOpenAddAssignee({ open: true, assigneeType: field })
+            }
+          />
+        </div>
+      );
+    }
+
+    if (editingField === field) {
+      return (
+        <input
+          type={
+            field === "dueDate" || field === "startDate" || field === "endDate"
+              ? "date"
+              : "text"
+          }
+          value={field === "dueDate" ? item[field]?.split("T")[0] : item[field]}
+          className="w-full bg-transparent border border-gray-300 rounded-md focus:outline-none"
+          onChange={(event) => handleEditTask(field, event.target.value)}
+          onKeyDown={(event) => handleKeyDown(event, field)}
+          onBlur={handleBlur}
+          autoFocus
+        />
+      );
+    }
+
+    return (
+      <span
+        onClick={() => setEditingField(field)}
+        className="cursor-pointer border border-transparent rounded-md hover:border-gray-400 px-1 py-0.5 transition"
+        title="Click to edit"
+      >
+        {field === "dueDate" || field === "startDate" || field === "endDate"
+          ? new Date(item[field]).toLocaleDateString("en-US", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            })
+          : item[field]}
+      </span>
+    );
   };
 
   return (
@@ -115,77 +210,14 @@ export default function TaskRow({ item, fields }) {
       <tr className="hover:bg-gray-50">
         {fields.map((field) => (
           <td key={field} className="border border-gray-300 px-1 py-1 w-96">
-            {field === "status" ? (
-              <StatusComponent
-                currentStatus={item[field]}
-                onStatusChange={(newStatus) => handleEditTask(field, newStatus)}
-              />
-            ) : field === "assignedToId" ? (
-              <div className="flex flex-wrap gap-1">
-                {item[field]?.map((assignee) => (
-                  <Tooltip
-                    key={assignee.userId}
-                    title={
-                      <div>
-                        <strong>Name:</strong> {assignee.fullname || "Unknown"}
-                        <br />
-                        <strong>Email:</strong> {assignee.email}
-                      </div>
-                    }
-                    arrow
-                  >
-                    <Chip
-                      avatar={
-                        <Avatar>
-                          {assignee.email.charAt(0).toUpperCase()}
-                        </Avatar>
-                      }
-                      onDelete={() => handleRemoveAssignee(assignee.userId)}
-                      className="bg-gray-100 shadow-sm hover:bg-gray-200"
-                    />
-                  </Tooltip>
-                ))}
-                <Chip
-                  avatar={<Plus />}
-                  label="Add"
-                  className="cursor-pointer bg-blue-100 hover:bg-blue-200"
-                  onClick={() => setOpenAddAssignee(true)}
-                />
-              </div>
-            ) : editingField === field ? (
-              <input
-                type={field === "dueDate" ? "date" : "text"}
-                value={
-                  field === "dueDate" ? item[field]?.split("T")[0] : item[field]
-                }
-                className="w-full bg-transparent border border-gray-300 rounded-md focus:outline-none"
-                onChange={(event) => handleEditTask(field, event.target.value)}
-                onKeyDown={(event) => handleKeyDown(event, field)}
-                onBlur={handleBlur}
-                autoFocus
-              />
-            ) : (
-              <span
-                onClick={() => setEditingField(field)}
-                className="cursor-pointer border border-transparent rounded-md hover:border-gray-400 px-1 py-0.5 transition"
-                title="Click to edit"
-              >
-                {field === "dueDate"
-                  ? new Date(item[field]).toLocaleDateString("en-US", {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                    })
-                  : item[field]}
-              </span>
-            )}
+            {getFieldDisplay(field)}
           </td>
         ))}
       </tr>
 
       <Dialog
-        open={openAddAssignee}
-        onClose={() => setOpenAddAssignee(false)}
+        open={openAddAssignee.open}
+        onClose={() => setOpenAddAssignee({ open: false, assigneeType: null })}
         maxWidth="sm"
         fullWidth
       >
@@ -202,7 +234,12 @@ export default function TaskRow({ item, fields }) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenAddAssignee(false)} color="error">
+          <Button
+            onClick={() =>
+              setOpenAddAssignee({ open: false, assigneeType: null })
+            }
+            color="error"
+          >
             Cancel
           </Button>
           <Button

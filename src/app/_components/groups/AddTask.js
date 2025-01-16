@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { io } from "socket.io-client";
 
-export default function AddTask({ groupId }) {
+export default function AddTask({ module, boardType, groupId }) {
   const [taskName, setTaskName] = useState("");
   const dispatch = useDispatch();
 
@@ -17,30 +17,77 @@ export default function AddTask({ groupId }) {
 
     const socket = io("http://localhost:4000/", { transports: ["websocket"] });
 
-    const newItem = {
-      itemName: taskName,
-      assignedToId: [],
-      status: "",
-      dueDate: new Date().toISOString(),
+    // Dynamic newItem template
+    const newItemTemplate = {
+      "work-management": () => ({
+        itemName: taskName,
+        assignedToId: [],
+        status: "",
+        dueDate: new Date().toISOString(),
+      }),
+      crm: {
+        Lead: () => ({
+          leadName: taskName,
+          status: "New",
+          company: "",
+          title: "",
+          email: "",
+          lastInteraction: "",
+        }),
+      },
+      dev: {
+        Bug: () => ({
+          bugName: taskName,
+          reporter: [],
+          developer: [],
+          priority: "Low",
+          status: "Open",
+        }),
+        Sprint: () => ({
+          sprintName: taskName,
+          sprintGoals: "",
+          startDate: new Date().toISOString(),
+          endDate: new Date().toISOString(),
+        }),
+      },
+      service: {
+        Ticket: () => ({
+          ticketName: taskName,
+          description: "",
+          employee: [],
+          agent: [],
+          priority: "Low",
+          status: "Open",
+          requestType: "General",
+        }),
+      },
     };
 
-    socket.emit("addItemToGroup", { groupId, item: newItem }, (response) => {
-      if (!response) {
-        console.error("Error adding task to group.");
-        return;
+    const newItem =
+      typeof newItemTemplate[module] === "function"
+        ? newItemTemplate[module]()
+        : newItemTemplate[module]?.[boardType]?.() || {};
+
+    socket.emit(
+      "addItemToGroup",
+      { groupId, item: newItem, type: boardType },
+      (response) => {
+        if (!response) {
+          console.error("Error adding task to group.");
+          return;
+        }
+
+        console.log(response);
+
+        const createdItem = {
+          itemId: response._id,
+          ...response,
+        };
+
+        dispatch(addItemToGroup({ groupId, item: createdItem }));
+        setTaskName("");
       }
-
-      const newItem = {
-        itemId: response._id,
-        itemName: response.itemName,
-        assignedToId: response.assignedToId,
-        status: response.status,
-        dueDate: response.dueDate,
-      };
-
-      dispatch(addItemToGroup({ groupId, item: newItem }));
-      setTaskName("");
-    });
+    );
   };
 
   return (

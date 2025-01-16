@@ -1,6 +1,8 @@
 import AppHeader from "@/app/_components/header/AppHeader";
 import AppSidebar from "@/app/_components/header/AppSidebar";
+import { setCookies } from "@/app/_utils/helpers/cookies";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { cookies } from "next/headers";
 
 const moduleColors = {
   "work-management": "bg-purple-100",

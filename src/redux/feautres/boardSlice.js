@@ -13,6 +13,8 @@ export const fetchBoardData = createAsyncThunk(
           return rejectWithValue(response.error);
         }
 
+        console.log(response);
+
         resolve(response);
       });
     });

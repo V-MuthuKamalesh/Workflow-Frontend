@@ -27,8 +27,11 @@ export default function WorkspaceModal({ onClose }) {
       socket.emit(
         "createWorkspace",
         {
-          createdBy: Cookies.get("userId"),
-          workspaceName,
+          moduleId: Cookies.get("moduleId"),
+          workspaceData: {
+            createdBy: Cookies.get("userId"),
+            workspaceName,
+          },
         },
         (data) => {
           console.log(data);

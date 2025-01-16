@@ -6,9 +6,10 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { io } from "socket.io-client";
 
-export default function CreateBoard({ workspaceId }) {
+export default function CreateBoard({ module, workspaceId }) {
   const [boardName, setBoardName] = useState("");
-  const [loading, setLoading] = useState("");
+  const [boardType, setBoardType] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const dispatch = useDispatch();
 
@@ -22,6 +23,7 @@ export default function CreateBoard({ workspaceId }) {
 
     const board = {
       boardName,
+      type: boardType,
       createdById: Cookies.get("userId"),
     };
 
@@ -41,21 +43,58 @@ export default function CreateBoard({ workspaceId }) {
 
         dispatch(addBoard(response));
         setBoardName("");
+        setBoardType("");
         setLoading(false);
       }
     );
   };
 
+  const getOptionsForModule = () => {
+    switch (module) {
+      case "service":
+        return [{ value: "Ticket", label: "Ticket" }];
+      case "dev":
+        return [
+          { value: "Bug", label: "Bug" },
+          { value: "Sprint", label: "Sprint" },
+        ];
+      case "crm":
+        return [{ value: "Lead", label: "Lead" }];
+      default:
+        return [];
+    }
+  };
+
+  const moduleOptions = getOptionsForModule();
+
   return (
     <form onSubmit={handleCreateBoard} className="mt-1 max-w-md">
-      <div className="flex items-center space-x-4 ">
+      <div className="flex flex-col space-y-4">
         <input
           type="text"
           value={boardName}
           onChange={(event) => setBoardName(event.target.value)}
           placeholder="Enter board name"
-          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+
+        {moduleOptions.length > 0 && (
+          <select
+            value={boardType}
+            onChange={(event) => setBoardType(event.target.value)}
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="" disabled>
+              Select type
+            </option>
+            {moduleOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        )}
+
         <button
           type="submit"
           disabled={loading}
@@ -65,9 +104,9 @@ export default function CreateBoard({ workspaceId }) {
         >
           {loading ? "Creating..." : "Create"}
         </button>
-      </div>
 
-      {error && <span className="text-red-500 text-sm">{error}</span>}
+        {error && <span className="text-red-500 text-sm">{error}</span>}
+      </div>
     </form>
   );
 }

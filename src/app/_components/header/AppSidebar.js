@@ -63,7 +63,7 @@ export default function AppSidebar({ module }) {
 
     socket.emit(
       "getWorkspaces",
-      { token: Cookies.get("authToken") },
+      { moduleId: Cookies.get("moduleId"), token: Cookies.get("authToken") },
       (response) => {
         if (!response) {
           setFetchError("Error getting workspaces.");

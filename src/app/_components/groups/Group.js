@@ -1,19 +1,28 @@
 "use client";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setBoardData, updateGroup } from "@/redux/feautres/boardSlice.js";
 import TaskRow from "./TaskRow";
 import AddTask from "./AddTask";
 import GroupHeader from "./GroupHeader";
 import { io } from "socket.io-client";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { moduleFields } from "@/app/_utils/helpers/fields";
 
-const fields = ["itemName", "assignedToId", "status", "dueDate"];
-
-export default function Group({ boardId, group }) {
+export default function Group({ module, boardType, boardId, group }) {
   const [editingGroupName, setEditingGroupName] = useState(false);
   const [groupName, setGroupName] = useState(group.groupName);
   const dispatch = useDispatch();
+
+  const fields = useMemo(() => {
+    if (module === "work-management") {
+      return moduleFields["work-management"];
+    }
+    if (moduleFields[module] && moduleFields[module][boardType]) {
+      return moduleFields[module][boardType];
+    }
+    return [];
+  }, [module, boardType]);
 
   const handleGroupNameSave = (newName) => {
     const socket = io("http://localhost:4000/", { transports: ["websocket"] });
@@ -45,14 +54,18 @@ export default function Group({ boardId, group }) {
   const handleDeleteGroup = (groupId) => {
     const socket = io("http://localhost:4000/", { transports: ["websocket"] });
 
-    socket.emit("removeGroupFromBoard", { groupId }, (response) => {
-      if (!response) {
-        console.error("Error deleting task.");
-        return;
-      }
+    socket.emit(
+      "removeGroupFromBoard",
+      { groupId, type: boardType },
+      (response) => {
+        if (!response) {
+          console.error("Error deleting task.");
+          return;
+        }
 
-      dispatch(setBoardData(response));
-    });
+        dispatch(setBoardData(response));
+      }
+    );
   };
 
   return (
@@ -89,9 +102,19 @@ export default function Group({ boardId, group }) {
         <tbody>
           <GroupHeader fields={fields} />
           {group.items.map((item, index) => (
-            <TaskRow key={index} item={item} fields={fields} />
+            <TaskRow
+              key={index}
+              module={module}
+              boardType={boardType}
+              item={item}
+              fields={fields}
+            />
           ))}
-          <AddTask groupId={group.groupId} />
+          <AddTask
+            module={module}
+            boardType={boardType}
+            groupId={group.groupId}
+          />
         </tbody>
       </table>
     </div>

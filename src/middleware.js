@@ -8,6 +8,15 @@ export async function middleware(request) {
     return NextResponse.next();
   }
 
+  const moduleMatcher = [
+    "/:module/:view",
+    "/:module/boards/:boardId",
+    "/:module/workspace/:workspaceId",
+  ];
+  const matchesModuleRoute = moduleMatcher.some((matcher) =>
+    request.nextUrl.pathname.match(new RegExp(matcher))
+  );
+
   const authToken = request.cookies.get("authToken");
 
   if (!authToken) {
@@ -23,7 +32,29 @@ export async function middleware(request) {
       return NextResponse.redirect(new URL("/auth/signin", request.url));
     }
   } catch (error) {
-    console.error(error);
+    console.error("Error verifying token:", error);
+    return NextResponse.redirect(new URL("/auth/signin", request.url));
+  }
+
+  const moduleSelected = request.nextUrl.pathname.split("/")[1];
+
+  const moduleId =
+    moduleSelected === "work-management"
+      ? process.env.WORK_MANAGEMENT_MODULE_ID
+      : moduleSelected === "dev"
+      ? process.env.DEV_MODULE_ID
+      : moduleSelected === "crm"
+      ? process.env.CRM_MODULE_ID
+      : moduleSelected === "service"
+      ? process.env.SERVICE_MODULE_ID
+      : null;
+
+  if (moduleId) {
+    const response = NextResponse.next();
+
+    response.cookies.set("moduleId", moduleId);
+
+    return response;
   }
 
   return NextResponse.next();
@@ -31,6 +62,8 @@ export async function middleware(request) {
 
 export const config = {
   matcher: [
+    "/auth/signin",
+    "/auth/signup",
     "/:module/:view",
     "/:module/boards/:boardId",
     "/:module/workspace/:workspaceId",

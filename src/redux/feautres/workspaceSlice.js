@@ -50,6 +50,10 @@ export const workspaceSlice = createSlice({
         (board) => board.boardId !== action.payload
       );
     },
+    updateWorkspaceData: (state, action) => {
+      const { field, value } = action.payload;
+      state[field] = value;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -72,7 +76,7 @@ export const workspaceSlice = createSlice({
   },
 });
 
-export const { setWorkspaceData, addBoard, removeBoard } =
+export const { setWorkspaceData, addBoard, removeBoard, updateWorkspaceData } =
   workspaceSlice.actions;
 
 export default workspaceSlice.reducer;

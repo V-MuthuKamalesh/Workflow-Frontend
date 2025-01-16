@@ -8,6 +8,9 @@ import {
   TextField,
 } from "@mui/material";
 import { io } from "socket.io-client";
+import { useDispatch, useSelector } from "react-redux";
+import { updateWorkspaceData } from "@/redux/feautres/workspaceSlice";
+import Cookies from "js-cookie";
 
 const moduleColors = {
   "work-management": "from-purple-600 to-purple-400",
@@ -25,25 +28,56 @@ export default function WorkspaceHeader({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newWorkspaceName, setNewWorkspaceName] = useState(workspaceName);
   const [deleteInput, setDeleteInput] = useState("");
+  const dispatch = useDispatch();
 
   const bgColor = moduleColors[module] || moduleColors.default;
 
   const handleEditWorkspace = () => {
-    // const socket = io("http://localhost:4000/", { transports: ["websocket"] });
+    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
 
-    // const
+    socket.emit(
+      "updateWorkspaceById",
+      {
+        id: workspaceId,
+        updateData: { workspaceName: newWorkspaceName },
+      },
+      (response) => {
+        if (!response) {
+          console.error("Error updating workspace.");
+          return;
+        }
 
-    // socket.emit("updateWorkspaceById", {
-    //   id: workspaceId,
-    //   updateData: updatedName,
-    // });
+        dispatch(
+          updateWorkspaceData({
+            field: "workspaceName",
+            value: response.workspaceName,
+          })
+        );
+      }
+    );
 
     setIsDialogOpen(false);
   };
 
   const handleDeleteWorkspace = () => {
     if (deleteInput === `${module}/${workspaceName}`) {
-      console.log("Workspace deleted:", workspaceName);
+      const socket = io("http://localhost:4000/", {
+        transports: ["websocket"],
+      });
+
+      socket.emit(
+        "deleteWorkspaceById",
+        { id: workspaceId, moduleId: Cookies.get("moduleId") },
+        (response) => {
+          if (!response) {
+            console.error("Error deleting workspace.");
+            return;
+          }
+        }
+      );
+
+      window.location.href = `/${module}/home`;
+
       setIsDialogOpen(false);
     } else {
       alert("Invalid input. Please enter the correct combination.");
@@ -84,7 +118,7 @@ export default function WorkspaceHeader({
             />
             <TextField
               label="Delete Confirmation"
-              placeholder={`Enter work-management/${workspaceName}`}
+              placeholder={`Enter ${module}/${workspaceName}`}
               value={deleteInput}
               onChange={(event) => setDeleteInput(event.target.value)}
               fullWidth
@@ -101,7 +135,7 @@ export default function WorkspaceHeader({
           <Button
             onClick={handleDeleteWorkspace}
             color="warning"
-            disabled={deleteInput !== `${module}t/${workspaceName}`}
+            // disabled={deleteInput !== `${module}t/${workspaceName}`}
           >
             Delete
           </Button>

@@ -9,13 +9,14 @@ import { io } from "socket.io-client";
 import { fetchBoardsByWorkspaceId } from "@/redux/feautres/workspaceSlice";
 import Cookies from "js-cookie";
 
-export default function GroupsDisplay({ boardId }) {
+export default function GroupsDisplay({ module, boardId }) {
   const {
     data: boardData,
     loading,
     error,
   } = useSelector((state) => state.board);
   const dispatch = useDispatch();
+  const boardType = boardData.type;
 
   useEffect(() => {
     dispatch(fetchBoardsByWorkspaceId(Cookies.get("workspaceId")));
@@ -25,42 +26,89 @@ export default function GroupsDisplay({ boardId }) {
   const handleAddGroup = () => {
     const socket = io("http://localhost:4000/", { transports: ["websocket"] });
 
-    const newItem = {
-      itemName: "item",
-      assignedToId: [],
-      status: "",
-      dueDate: new Date(),
+    const newItemTemplate = {
+      "work-management": () => ({
+        itemName: "item",
+        assignedToId: [],
+        status: "",
+        dueDate: new Date(),
+      }),
+      crm: {
+        Lead: () => ({
+          leadName: "New Lead",
+          status: "",
+          company: "",
+          title: "",
+          email: "",
+          phone: "",
+          lastInteraction: "",
+        }),
+      },
+      dev: {
+        Bug: () => ({
+          bugName: "New Bug",
+          reporter: [],
+          developer: [],
+          priority: "",
+          status: "",
+        }),
+        Sprint: () => ({
+          sprintName: "New Sprint",
+          sprintGoals: "",
+          startDate: new Date(),
+          endDate: new Date(),
+        }),
+      },
+      service: {
+        Ticket: () => ({
+          ticketName: "New Ticket",
+          description: "",
+          employee: [],
+          agent: [],
+          priority: "",
+          status: "",
+          requestType: "",
+        }),
+      },
     };
 
-    socket.emit("createItem", { item: newItem }, (response) => {
-      if (!response) {
-        console.error("Error creating item.");
-        return;
-      }
+    const newItem =
+      typeof newItemTemplate[module] === "function"
+        ? newItemTemplate[module]()
+        : newItemTemplate[module]?.[boardType]?.() || {};
 
-      const newItemId = response.itemId;
-      const newGroup = {
-        groupName: `New Group ${boardData.groups.length + 1}`,
-        items: [newItemId],
-        New,
-      };
-
-      socket.emit(
-        "addGroupToBoard",
-        { boardId, group: newGroup },
-        (response) => {
-          if (!response) {
-            console.error("Error adding group to board.");
-            return;
-          }
-
-          dispatch(setBoardData(response));
+    socket.emit(
+      "createItem",
+      { item: newItem, type: boardType },
+      (response) => {
+        if (!response) {
+          console.error("Error creating item.");
+          return;
         }
-      );
-    });
-  };
 
-  console.log(boardData);
+        console.log(response);
+
+        const newGroup = {
+          groupName: `New Group ${boardData.groups.length + 1}`,
+        };
+
+        socket.emit(
+          "addGroupToBoard",
+          { boardId, group: newGroup, itemId: response.itemId },
+          (response) => {
+            if (!response) {
+              console.error("Error adding group to board.");
+              return;
+            }
+
+            console.log(response);
+
+            dispatch(setBoardData(response));
+          }
+        );
+      }
+    );
+  };
 
   if (loading) {
     return (
@@ -84,7 +132,13 @@ export default function GroupsDisplay({ boardId }) {
 
       <div className="space-y-14">
         {boardData.groups.map((group) => (
-          <Group key={group.groupId} boardId={boardId} group={group} />
+          <Group
+            key={group.groupId}
+            module={module}
+            boardType={boardType}
+            boardId={boardId}
+            group={group}
+          />
         ))}
       </div>
 
