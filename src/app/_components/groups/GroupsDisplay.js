@@ -37,11 +37,10 @@ export default function GroupsDisplay({ module, boardId }) {
         Lead: () => ({
           leadName: "New Lead",
           status: "",
-          company: "",
-          title: "",
-          email: "",
-          phone: "",
-          lastInteraction: "",
+          company: "Company Name",
+          title: "Title",
+          email: "name@company.com",
+          lastInteraction: new Date(),
         }),
       },
       dev: {
@@ -54,7 +53,7 @@ export default function GroupsDisplay({ module, boardId }) {
         }),
         Sprint: () => ({
           sprintName: "New Sprint",
-          sprintGoals: "",
+          sprintGoals: "Type your sprint goals here",
           startDate: new Date(),
           endDate: new Date(),
         }),
@@ -62,7 +61,7 @@ export default function GroupsDisplay({ module, boardId }) {
       service: {
         Ticket: () => ({
           ticketName: "New Ticket",
-          description: "",
+          description: "Ticket description",
           employee: [],
           agent: [],
           priority: "",

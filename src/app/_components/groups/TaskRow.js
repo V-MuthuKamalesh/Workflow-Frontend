@@ -2,7 +2,6 @@
 
 import { updateTaskField } from "@/redux/feautres/boardSlice";
 import { useState } from "react";
-import StatusComponent from "../UI/StatusComponent";
 import {
   Avatar,
   Chip,
@@ -17,10 +16,12 @@ import {
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
-import { Plus } from "lucide-react";
+import { Plus, Trash } from "lucide-react";
+import Priority from "../UI/Priority";
+import RequestType from "../UI/RequestType";
+import Status from "../UI/Status";
 
 export default function TaskRow({ module, boardType, item, fields }) {
-  const { data: boardData } = useSelector((state) => state.board);
   const [editingField, setEditingField] = useState(null);
   const [openAddAssignee, setOpenAddAssignee] = useState({
     open: false,
@@ -29,8 +30,6 @@ export default function TaskRow({ module, boardType, item, fields }) {
   const [selectedMember, setSelectedMember] = useState(null);
   const { members } = useSelector((state) => state.workspace);
   const dispatch = useDispatch();
-
-  console.log(boardData);
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -45,7 +44,7 @@ export default function TaskRow({ module, boardType, item, fields }) {
   const handleEditTask = (field, value) => {
     const socket = io("http://localhost:4000/", { transports: ["websocket"] });
 
-    const updatedItem = { ...item, [field]: value };
+    let updatedItem = { ...item, [field]: value };
 
     socket.emit(
       "updateItemInGroup",
@@ -122,9 +121,35 @@ export default function TaskRow({ module, boardType, item, fields }) {
   const getFieldDisplay = (field) => {
     if (field === "status") {
       return (
-        <StatusComponent
+        <Status
+          module={module}
+          type={boardType}
           currentStatus={item[field]}
           onStatusChange={(newStatus) => handleEditTask(field, newStatus)}
+        />
+      );
+    }
+
+    if (field === "priority") {
+      return (
+        <Priority
+          module={module}
+          type={boardType}
+          currentPriority={item[field]}
+          onPriorityChange={(newPriority) => handleEditTask(field, newPriority)}
+        />
+      );
+    }
+
+    if (field === "requestType") {
+      return (
+        <RequestType
+          module={module}
+          type={boardType}
+          currentRequestType={item[field]}
+          onRequestTypeChange={(newRequestType) =>
+            handleEditTask(field, newRequestType)
+          }
         />
       );
     }
@@ -132,26 +157,27 @@ export default function TaskRow({ module, boardType, item, fields }) {
     if (
       field === "assignedToId" ||
       field === "reporter" ||
-      field === "developer"
+      field === "developer" ||
+      field === "employee" ||
+      field === "agent"
     ) {
       return (
         <div className="flex flex-wrap gap-1">
-          {item[field]?.map((assignee) => (
+          {item[field]?.map((assignee, index) => (
             <Tooltip
-              key={assignee.userId}
+              key={`${field}-${assignee.userId}-${index}`}
               title={
                 <div>
                   <strong>Name:</strong> {assignee.fullname || "Unknown"}
                   <br />
-                  {/* <strong>Email:</strong> {assignee.email} */}
+                  <strong>Email:</strong> {assignee.email}
                 </div>
               }
               arrow
             >
               <Chip
                 avatar={
-                  // <Avatar>{assignee.email.charAt(0).toUpperCase()}</Avatar>
-                  <Avatar>M</Avatar>
+                  <Avatar>{assignee.email.charAt(0).toUpperCase()}</Avatar>
                 }
                 onDelete={() => handleRemoveAssignee(assignee.userId, field)}
                 className="bg-gray-100 shadow-sm hover:bg-gray-200"
@@ -174,7 +200,10 @@ export default function TaskRow({ module, boardType, item, fields }) {
       return (
         <input
           type={
-            field === "dueDate" || field === "startDate" || field === "endDate"
+            field === "dueDate" ||
+            field === "startDate" ||
+            field === "endDate" ||
+            field === "lastInteraction"
               ? "date"
               : "text"
           }
@@ -194,7 +223,10 @@ export default function TaskRow({ module, boardType, item, fields }) {
         className="cursor-pointer border border-transparent rounded-md hover:border-gray-400 px-1 py-0.5 transition"
         title="Click to edit"
       >
-        {field === "dueDate" || field === "startDate" || field === "endDate"
+        {field === "dueDate" ||
+        field === "startDate" ||
+        field === "endDate" ||
+        field === "lastInteraction"
           ? new Date(item[field]).toLocaleDateString("en-US", {
               day: "2-digit",
               month: "short",

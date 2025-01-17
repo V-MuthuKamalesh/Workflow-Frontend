@@ -28,11 +28,11 @@ export default function AddTask({ module, boardType, groupId }) {
       crm: {
         Lead: () => ({
           leadName: taskName,
-          status: "New",
-          company: "",
-          title: "",
-          email: "",
-          lastInteraction: "",
+          status: "",
+          company: "Company Name",
+          title: "Title",
+          email: "name@company.com",
+          lastInteraction: new Date().toISOString(),
         }),
       },
       dev: {
@@ -40,12 +40,12 @@ export default function AddTask({ module, boardType, groupId }) {
           bugName: taskName,
           reporter: [],
           developer: [],
-          priority: "Low",
-          status: "Open",
+          priority: "",
+          status: "",
         }),
         Sprint: () => ({
           sprintName: taskName,
-          sprintGoals: "",
+          sprintGoals: "Type your sprint goals here",
           startDate: new Date().toISOString(),
           endDate: new Date().toISOString(),
         }),
@@ -53,12 +53,12 @@ export default function AddTask({ module, boardType, groupId }) {
       service: {
         Ticket: () => ({
           ticketName: taskName,
-          description: "",
+          description: "Ticket description",
           employee: [],
           agent: [],
-          priority: "Low",
-          status: "Open",
-          requestType: "General",
+          priority: "",
+          status: "",
+          requestType: "",
         }),
       },
     };
