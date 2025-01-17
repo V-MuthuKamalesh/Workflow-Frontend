@@ -61,10 +61,10 @@ export default function WorkspaceDisplay({ module, workspaceId }) {
             </div>
           </div>
 
-          <div>
+          {/* <div>
             <h2 className="text-2xl font-semibold mb-4">Activity Feed</h2>
             <ActivityFeed workspaceId={workspaceId} />
-          </div>
+          </div> */}
         </section>
       </div>
     </>

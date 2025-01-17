@@ -9,7 +9,9 @@ export default function AddTask({ module, boardType, groupId }) {
   const [taskName, setTaskName] = useState("");
   const dispatch = useDispatch();
 
-  const handleAddTask = () => {
+  const handleAddTask = (event) => {
+    event.preventDefault();
+
     if (!taskName.trim()) {
       alert("Task name cannot be empty.");
       return;
@@ -17,7 +19,6 @@ export default function AddTask({ module, boardType, groupId }) {
 
     const socket = io("http://localhost:4000/", { transports: ["websocket"] });
 
-    // Dynamic newItem template
     const newItemTemplate = {
       "work-management": () => ({
         itemName: taskName,
@@ -93,19 +94,18 @@ export default function AddTask({ module, boardType, groupId }) {
   return (
     <tr>
       <td colSpan="3">
-        <input
-          type="text"
-          placeholder="New task..."
-          value={taskName}
-          onChange={(event) => setTaskName(event.target.value)}
-          className="border border-gray-300 rounded-md px-2 py-1"
-        />
-        <button
-          onClick={handleAddTask}
-          className="ml-2 px-2 py-1 bg-blue-500 text-white rounded-md"
-        >
-          Add Task
-        </button>
+        <form onSubmit={handleAddTask}>
+          <input
+            type="text"
+            placeholder="New task..."
+            value={taskName}
+            onChange={(event) => setTaskName(event.target.value)}
+            className="border border-gray-300 rounded-md px-2 py-1"
+          />
+          <button className="ml-2 px-2 py-1 bg-blue-500 text-white rounded-md">
+            Add Task
+          </button>
+        </form>
       </td>
     </tr>
   );

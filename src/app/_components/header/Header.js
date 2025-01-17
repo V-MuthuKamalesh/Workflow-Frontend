@@ -3,17 +3,20 @@
 import Link from "next/link";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
+import { User2 } from "lucide-react";
+import { clearAllCookies } from "@/app/_utils/helpers/cookies";
 
 export default function Header() {
   const [authToken, setAuthToken] = useState(null);
 
   useEffect(() => {
     const token = Cookies.get("authToken");
+    window.location.reload();
     setAuthToken(token);
   }, []);
 
   const handleLogout = () => {
-    Cookies.remove("authToken");
+    clearAllCookies();
     setAuthToken(null);
   };
 
@@ -32,12 +35,18 @@ export default function Header() {
 
         <div className="space-x-4 flex items-center">
           {authToken ? (
-            <button
-              onClick={handleLogout}
-              className="py-2 px-6 rounded-full border border-violet-400 text-violet-400"
-            >
-              Logout
-            </button>
+            <div className="flex items-center space-x-5">
+              <button
+                onClick={handleLogout}
+                className="py-2 px-6 rounded-full border border-violet-400 text-violet-400"
+              >
+                Logout
+              </button>
+
+              <div className="flex items-center justify-center p-2 rounded-full bg-gray-200 transition duration-200 cursor-pointer">
+                <User2 />
+              </div>
+            </div>
           ) : (
             <>
               <Link

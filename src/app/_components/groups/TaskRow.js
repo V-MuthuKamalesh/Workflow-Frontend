@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
-import { Plus, Trash } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import Priority from "../UI/Priority";
 import RequestType from "../UI/RequestType";
 import Status from "../UI/Status";
@@ -61,6 +61,26 @@ export default function TaskRow({ module, boardType, item, fields }) {
     );
 
     dispatch(updateTaskField({ taskId: item.itemId, field, value }));
+  };
+
+  const handleDeleteTask = () => {
+    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
+
+    socket.emit(
+      "removeItemFromGroup",
+      {
+        itemId: item.itemId,
+        type: boardType,
+      },
+      (response) => {
+        if (!response) {
+          console.error("Error deleting task.");
+          return;
+        }
+
+        console.log(response);
+      }
+    );
   };
 
   const handleRemoveAssignee = (assigneeId, assigneeType) => {
@@ -245,6 +265,12 @@ export default function TaskRow({ module, boardType, item, fields }) {
             {getFieldDisplay(field)}
           </td>
         ))}
+        <td className="border border-gray-300 px-1 py-1 w-10">
+          <Trash2
+            className="cursor-pointer text-red-500 hover:text-red-700"
+            onClick={handleDeleteTask}
+          />
+        </td>
       </tr>
 
       <Dialog

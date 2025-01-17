@@ -47,10 +47,6 @@ export default function AppHeader({ module }) {
             <Notifications className="text-gray-600" fontSize="medium" />
           </div>
 
-          <div className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200 transition duration-200">
-            <Search className="text-gray-600" fontSize="medium" />
-          </div>
-
           <div
             className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200 transition duration-200"
             onClick={() => setIsModalOpen(true)}

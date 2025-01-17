@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ChevronDown, Home, Star } from "lucide-react";
+import { ChevronDown, Star } from "lucide-react";
+import BarChartIcon from "@mui/icons-material/BarChart";
 import {
   Sidebar,
   SidebarContent,
@@ -43,9 +44,9 @@ export default function AppSidebar({ module }) {
 
   const items = [
     {
-      title: "Home",
-      url: `/${module}/home`,
-      icon: Home,
+      title: "Dashboard",
+      url: `/${module}/dashboard`,
+      icon: BarChartIcon,
     },
     {
       title: "Favorites",
