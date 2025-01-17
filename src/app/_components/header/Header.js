@@ -11,12 +11,12 @@ export default function Header() {
 
   useEffect(() => {
     const token = Cookies.get("authToken");
-    window.location.reload();
     setAuthToken(token);
   }, []);
 
   const handleLogout = () => {
     clearAllCookies();
+    window.location.reload();
     setAuthToken(null);
   };
 

@@ -42,6 +42,13 @@ export const workspaceSlice = createSlice({
       state.members = members || [];
       state.error = null;
     },
+    clearWorkspaceData: (state) => {
+      state.workspaceId = null;
+      state.workspaceName = "";
+      state.boards = [];
+      state.members = [];
+      state.error = null;
+    },
     addBoard: (state, action) => {
       state.boards.push(action.payload);
     },
@@ -76,7 +83,12 @@ export const workspaceSlice = createSlice({
   },
 });
 
-export const { setWorkspaceData, addBoard, removeBoard, updateWorkspaceData } =
-  workspaceSlice.actions;
+export const {
+  setWorkspaceData,
+  clearWorkspaceData,
+  addBoard,
+  removeBoard,
+  updateWorkspaceData,
+} = workspaceSlice.actions;
 
 export default workspaceSlice.reducer;

@@ -23,7 +23,10 @@ import CreateWorkspaceButton from "../workspaces/CreateWorkspaceButton";
 import { io } from "socket.io-client";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchBoardsByWorkspaceId } from "@/redux/feautres/workspaceSlice";
+import {
+  clearWorkspaceData,
+  fetchBoardsByWorkspaceId,
+} from "@/redux/feautres/workspaceSlice";
 import { usePathname } from "next/navigation";
 
 const moduleColors = {
@@ -59,7 +62,8 @@ export default function AppSidebar({ module }) {
 
   useEffect(() => {
     console.log("Route changed, Re-rendering App Sidebar");
-  }, [pathName]);
+    dispatch(clearWorkspaceData());
+  }, [pathName, dispatch]);
 
   useEffect(() => {
     const socket = io("http://localhost:4000/", { transports: ["websocket"] });

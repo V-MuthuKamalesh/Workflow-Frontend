@@ -1,6 +1,9 @@
 "use client";
 
-import { updateTaskField } from "@/redux/feautres/boardSlice";
+import {
+  removeItemFromGroup,
+  updateTaskField,
+} from "@/redux/feautres/boardSlice";
 import { useState } from "react";
 import {
   Avatar,
@@ -78,7 +81,12 @@ export default function TaskRow({ module, boardType, item, fields }) {
           return;
         }
 
-        console.log(response);
+        dispatch(
+          removeItemFromGroup({
+            groupId: response.groupId,
+            itemId: item.itemId,
+          })
+        );
       }
     );
   };

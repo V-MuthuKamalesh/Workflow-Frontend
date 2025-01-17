@@ -56,6 +56,21 @@ export const boardSlice = createSlice({
         group.items.push(action.payload.item);
       }
     },
+    removeItemFromGroup: (state, action) => {
+      const group = state.data.groups.find((group) => {
+        return group.groupId === action.payload.groupId;
+      });
+
+      if (group) {
+        const itemIndex = group.items.findIndex((item) => {
+          return item.itemId === action.payload.itemId;
+        });
+
+        if (itemIndex !== -1) {
+          group.items.splice(itemIndex, 1);
+        }
+      }
+    },
     updateTaskField: (state, action) => {
       const { taskId, field, value } = action.payload;
 
@@ -93,6 +108,7 @@ export const {
   addGroup,
   updateGroup,
   addItemToGroup,
+  removeItemFromGroup,
   updateTaskField,
 } = boardSlice.actions;
 
