@@ -15,12 +15,12 @@ export default async function ViewPage({ params }) {
       <Welcome view={view} module={module} />
       {view === "home" ? (
         <div className="pb-3 space-y-8">
-          <SearchBar />
-          <ContactSales />
+          {/* <SearchBar /> */}
+          {/* <ContactSales />
           <QuickAccess />
           <Announcements />
           <DashboardStats />
-          <RecentActivity />
+          <RecentActivity /> */}
         </div>
       ) : view === "favorites" ? (
         <div className="mt-8">

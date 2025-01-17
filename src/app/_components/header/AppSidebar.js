@@ -16,18 +16,20 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 import CreateWorkspaceButton from "../workspaces/CreateWorkspaceButton";
 import { io } from "socket.io-client";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBoardsByWorkspaceId } from "@/redux/feautres/workspaceSlice";
+import { usePathname } from "next/navigation";
 
 const moduleColors = {
-  "work-management": "bg-purple-50",
-  dev: "bg-green-50",
-  crm: "bg-yellow-50",
-  service: "bg-teal-50",
+  "work-management": "bg-purple-100",
+  dev: "bg-green-100",
+  crm: "bg-yellow-100",
+  service: "bg-teal-100",
 };
 
 export default function AppSidebar({ module }) {
@@ -37,11 +39,7 @@ export default function AppSidebar({ module }) {
   );
   const [workspaces, setWorkspaces] = useState([]);
   const [fetchError, setFetchError] = useState(null);
-
-  const moduleName = module
-    .split("-")
-    .map((str) => str.charAt(0).toUpperCase() + str.slice(1))
-    .join(" ");
+  const pathName = usePathname();
 
   const items = [
     {
@@ -56,7 +54,11 @@ export default function AppSidebar({ module }) {
     },
   ];
 
-  const bgColor = moduleColors[module] || "bg-gray-50";
+  const bgColor = moduleColors[module] || "bg-gray-100";
+
+  useEffect(() => {
+    console.log("Route changed, Re-rendering App Sidebar");
+  }, [pathName]);
 
   useEffect(() => {
     const socket = io("http://localhost:4000/", { transports: ["websocket"] });
@@ -84,7 +86,7 @@ export default function AppSidebar({ module }) {
   };
 
   return (
-    <Sidebar>
+    <Sidebar className="min-h-screen bg-white shadow-xl">
       <SidebarContent className={`${bgColor} shadow-lg rounded-r-xl`}>
         <SidebarGroup>
           <div className="mt-16"></div>
@@ -95,10 +97,12 @@ export default function AppSidebar({ module }) {
                   <SidebarMenuButton asChild>
                     <Link
                       href={item.url}
-                      className="flex items-center gap-2 p-2 hover:bg-gray-200 rounded-md"
+                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200 transition duration-200"
                     >
-                      <item.icon />
-                      <span>{item.title}</span>
+                      <item.icon className="text-gray-600" />
+                      <span className="font-medium text-gray-800">
+                        {item.title}
+                      </span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -107,18 +111,18 @@ export default function AppSidebar({ module }) {
               <SidebarMenuItem>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <SidebarMenuButton className="flex items-center gap-2 p-2 hover:bg-gray-200 rounded-md relative">
+                    <Button className="w-full flex justify-between items-center bg-gray-200 text-gray-800 hover:bg-gray-300 rounded-lg px-4 py-2">
                       <span>Select Workspace</span>
                       <ChevronDown className="ml-auto" />
-                    </SidebarMenuButton>
+                    </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-[--radix-popper-anchor-width] flex flex-col mt-2 max-h-60 overflow-y-auto scrollbar-hidden absolute z-10">
+                  <DropdownMenuContent className="w-full mt-2 max-h-60 overflow-y-auto bg-white rounded-lg shadow-md">
                     {fetchError ? (
                       <div className="text-red-500 text-center p-2">
                         {fetchError}
                       </div>
                     ) : workspaces.length === 0 ? (
-                      <div className="text-center p-2">
+                      <div className="text-center text-gray-600 p-4">
                         No workspaces available
                       </div>
                     ) : (
@@ -129,7 +133,7 @@ export default function AppSidebar({ module }) {
                           onClick={() =>
                             handleWorkspaceSelect(workspace.workspaceId)
                           }
-                          className={`border border-gray-300 rounded-md mb-3 p-2 hover:bg-gray-200 transition duration-150 ${
+                          className={`block border border-gray-300 rounded-md p-3 mb-2 hover:bg-gray-200 transition ${
                             workspaceId === workspace.workspaceId
                               ? "bg-gray-300"
                               : ""
@@ -142,16 +146,20 @@ export default function AppSidebar({ module }) {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </SidebarMenuItem>
-              <SidebarMenuItem>
-                {workspaceId && (
-                  <div className="flex items-center justify-between p-4 bg-gray-200 rounded-t-md mb-4">
-                    <span className="text-sm">{workspaceName}</span>
+              {workspaceId && (
+                <SidebarMenuItem>
+                  <div className="p-4 bg-gray-200 rounded-lg flex items-center justify-between">
+                    <span className="font-medium text-gray-700">
+                      {workspaceName}
+                    </span>
                     {loading && (
-                      <span className="italic text-sm">Loading...</span>
+                      <span className="text-sm italic text-gray-500">
+                        Loading...
+                      </span>
                     )}
                   </div>
-                )}
-              </SidebarMenuItem>
+                </SidebarMenuItem>
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
