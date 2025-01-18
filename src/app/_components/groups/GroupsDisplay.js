@@ -120,7 +120,7 @@ export default function GroupsDisplay({ module, boardId }) {
 
     socket.emit(
       "createItem",
-      { item: newItem, type: boardType },
+      { boardId, type: boardType, item: newItem },
       (response) => {
         if (!response) {
           console.error("Error creating item.");
@@ -142,7 +142,7 @@ export default function GroupsDisplay({ module, boardId }) {
 
             console.log(response);
 
-            dispatch(setBoardData(response));
+            // dispatch(setBoardData(response));
           }
         );
       }

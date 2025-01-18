@@ -43,7 +43,10 @@ export default function CreateBoard({ module, workspaceId }) {
 
         console.log(response);
 
-        dispatch(addBoard(response));
+        for (const board of response) {
+          dispatch(addBoard(board));
+        }
+
         setBoardName("");
         setBoardType("");
         setLoading(false);

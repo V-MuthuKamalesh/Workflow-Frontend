@@ -14,7 +14,7 @@ export default async function ViewPage({ params }) {
         </div>
       ) : view === "favorites" ? (
         <div className="mt-8">
-          <FavoriteWorkspacesAndBoards />
+          <FavoriteWorkspacesAndBoards module={module} />
         </div>
       ) : (
         <></>

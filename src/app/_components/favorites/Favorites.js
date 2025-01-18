@@ -2,7 +2,8 @@
 
 import { FavoriteWorkspaces } from "./FavoriteWorkspaces";
 import { FavoriteBoards } from "./FavoriteBoards";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
 
 const favoriteData = {
   workspaces: [
@@ -61,8 +62,24 @@ const favoriteData = {
   ],
 };
 
-export default function FavoriteWorkspacesAndBoards() {
-  const [favorites] = useState(favoriteData);
+export default function FavoriteWorkspacesAndBoards({ module }) {
+  const [favorites] = useState({
+    workspaces: [],
+    boards: [],
+  });
+
+  useEffect(() => {
+    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
+
+    socket.emit("getFavourite", { type: module }, (response) => {
+      if (!response) {
+        console.error("Error getting favorite data.");
+        return;
+      }
+
+      console.log(response);
+    });
+  }, [module]);
 
   return (
     <div className="p-6 rounded-lg shadow-md">

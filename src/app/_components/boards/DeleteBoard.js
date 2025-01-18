@@ -21,7 +21,9 @@ export default function DeleteBoard({ boardId }) {
 
       console.log(response);
 
-      dispatch(removeBoard(boardId));
+      for (const boardId of response) {
+        dispatch(removeBoard(boardId));
+      }
     });
   };
 
