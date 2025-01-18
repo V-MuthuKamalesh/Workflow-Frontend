@@ -14,7 +14,6 @@ export default function BasicAuthSignUp() {
   async function handleEmailSubmit(event) {
     event.preventDefault();
 
-    // Backend Email Verification
     try {
       const response = await workflowBackend.post("/users/email", { email });
       console.log(response);

@@ -20,7 +20,7 @@ export default async function ModulePageUI({ params }) {
           <p className="text-center">{description}</p>
         </div>
         <Link
-          href={`/${module}/home`}
+          href={`/${module}/dashboard`}
           className={`font-semibold relative my-10 py-4 px-8 rounded-full border ${colorSchemes.text} overflow-hidden group`}
         >
           <span className="absolute inset-0 w-full h-full bg-black"></span>

@@ -6,7 +6,8 @@ export default async function Welcome({ view, module }) {
   const fullName = cookieStore.get("fullName")?.value;
 
   const descriptions = {
-    home: "Access your tools, recent activities, announcements, and workspace stats in one convenient dashboard.",
+    dashboard:
+      "Access your tools, recent activities, announcements, and workspace stats in one convenient dashboard.",
     favorites: "View and manage your favorite boards and workspaces.",
   };
 

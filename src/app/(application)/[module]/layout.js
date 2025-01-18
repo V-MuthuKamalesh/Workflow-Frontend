@@ -1,8 +1,6 @@
 import AppHeader from "@/app/_components/header/AppHeader";
 import AppSidebar from "@/app/_components/header/AppSidebar";
-import { setCookies } from "@/app/_utils/helpers/cookies";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { cookies } from "next/headers";
 
 const moduleColors = {
   "work-management": "bg-purple-100",
@@ -33,7 +31,7 @@ export default async function Layout({ children, params }) {
           <main className="flex-1">
             <SidebarTrigger />
             <section
-              className={`min-h-96 ${sectionBgColor} mb-5 ml-7 -mt-7 rounded-l-3xl`}
+              className={`min-h-32 ${sectionBgColor} mb-5 ml-7 -mt-7 rounded-l-3xl`}
             >
               {children}
             </section>

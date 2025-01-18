@@ -41,6 +41,8 @@ export default function CreateBoard({ module, workspaceId }) {
           return;
         }
 
+        console.log(response);
+
         dispatch(addBoard(response));
         setBoardName("");
         setBoardType("");
@@ -66,6 +68,10 @@ export default function CreateBoard({ module, workspaceId }) {
   };
 
   const moduleOptions = getOptionsForModule();
+
+  const isWorkManagement = module === "work-management";
+  const isCreateDisabled =
+    !boardName.trim() || (!isWorkManagement && !boardType.trim()) || loading;
 
   return (
     <form onSubmit={handleCreateBoard} className="mt-1 max-w-md">
@@ -97,9 +103,11 @@ export default function CreateBoard({ module, workspaceId }) {
 
         <button
           type="submit"
-          disabled={loading}
+          disabled={isCreateDisabled}
           className={`px-6 py-2 text-white rounded-lg ${
-            loading ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
+            isCreateDisabled
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-500 hover:bg-blue-600"
           }`}
         >
           {loading ? "Creating..." : "Create"}

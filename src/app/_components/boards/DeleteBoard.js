@@ -19,6 +19,8 @@ export default function DeleteBoard({ boardId }) {
         return;
       }
 
+      console.log(response);
+
       dispatch(removeBoard(boardId));
     });
   };

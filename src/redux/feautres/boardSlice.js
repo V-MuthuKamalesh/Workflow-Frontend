@@ -32,6 +32,9 @@ export const boardSlice = createSlice({
     setBoardData: (state, action) => {
       state.data = action.payload;
     },
+    updateBoardName: (state, action) => {
+      state.data.boardName = action.payload;
+    },
     addGroup: (state, action) => {
       state.data.groups.push(action.payload.newGroup);
     },
@@ -105,6 +108,7 @@ export const boardSlice = createSlice({
 
 export const {
   setBoardData,
+  updateBoardName,
   addGroup,
   updateGroup,
   addItemToGroup,

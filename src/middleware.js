@@ -2,7 +2,11 @@ import { NextResponse } from "next/server";
 import { workflowBackend } from "./app/_utils/api/axiosConfig";
 
 export async function middleware(request) {
-  const publicPaths = ["/auth/signin", "/auth/signup"];
+  const publicPaths = [
+    "/auth/signin",
+    "/auth/signup",
+    "/users/account-creation",
+  ];
 
   if (publicPaths.some((path) => request.nextUrl.pathname.startsWith(path))) {
     return NextResponse.next();
@@ -13,6 +17,7 @@ export async function middleware(request) {
     "/:module/boards/:boardId",
     "/:module/workspace/:workspaceId",
   ];
+
   const matchesModuleRoute = moduleMatcher.some((matcher) =>
     request.nextUrl.pathname.match(new RegExp(matcher))
   );
