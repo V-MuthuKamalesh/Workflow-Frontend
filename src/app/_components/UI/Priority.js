@@ -13,6 +13,7 @@ export default function Priority({
   const priorityOptionsMap = {
     dev: {
       Bug: ["Critical", "High", "Medium", "Low"],
+      Task: ["Critical", "High", "Medium", "Low", "Best Effort"],
     },
     service: {
       Ticket: ["Critical", "High", "Medium", "Low"],
@@ -24,6 +25,7 @@ export default function Priority({
     High: "text-orange-100 bg-orange-500",
     Medium: "text-yellow-100 bg-yellow-500",
     Low: "text-green-100 bg-green-500",
+    "Best Effort": "text-blue-100 bg-blue-500",
     "Set Priority": "text-gray-100 bg-gray-500",
   };
 
@@ -32,6 +34,7 @@ export default function Priority({
     High: "hover:bg-orange-800",
     Medium: "hover:bg-yellow-800",
     Low: "hover:bg-green-800",
+    "Best Effort": "hover:bg-blue-800",
     "Set Priority": "hover:bg-gray-700",
   };
 

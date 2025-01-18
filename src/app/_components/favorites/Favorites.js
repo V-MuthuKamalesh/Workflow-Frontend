@@ -63,7 +63,7 @@ const favoriteData = {
 };
 
 export default function FavoriteWorkspacesAndBoards({ module }) {
-  const [favorites] = useState({
+  const [favorites, setFavorites] = useState({
     workspaces: [],
     boards: [],
   });
@@ -78,13 +78,18 @@ export default function FavoriteWorkspacesAndBoards({ module }) {
       }
 
       console.log(response);
+
+      setFavorites({
+        workspaces: [],
+        boards: response.boards,
+      });
     });
   }, [module]);
 
   return (
     <div className="p-6 rounded-lg shadow-md">
       <FavoriteWorkspaces workspaces={favorites.workspaces} />
-      <FavoriteBoards boards={favorites.boards} />
+      <FavoriteBoards module={module} boards={favorites.boards} />
     </div>
   );
 }

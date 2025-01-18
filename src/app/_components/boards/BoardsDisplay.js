@@ -6,11 +6,6 @@ import { useRouter } from "next/navigation";
 
 export default function BoardsDisplay({ module }) {
   const { workspaceName, boards } = useSelector((state) => state.workspace);
-  const router = useRouter();
-
-  const handleBoardClick = (module, boardId) => {
-    router.push(`/${module}/boards/${boardId}`);
-  };
 
   return (
     <>
@@ -21,17 +16,13 @@ export default function BoardsDisplay({ module }) {
       ) : (
         <div className="mt-1 grid grid-cols-4">
           {boards.map((board) => (
-            <div
+            <BoardCard
               key={board.boardId}
-              className="cursor-pointer"
-              onClick={() => handleBoardClick(module, board.boardId)}
-            >
-              <BoardCard
-                workspaceName={workspaceName}
-                boardName={board.boardName}
-                boardId={board.boardId}
-              />
-            </div>
+              module={module}
+              workspaceName={workspaceName}
+              boardName={board.boardName}
+              boardId={board.boardId}
+            />
           ))}
         </div>
       )}

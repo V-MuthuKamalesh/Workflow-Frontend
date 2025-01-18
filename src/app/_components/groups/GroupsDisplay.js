@@ -99,6 +99,12 @@ export default function GroupsDisplay({ module, boardId }) {
           startDate: new Date(),
           endDate: new Date(),
         }),
+        Task: () => ({
+          taskName: "New Task",
+          assignedToId: [],
+          priority: "",
+          status: "",
+        }),
       },
       service: {
         Ticket: () => ({
@@ -142,7 +148,7 @@ export default function GroupsDisplay({ module, boardId }) {
 
             console.log(response);
 
-            // dispatch(setBoardData(response));
+            dispatch(setBoardData(response));
           }
         );
       }

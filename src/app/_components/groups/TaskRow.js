@@ -24,7 +24,7 @@ import Priority from "../UI/Priority";
 import RequestType from "../UI/RequestType";
 import Status from "../UI/Status";
 
-export default function TaskRow({ module, boardType, item, fields }) {
+export default function TaskRow({ module, boardId, boardType, item, fields }) {
   const [editingField, setEditingField] = useState(null);
   const [openAddAssignee, setOpenAddAssignee] = useState({
     open: false,
@@ -52,9 +52,10 @@ export default function TaskRow({ module, boardType, item, fields }) {
     socket.emit(
       "updateItemInGroup",
       {
+        boardId,
+        type: boardType,
         itemId: item.itemId,
         updateData: updatedItem,
-        type: boardType,
       },
       (response) => {
         if (!response) {

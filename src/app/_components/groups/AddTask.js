@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { io } from "socket.io-client";
 
-export default function AddTask({ module, boardType, groupId }) {
+export default function AddTask({ module, boardId, boardType, groupId }) {
   const [taskName, setTaskName] = useState("");
   const dispatch = useDispatch();
 
@@ -50,6 +50,12 @@ export default function AddTask({ module, boardType, groupId }) {
           startDate: new Date().toISOString(),
           endDate: new Date().toISOString(),
         }),
+        Task: () => ({
+          taskName: taskName,
+          assignedToId: [],
+          priority: "",
+          status: "",
+        }),
       },
       service: {
         Ticket: () => ({
@@ -71,7 +77,7 @@ export default function AddTask({ module, boardType, groupId }) {
 
     socket.emit(
       "addItemToGroup",
-      { groupId, item: newItem, type: boardType },
+      { boardId, type: boardType, groupId, item: newItem },
       (response) => {
         if (!response) {
           console.error("Error adding task to group.");

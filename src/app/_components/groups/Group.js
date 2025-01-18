@@ -14,6 +14,8 @@ export default function Group({ module, boardType, boardId, group }) {
   const [groupName, setGroupName] = useState(group.groupName);
   const dispatch = useDispatch();
 
+  console.log(group);
+
   const fields = useMemo(() => {
     if (module === "work-management") {
       return moduleFields["work-management"];
@@ -105,6 +107,7 @@ export default function Group({ module, boardType, boardId, group }) {
             <TaskRow
               key={index}
               module={module}
+              boardId={boardId}
               boardType={boardType}
               item={item}
               fields={fields}
@@ -112,6 +115,7 @@ export default function Group({ module, boardType, boardId, group }) {
           ))}
           <AddTask
             module={module}
+            boardId={boardId}
             boardType={boardType}
             groupId={group.groupId}
           />
