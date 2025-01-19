@@ -60,11 +60,6 @@ export default function WorkspaceDisplay({ module, workspaceId }) {
               <BoardsDisplay module={module} />
             </div>
           </div>
-
-          {/* <div>
-            <h2 className="text-2xl font-semibold mb-4">Activity Feed</h2>
-            <ActivityFeed workspaceId={workspaceId} />
-          </div> */}
         </section>
       </div>
     </>

@@ -52,7 +52,7 @@ export default function AddTask({ module, boardId, boardType, groupId }) {
         }),
         Task: () => ({
           taskName: taskName,
-          assignedToId: [],
+          person: [],
           priority: "",
           status: "",
         }),

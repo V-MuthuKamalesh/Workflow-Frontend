@@ -80,7 +80,7 @@ export default function FavoriteWorkspacesAndBoards({ module }) {
       console.log(response);
 
       setFavorites({
-        workspaces: [],
+        workspaces: response.workspaces,
         boards: response.boards,
       });
     });
@@ -88,7 +88,7 @@ export default function FavoriteWorkspacesAndBoards({ module }) {
 
   return (
     <div className="p-6 rounded-lg shadow-md">
-      <FavoriteWorkspaces workspaces={favorites.workspaces} />
+      <FavoriteWorkspaces module={module} workspaces={favorites.workspaces} />
       <FavoriteBoards module={module} boards={favorites.boards} />
     </div>
   );

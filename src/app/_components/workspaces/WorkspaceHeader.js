@@ -1,4 +1,6 @@
-import { useState } from "react";
+"use client";
+
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogActions,
@@ -8,9 +10,10 @@ import {
   TextField,
 } from "@mui/material";
 import { io } from "socket.io-client";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { updateWorkspaceData } from "@/redux/feautres/workspaceSlice";
 import Cookies from "js-cookie";
+import { Star } from "lucide-react"; // Assuming StarFill represents a filled star icon
 
 const moduleColors = {
   "work-management": "from-purple-600 to-purple-400",
@@ -26,11 +29,48 @@ export default function WorkspaceHeader({
   workspaceName,
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
   const [newWorkspaceName, setNewWorkspaceName] = useState(workspaceName);
   const [deleteInput, setDeleteInput] = useState("");
   const dispatch = useDispatch();
 
   const bgColor = moduleColors[module] || moduleColors.default;
+
+  useEffect(() => {
+    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
+
+    socket.emit(
+      "isWorkspaceInFavourite",
+      { workspaceId, type: module },
+      (response) => {
+        if (!response) {
+          console.error("Error checking if workspace is in favourite.");
+          return;
+        }
+
+        setIsFavorite(response.isFavourite);
+      }
+    );
+  }, [workspaceId, module]);
+
+  const toggleFavorite = () => {
+    setIsFavorite((prev) => !prev);
+
+    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
+
+    socket.emit(
+      isFavorite ? "removeFavouriteWorkspace" : "addFavouriteWorkspace",
+      { workspaceId, type: module },
+      (response) => {
+        if (!response) {
+          console.error("Error toggling favorite workspace.");
+          return;
+        }
+
+        console.log(response);
+      }
+    );
+  };
 
   const handleEditWorkspace = () => {
     const socket = io("http://localhost:4000/", { transports: ["websocket"] });
@@ -94,12 +134,24 @@ export default function WorkspaceHeader({
           {module.replace("-", " ")}
         </p>
       </div>
-      <button
-        onClick={() => setIsDialogOpen(true)}
-        className="bg-gray-800 text-white py-2 px-6 rounded-lg hover:bg-gray-700 transition-colors duration-300 flex items-center gap-2"
-      >
-        <span>Edit Workspace</span>
-      </button>
+      <div className="flex items-center gap-4">
+        <button
+          onClick={toggleFavorite}
+          className="text-yellow-400 hover:text-yellow-500 focus:outline-none"
+        >
+          {isFavorite ? (
+            <Star fill="yellow" size={24} />
+          ) : (
+            <Star fill="white" size={24} />
+          )}
+        </button>
+        <button
+          onClick={() => setIsDialogOpen(true)}
+          className="bg-gray-800 text-white py-2 px-6 rounded-lg hover:bg-gray-700 transition-colors duration-300"
+        >
+          <span>Edit Workspace</span>
+        </button>
+      </div>
 
       <Dialog
         open={isDialogOpen}
@@ -135,7 +187,7 @@ export default function WorkspaceHeader({
           <Button
             onClick={handleDeleteWorkspace}
             color="warning"
-            // disabled={deleteInput !== `${module}t/${workspaceName}`}
+            disabled={deleteInput !== `${module}/${workspaceName}`}
           >
             Delete
           </Button>

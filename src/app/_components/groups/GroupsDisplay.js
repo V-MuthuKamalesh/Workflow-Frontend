@@ -101,7 +101,7 @@ export default function GroupsDisplay({ module, boardId }) {
         }),
         Task: () => ({
           taskName: "New Task",
-          assignedToId: [],
+          person: [],
           priority: "",
           status: "",
         }),

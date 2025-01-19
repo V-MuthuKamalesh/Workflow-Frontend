@@ -185,6 +185,7 @@ export default function TaskRow({ module, boardId, boardType, item, fields }) {
 
     if (
       field === "assignedToId" ||
+      field === "person" ||
       field === "reporter" ||
       field === "developer" ||
       field === "employee" ||

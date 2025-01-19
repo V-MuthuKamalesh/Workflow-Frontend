@@ -13,7 +13,7 @@ export const moduleFields = {
   dev: {
     Bug: ["bugName", "reporter", "developer", "priority", "status"],
     Sprint: ["sprintName", "sprintGoals", "startDate", "endDate"],
-    Task: ["taskName", "assignedToId", "priority", "status"],
+    Task: ["taskName", "person", "priority", "status"],
   },
   service: {
     Ticket: [
