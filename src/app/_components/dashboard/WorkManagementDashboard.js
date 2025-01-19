@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -11,6 +11,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { io } from "socket.io-client";
+import Cookies from "js-cookie";
 
 ChartJS.register(
   CategoryScale,
@@ -71,6 +73,25 @@ export default function WorkManagementDashboard() {
       },
     },
   };
+
+  useEffect(() => {
+    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
+
+    socket.emit(
+      "getDashboardDetails",
+      { moduleId: Cookies.get("moduleId"), userId: Cookies.get("userId") },
+      (response) => {
+        console.log(response);
+
+        if (!response) {
+          console.error("Error getting workspace data.");
+          return;
+        }
+
+        console.log(response);
+      }
+    );
+  }, []);
 
   return (
     <div>
