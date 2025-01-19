@@ -14,6 +14,8 @@ import { useDispatch } from "react-redux";
 import { updateWorkspaceData } from "@/redux/feautres/workspaceSlice";
 import Cookies from "js-cookie";
 import { Star } from "lucide-react"; // Assuming StarFill represents a filled star icon
+import { useRouter } from "next/navigation";
+import { deleteWorkspace } from "@/redux/feautres/userDetailsSlice";
 
 const moduleColors = {
   "work-management": "from-purple-600 to-purple-400",
@@ -33,6 +35,7 @@ export default function WorkspaceHeader({
   const [newWorkspaceName, setNewWorkspaceName] = useState(workspaceName);
   const [deleteInput, setDeleteInput] = useState("");
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const bgColor = moduleColors[module] || moduleColors.default;
 
@@ -116,7 +119,9 @@ export default function WorkspaceHeader({
         }
       );
 
-      window.location.href = `/${module}/home`;
+      dispatch(deleteWorkspace(workspaceId));
+
+      router.push(`/${module}/dashboard`);
 
       setIsDialogOpen(false);
     } else {

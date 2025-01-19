@@ -28,6 +28,7 @@ import {
   fetchBoardsByWorkspaceId,
 } from "@/redux/feautres/workspaceSlice";
 import { usePathname } from "next/navigation";
+import { setWorkspaces } from "@/redux/feautres/userDetailsSlice";
 
 const moduleColors = {
   "work-management": "bg-purple-100",
@@ -38,11 +39,11 @@ const moduleColors = {
 
 export default function AppSidebar({ module }) {
   const dispatch = useDispatch();
+  const { workspaces } = useSelector((state) => state.userDetails);
   const { workspaceId, workspaceName, loading, error } = useSelector(
     (state) => state.workspace
   );
-  const [workspaces, setWorkspaces] = useState([]);
-  const [fetchError, setFetchError] = useState(null);
+  // const [fetchError, setFetchError] = useState(null);
   const pathName = usePathname();
 
   const items = [
@@ -77,14 +78,14 @@ export default function AppSidebar({ module }) {
           return;
         }
 
-        setWorkspaces(response);
+        dispatch(setWorkspaces(response));
       }
     );
 
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [dispatch]);
 
   const handleWorkspaceSelect = (workspaceId) => {
     dispatch(fetchBoardsByWorkspaceId(workspaceId));
@@ -122,9 +123,9 @@ export default function AppSidebar({ module }) {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-full mt-2 max-h-60 overflow-y-auto bg-white rounded-lg shadow-md">
-                    {fetchError ? (
+                    {error ? (
                       <div className="text-red-500 text-center p-2">
-                        {fetchError}
+                        {error}
                       </div>
                     ) : workspaces.length === 0 ? (
                       <div className="text-center text-gray-600 p-4">

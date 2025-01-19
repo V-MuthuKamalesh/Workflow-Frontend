@@ -146,8 +146,6 @@ export default function GroupsDisplay({ module, boardId }) {
               return;
             }
 
-            console.log(response);
-
             dispatch(setBoardData(response));
           }
         );

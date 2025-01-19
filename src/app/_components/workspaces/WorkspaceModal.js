@@ -3,10 +3,13 @@
 import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { addWorkspace, setWorkspaces } from "@/redux/feautres/userDetailsSlice";
 
 export default function WorkspaceModal({ onClose }) {
   const [workspaceName, setWorkspaceName] = useState("");
   const [socket, setSocket] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const newSocket = io("http://localhost:4000/", {
@@ -20,29 +23,37 @@ export default function WorkspaceModal({ onClose }) {
     };
   }, []);
 
-  async function handleWorkspaceCreation() {
+  const handleWorkspaceCreation = () => {
     if (!workspaceName || !socket) return;
 
-    try {
-      socket.emit(
-        "createWorkspace",
-        {
-          moduleId: Cookies.get("moduleId"),
-          workspaceData: {
-            createdBy: Cookies.get("userId"),
-            workspaceName,
-          },
+    socket.emit(
+      "createWorkspace",
+      {
+        moduleId: Cookies.get("moduleId"),
+        workspaceData: {
+          createdBy: Cookies.get("userId"),
+          workspaceName,
         },
-        (data) => {
-          console.log(data);
+      },
+      (response) => {
+        if (!response) {
+          console.error("Error creating workspace.");
+          return;
         }
-      );
 
-      onClose();
-    } catch (error) {
-      console.error("Error during workspace creation:", error);
-    }
-  }
+        console.log(response);
+
+        dispatch(
+          addWorkspace({
+            workspaceId: response.workspaceId,
+            workspaceName: response.workspaceName,
+          })
+        );
+
+        onClose();
+      }
+    );
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">

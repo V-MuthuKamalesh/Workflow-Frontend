@@ -7,8 +7,8 @@ export default async function Welcome({ view, module }) {
 
   const descriptions = {
     dashboard:
-      "Access your tools, recent activities, announcements, and workspace stats in one convenient dashboard.",
-    favorites: "View and manage your favorite boards and workspaces.",
+      "Track your performance across all workspaces with insightful metrics and workspace stats, all in one comprehensive dashboard.",
+    favorites: "View and manage your favorite workspaces and boards.",
   };
 
   const moduleColors = {

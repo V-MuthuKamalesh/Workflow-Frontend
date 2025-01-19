@@ -14,6 +14,14 @@ const statusOptionsMap = {
       "Known Bug",
       "Duplicated",
     ],
+    Task: [
+      "Ready to start",
+      "In Progress",
+      "Waiting for review",
+      "Pending Deploy",
+      "Done",
+      "Stuck",
+    ],
   },
   "work-management": [
     "Ready to start",

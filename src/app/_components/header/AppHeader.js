@@ -1,15 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import ModuleSwitcher from "./ModuleSwitcher";
 import { UserPlus } from "lucide-react";
 import {
   ChangeCircleRounded,
   Notifications,
   Person,
-  Search,
 } from "@mui/icons-material";
+import ModuleSwitcher from "./ModuleSwitcher";
 import UserProfile from "./UserProfile";
+import Invite from "./Invite";
 
 const moduleColors = {
   "work-management": "bg-purple-100",
@@ -21,6 +21,7 @@ const moduleColors = {
 export default function AppHeader({ module }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
   const bgColor = moduleColors[module] || "bg-gray-50";
 
@@ -39,7 +40,10 @@ export default function AppHeader({ module }) {
         </h1>
 
         <div className="flex items-center space-x-4 cursor-pointer">
-          <div className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200 transition duration-200">
+          <div
+            className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200 transition duration-200"
+            onClick={() => setIsInviteModalOpen(true)}
+          >
             <UserPlus className="text-gray-600" fontSize="medium" />
           </div>
 
@@ -75,6 +79,11 @@ export default function AppHeader({ module }) {
       <UserProfile
         isProfileOpen={isProfileOpen}
         setIsProfileOpen={setIsProfileOpen}
+      />
+
+      <Invite
+        isOpen={isInviteModalOpen}
+        onClose={() => setIsInviteModalOpen(false)}
       />
     </header>
   );

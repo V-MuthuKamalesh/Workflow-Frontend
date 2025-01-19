@@ -9,7 +9,7 @@ export default async function ViewPage({ params }) {
     <>
       <Welcome view={view} module={module} />
       {view === "dashboard" ? (
-        <div className="pb-3 space-y-8">
+        <div className="p-3 space-y-8">
           <WorkManagementDashboard />
         </div>
       ) : view === "favorites" ? (

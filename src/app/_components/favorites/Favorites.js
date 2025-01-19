@@ -4,6 +4,7 @@ import { FavoriteWorkspaces } from "./FavoriteWorkspaces";
 import { FavoriteBoards } from "./FavoriteBoards";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
+import Cookies from "js-cookie";
 
 const favoriteData = {
   workspaces: [
@@ -71,19 +72,23 @@ export default function FavoriteWorkspacesAndBoards({ module }) {
   useEffect(() => {
     const socket = io("http://localhost:4000/", { transports: ["websocket"] });
 
-    socket.emit("getFavourite", { type: module }, (response) => {
-      if (!response) {
-        console.error("Error getting favorite data.");
-        return;
+    socket.emit(
+      "getFavourite",
+      { userId: Cookies.get("userId"), type: module },
+      (response) => {
+        if (!response) {
+          console.error("Error getting favorite data.");
+          return;
+        }
+
+        console.log(response);
+
+        setFavorites({
+          workspaces: response.workspaces,
+          boards: response.boards,
+        });
       }
-
-      console.log(response);
-
-      setFavorites({
-        workspaces: response.workspaces,
-        boards: response.boards,
-      });
-    });
+    );
   }, [module]);
 
   return (
