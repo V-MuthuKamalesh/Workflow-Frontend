@@ -52,9 +52,6 @@ export default function Dashboard({ module }) {
           return;
         }
 
-        console.log(response);
-
-        // Dynamically determine the keys based on the module
         const keyMappings = {
           crm: {
             total: "totalLeads",
@@ -139,18 +136,16 @@ export default function Dashboard({ module }) {
           ],
         });
 
-        const totalCounts = {
-          Completed: completed.reduce((sum, val) => sum + val, 0),
-          Pending: pending.reduce((sum, val) => sum + val, 0),
-          InProgress: inProgress.reduce((sum, val) => sum + val, 0),
-        };
-
         setPieChartData({
           labels: ["Completed", "Pending", "In Progress"],
           datasets: [
             {
               label: "Task Distribution",
-              data: Object.values(totalCounts),
+              data: [
+                completed.reduce((sum, val) => sum + val, 0),
+                pending.reduce((sum, val) => sum + val, 0),
+                inProgress.reduce((sum, val) => sum + val, 0),
+              ],
               backgroundColor: [
                 "rgba(54, 162, 235, 0.5)",
                 "rgba(255, 99, 132, 0.5)",
@@ -201,7 +196,7 @@ export default function Dashboard({ module }) {
 
   return (
     <div className="min-h-screen p-6 bg-gray-100">
-      <h1 className="text-2xl font-bold mb-4 text-gray-800">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">
         {moduleName} Dashboard
       </h1>
       {!hasData ? (
@@ -209,20 +204,22 @@ export default function Dashboard({ module }) {
           No data available. Charts cannot be displayed.
         </p>
       ) : (
-        <div className="grid grid-cols-2 gap-10">
-          <div className="h-[30rem] flex flex-col items-center justify-center">
-            <h2 className="text-xl font-bold mb-4">Bar Chart</h2>
-            <Bar data={barChartData} options={commonOptions} />
+        <>
+          <div className="grid grid-cols-2 gap-10">
+            <div className="h-[30rem] flex flex-col items-center justify-center">
+              <h2 className="text-xl font-bold mb-4">Task Summary</h2>
+              <Bar data={barChartData} options={commonOptions} />
+            </div>
+            <div className="h-[30rem] flex flex-col items-center justify-center">
+              <h2 className="text-xl font-bold mb-4">Task Trends</h2>
+              <Line data={lineChartData} options={commonOptions} />
+            </div>
+            <div className="col-span-2 h-[27rem] flex flex-col items-center justify-center">
+              <h2 className="text-xl font-bold mb-4">Task Distribution</h2>
+              <Pie data={pieChartData} options={commonOptions} />
+            </div>
           </div>
-          <div className="h-[30rem] flex flex-col items-center justify-center">
-            <h2 className="text-xl font-bold mb-4">Line Chart</h2>
-            <Line data={lineChartData} options={commonOptions} />
-          </div>
-          <div className="h-[27rem] flex flex-col items-center justify-center">
-            <h2 className="text-xl font-bold mb-4">Pie Chart</h2>
-            <Pie data={pieChartData} options={commonOptions} />
-          </div>
-        </div>
+        </>
       )}
     </div>
   );

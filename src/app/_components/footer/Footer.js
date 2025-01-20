@@ -2,7 +2,7 @@ import FooterLinks from "./FooterLinks";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-100 border border-gray-100 rounded-t-3xl min-h-60 mx-10 mt-2 p-10">
+    <footer className="bg-gray-100 border border-gray-100 rounded-t-3xl min-h-60 mt-2 p-10">
       <div className="flex items-center justify-around">
         <div className="max-w-xl">
           <h1 className="text-3xl font-bold text-gray-800">WorkFlow</h1>
