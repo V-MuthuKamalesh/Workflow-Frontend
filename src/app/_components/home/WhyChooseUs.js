@@ -1,26 +1,25 @@
-import { Handshake, Settings2 } from "lucide-react";
+import { Layers, Settings, Users } from "lucide-react";
 import AboutCard from "./AboutCard";
-import { Widgets } from "@mui/icons-material";
 
 export default function WhyChooseUsSection() {
   const aboutData = [
     {
-      Icon: Handshake,
-      color: "",
+      Icon: Users,
+      color: "text-indigo-500",
       title: "Seamless Collaboration",
       description:
         "Empower your team to collaborate in real-time with easy task management and transparent project tracking.",
     },
     {
-      Icon: Widgets,
-      color: "success",
+      Icon: Layers,
+      color: "text-green-500",
       title: "All-in-One Solution",
       description:
         "Manage everything from tasks to team communication in one intuitive platform designed to boost productivity.",
     },
     {
-      Icon: Settings2,
-      color: "action",
+      Icon: Settings,
+      color: "text-yellow-500",
       title: "Customizable WorkFlow",
       description:
         "Create your own workflow to fit your team's needs and preferences, ensuring smooth collaboration and efficiency.",
