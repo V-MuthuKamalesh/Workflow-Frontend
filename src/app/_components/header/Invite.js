@@ -1,18 +1,31 @@
 "use client";
 
+import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 import { useState } from "react";
 
 export default function Invite({ isOpen, onClose }) {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("member");
 
-  const handleInvite = () => {
+  const handleInvite = async () => {
     if (!email) {
       alert("Please enter an email address.");
       return;
     }
 
+    try {
+      const response = await workflowBackend.post("/users/sendinvite", {
+        email,
+        role,
+      });
+
+      console.log(response);
+    } catch (error) {
+      console.error("Failed to invite member:", error);
+    }
+
     alert(`Invited ${email} as a ${role}`);
+
     setEmail("");
     setRole("member");
     onClose();

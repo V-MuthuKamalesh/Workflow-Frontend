@@ -1,15 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UserPlus } from "lucide-react";
-import {
-  ChangeCircleRounded,
-  Notifications,
-  Person,
-} from "@mui/icons-material";
+import { ChangeCircleRounded, Person } from "@mui/icons-material";
 import ModuleSwitcher from "./ModuleSwitcher";
 import UserProfile from "./UserProfile";
 import Invite from "./Invite";
+import Cookies from "js-cookie";
+import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 
 const moduleColors = {
   "work-management": "bg-purple-100",
@@ -22,6 +20,7 @@ export default function AppHeader({ module }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const bgColor = moduleColors[module] || "bg-gray-50";
 
@@ -29,6 +28,32 @@ export default function AppHeader({ module }) {
     .split("-")
     .map((str) => str.charAt(0).toUpperCase() + str.slice(1))
     .join(" ");
+
+  useEffect(() => {
+    const checkUserRole = async () => {
+      const workspaceId = Cookies.get("workspaceId");
+      const userId = Cookies.get("userId");
+
+      if (workspaceId && userId) {
+        try {
+          console.log(workspaceId, userId);
+          const response = await workflowBackend.post("/users/checkRole", {
+            workspaceId,
+            userId,
+          });
+
+          setIsAdmin(response.data.role === "admin");
+        } catch (error) {
+          console.error("Error checking user role:", error);
+          setIsAdmin(false);
+        }
+      } else {
+        setIsAdmin(false);
+      }
+    };
+
+    checkUserRole();
+  }, []);
 
   return (
     <header
@@ -40,16 +65,14 @@ export default function AppHeader({ module }) {
         </h1>
 
         <div className="flex items-center space-x-4 cursor-pointer">
-          <div
-            className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200 transition duration-200"
-            onClick={() => setIsInviteModalOpen(true)}
-          >
-            <UserPlus className="text-gray-600" fontSize="medium" />
-          </div>
-
-          <div className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200 transition duration-200">
-            <Notifications className="text-gray-600" fontSize="medium" />
-          </div>
+          {isAdmin && (
+            <div
+              className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200 transition duration-200"
+              onClick={() => setIsInviteModalOpen(true)}
+            >
+              <UserPlus className="text-gray-600" fontSize="medium" />
+            </div>
+          )}
 
           <div
             className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200 transition duration-200"

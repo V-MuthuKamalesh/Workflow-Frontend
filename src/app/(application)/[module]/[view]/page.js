@@ -1,4 +1,4 @@
-import WorkManagementDashboard from "@/app/_components/dashboard/WorkManagementDashboard";
+import Dashboard from "@/app/_components/dashboard/Dashboard";
 import FavoriteWorkspacesAndBoards from "@/app/_components/favorites/Favorites";
 import Welcome from "@/app/_components/UI/Welcome";
 
@@ -10,7 +10,7 @@ export default async function ViewPage({ params }) {
       <Welcome view={view} module={module} />
       {view === "dashboard" ? (
         <div className="p-3 space-y-8">
-          <WorkManagementDashboard />
+          <Dashboard module={module} />
         </div>
       ) : view === "favorites" ? (
         <div className="mt-8">

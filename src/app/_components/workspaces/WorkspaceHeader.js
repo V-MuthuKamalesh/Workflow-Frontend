@@ -116,6 +116,8 @@ export default function WorkspaceHeader({
             console.error("Error deleting workspace.");
             return;
           }
+
+          Cookies.remove("workspaceId");
         }
       );
 
