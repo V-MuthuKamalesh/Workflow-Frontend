@@ -38,14 +38,17 @@ export default function Header() {
             <div className="flex items-center space-x-5">
               <button
                 onClick={handleLogout}
-                className="py-2 px-6 rounded-full border border-violet-400 text-violet-400"
+                className="relative py-2 px-6 rounded-full border border-violet-400 text-violet-400 overflow-hidden group"
               >
-                Logout
+                <span className="absolute inset-0 w-full h-full bg-violet-400 transform scale-x-0 origin-right group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
+                <span className="relative z-10 group-hover:text-white transition-colors duration-300">
+                  Logout
+                </span>
               </button>
 
-              <div className="flex items-center justify-center p-2 rounded-full bg-gray-200 transition duration-200 cursor-pointer">
+              {/* <div className="flex items-center justify-center p-2 rounded-full bg-gray-200 transition duration-200 cursor-pointer">
                 <User2 />
-              </div>
+              </div> */}
             </div>
           ) : (
             <>

@@ -8,6 +8,7 @@ import UserProfile from "./UserProfile";
 import Invite from "./Invite";
 import Cookies from "js-cookie";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
+import { usePathname } from "next/navigation";
 
 const moduleColors = {
   "work-management": "bg-purple-100",
@@ -21,6 +22,8 @@ export default function AppHeader({ module }) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const pathName = usePathname();
+  const [currentPath, setCurrentPath] = useState(pathName);
 
   const bgColor = moduleColors[module] || "bg-gray-50";
 
@@ -29,29 +32,37 @@ export default function AppHeader({ module }) {
     .map((str) => str.charAt(0).toUpperCase() + str.slice(1))
     .join(" ");
 
-  useEffect(() => {
-    const checkUserRole = async () => {
-      const workspaceId = Cookies.get("workspaceId");
-      const userId = Cookies.get("userId");
+  const checkUserRole = async () => {
+    const workspaceId = Cookies.get("workspaceId");
+    const userId = Cookies.get("userId");
 
-      if (workspaceId && userId) {
-        try {
-          console.log(workspaceId, userId);
-          const response = await workflowBackend.post("/users/checkRole", {
-            workspaceId,
-            userId,
-          });
+    if (workspaceId && userId) {
+      try {
+        console.log(workspaceId, userId);
+        const response = await workflowBackend.post("/users/checkRole", {
+          workspaceId,
+          userId,
+        });
 
-          setIsAdmin(response.data.role === "admin");
-        } catch (error) {
-          console.error("Error checking user role:", error);
-          setIsAdmin(false);
-        }
-      } else {
+        setIsAdmin(response.data.role === "admin");
+      } catch (error) {
+        console.error("Error checking user role:", error);
         setIsAdmin(false);
       }
-    };
+    } else {
+      setIsAdmin(false);
+    }
+  };
 
+  useEffect(() => {
+    if (pathName !== currentPath) {
+      setCurrentPath(pathName);
+      checkUserRole(); // Trigger role check on path change
+    }
+  }, [pathName]);
+
+  useEffect(() => {
+    // Ensure role check on the first render
     checkUserRole();
   }, []);
 

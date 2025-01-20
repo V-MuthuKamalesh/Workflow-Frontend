@@ -1,9 +1,18 @@
 "use client";
 
+import { workflowBackend } from "@/app/_utils/api/axiosConfig";
+
 export default function JoinUser({ token }) {
   const handleJoinUser = async () => {
     try {
-    } catch (error) {}
+      const response = await workflowBackend.post("/users/addMember", {
+        token,
+      });
+
+      window.close();
+    } catch (error) {
+      console.error("Failed to join workspace:", error);
+    }
   };
 
   return (

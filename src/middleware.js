@@ -5,6 +5,8 @@ export async function middleware(request) {
   const publicPaths = [
     "/auth/signin",
     "/auth/signup",
+    "/auth/forgot-password",
+    "/auth/reset-password",
     "/users/account-creation",
   ];
 

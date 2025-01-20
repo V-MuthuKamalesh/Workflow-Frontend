@@ -6,6 +6,7 @@ import Button from "../UI/Button";
 import Input from "../UI/Input";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 import { setCookies } from "@/app/_utils/helpers/cookies";
+import Link from "next/link";
 
 export default function BasicAuthSignIn() {
   const [formData, setFormData] = useState({
@@ -43,7 +44,10 @@ export default function BasicAuthSignIn() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-sm flex flex-col items-center mt-8">
+    <form
+      onSubmit={handleSubmit}
+      className="w-full max-w-sm flex flex-col items-center mt-8"
+    >
       <Input
         title="Your Email Address"
         type="email"
@@ -64,7 +68,9 @@ export default function BasicAuthSignIn() {
         required
       />
 
-      {error && <span className="text-red-600 text-xs">Invalid Credentials</span>}
+      {error && (
+        <span className="text-red-600 text-xs">Invalid Credentials</span>
+      )}
 
       <Button buttonText="Log In" />
     </form>

@@ -18,6 +18,16 @@ export default function SignInPage() {
           Log in to your account
         </h1>
         <BasicAuthSignIn />
+
+        <div className="w-96 flex justify-start mt-5">
+          <Link
+            className="text-blue-800 mt-1 underline underline-offset-2"
+            href={"/auth/forgot-password"}
+          >
+            Forgot Password?
+          </Link>
+        </div>
+
         <SeparatorLine text="Or Sign in with" />
         <GoogleAuthButton
           text="Google"

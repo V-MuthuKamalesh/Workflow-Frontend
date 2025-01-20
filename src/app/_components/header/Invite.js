@@ -1,6 +1,7 @@
 "use client";
 
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
+import Cookies from "js-cookie";
 import { useState } from "react";
 
 export default function Invite({ isOpen, onClose }) {
@@ -17,6 +18,8 @@ export default function Invite({ isOpen, onClose }) {
       const response = await workflowBackend.post("/users/sendinvite", {
         email,
         role,
+        workspaceId: Cookies.get("workspaceId"),
+        adminId: Cookies.get("userId"),
       });
 
       console.log(response);
