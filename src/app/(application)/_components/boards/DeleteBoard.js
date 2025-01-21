@@ -2,11 +2,12 @@
 
 import { removeBoard } from "@/redux/feautres/workspaceSlice";
 import { Trash2 } from "lucide-react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
 
 export default function DeleteBoard({ boardId }) {
   const dispatch = useDispatch();
+  const { isAdmin } = useSelector((state) => state.userDetails);
 
   const handleDelete = (event) => {
     event.stopPropagation();
@@ -29,9 +30,15 @@ export default function DeleteBoard({ boardId }) {
 
   return (
     <button
-      onClick={handleDelete}
-      className="text-gray-500 hover:text-red-500 transition duration-100 z-50"
+      onClick={isAdmin ? handleDelete : undefined}
+      className={`text-gray-500 ${
+        isAdmin
+          ? "hover:text-red-500 transition duration-100"
+          : "cursor-not-allowed"
+      } z-50`}
       aria-label="Delete board"
+      disabled={!isAdmin}
+      title={!isAdmin ? "You are not an admin" : "Delete board"}
     >
       <Trash2 />
     </button>

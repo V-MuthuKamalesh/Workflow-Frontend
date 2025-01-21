@@ -5,16 +5,45 @@ import WorkspaceHeader from "./WorkspaceHeader";
 import WorkspaceMembers from "./WorkspaceMembers";
 import CreateBoard from "../boards/CreateBoard";
 import BoardsDisplay from "../boards/BoardsDisplay";
-import ActivityFeed from "./ActivityFeed";
 import { useEffect } from "react";
 import { fetchBoardsByWorkspaceId } from "@/redux/feautres/workspaceSlice";
 import { setCookies } from "@/app/_utils/helpers/cookies";
+import { setIsAdmin } from "@/redux/feautres/userDetailsSlice";
+import Cookies from "js-cookie";
+import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 
 export default function WorkspaceDisplay({ module, workspaceId }) {
   const dispatch = useDispatch();
   const { workspaceName, members, loading, error } = useSelector(
     (state) => state.workspace
   );
+  const { isAdmin } = useSelector((state) => state.userDetails);
+
+  useEffect(() => {
+    const checkUserRole = async () => {
+      const workspaceId = Cookies.get("workspaceId");
+      const userId = Cookies.get("userId");
+
+      if (workspaceId && userId) {
+        try {
+          console.log(workspaceId, userId);
+          const response = await workflowBackend.post("/users/checkRole", {
+            workspaceId,
+            userId,
+          });
+
+          dispatch(setIsAdmin(response.data.role === "admin"));
+        } catch (error) {
+          console.error("Error checking user role:", error);
+          dispatch(setIsAdmin(false));
+        }
+      } else {
+        dispatch(setIsAdmin(false));
+      }
+    };
+
+    checkUserRole();
+  });
 
   useEffect(() => {
     dispatch(fetchBoardsByWorkspaceId(workspaceId));
@@ -41,6 +70,7 @@ export default function WorkspaceDisplay({ module, workspaceId }) {
     <>
       <WorkspaceHeader
         module={module}
+        isAdmin={isAdmin}
         workspaceId={workspaceId}
         workspaceName={workspaceName}
       />
@@ -50,10 +80,12 @@ export default function WorkspaceDisplay({ module, workspaceId }) {
           <WorkspaceMembers members={members} />
 
           <div className="space-y-8">
-            <div>
-              <h1 className="text-2xl font-semibold">Create Board</h1>
-              <CreateBoard module={module} workspaceId={workspaceId} />
-            </div>
+            {isAdmin && (
+              <div>
+                <h1 className="text-2xl font-semibold">Create Board</h1>
+                <CreateBoard module={module} workspaceId={workspaceId} />
+              </div>
+            )}
 
             <div>
               <h1 className="text-2xl font-semibold">Boards</h1>

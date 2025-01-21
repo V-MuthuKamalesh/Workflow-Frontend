@@ -8,6 +8,7 @@ import GroupHeader from "./GroupHeader";
 import { io } from "socket.io-client";
 import { useMemo, useState } from "react";
 import { moduleFields } from "@/app/_utils/helpers/fields";
+import DeleteGroupButton from "./DeleteGroupButton";
 
 export default function Group({ module, boardType, boardId, group }) {
   const [editingGroupName, setEditingGroupName] = useState(false);
@@ -92,12 +93,10 @@ export default function Group({ module, boardType, boardId, group }) {
             {groupName}
           </span>
         )}
-        <button
-          className="bg-red-500 text-white px-2 py-1 rounded-md shadow-md hover:bg-red-600 hover:shadow-lg transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-1"
-          onClick={() => handleDeleteGroup(group.groupId)}
-        >
-          Delete Group
-        </button>
+
+        <DeleteGroupButton
+          onDeleteGroup={() => handleDeleteGroup(group.groupId)}
+        />
       </div>
 
       <table className="table-auto w-full border-collapse border border-gray-300">

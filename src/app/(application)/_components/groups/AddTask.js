@@ -2,12 +2,13 @@
 
 import { addItemToGroup } from "@/redux/feautres/boardSlice";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
 
 export default function AddTask({ module, boardId, boardType, groupId }) {
   const [taskName, setTaskName] = useState("");
   const dispatch = useDispatch();
+  const { isAdmin } = useSelector((state) => state.userDetails);
 
   const handleAddTask = (event) => {
     event.preventDefault();
@@ -100,15 +101,30 @@ export default function AddTask({ module, boardId, boardType, groupId }) {
   return (
     <tr>
       <td colSpan="3">
-        <form onSubmit={handleAddTask}>
+        <form
+          onSubmit={isAdmin ? handleAddTask : (event) => event.preventDefault()}
+        >
           <input
             type="text"
             placeholder="New task..."
             value={taskName}
             onChange={(event) => setTaskName(event.target.value)}
-            className="border border-gray-300 rounded-md px-2 py-1"
+            className={`border rounded-md px-2 py-1 ${
+              isAdmin
+                ? "border-gray-300"
+                : "border-gray-200 bg-gray-100 cursor-not-allowed"
+            }`}
+            disabled={!isAdmin}
           />
-          <button className="ml-2 px-2 py-1 bg-blue-500 text-white rounded-md">
+          <button
+            className={`ml-2 px-2 py-1 rounded-md ${
+              isAdmin
+                ? "bg-blue-500 text-white hover:bg-blue-600"
+                : "bg-blue-500 text-white hover:bg-gray-500 cursor-not-allowed"
+            }`}
+            disabled={!isAdmin}
+            title={!isAdmin ? "You are not an admin" : "Add a new task"}
+          >
             Add Task
           </button>
         </form>

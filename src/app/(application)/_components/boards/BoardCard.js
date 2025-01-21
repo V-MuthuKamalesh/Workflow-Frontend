@@ -81,6 +81,7 @@ export default function BoardCard({
           <div className="flex items-center space-x-1">
             <span>Workspace</span> <ArrowRight /> <span>{workspaceName}</span>
           </div>
+
           <DeleteBoard boardId={boardId} />
         </div>
       </div>

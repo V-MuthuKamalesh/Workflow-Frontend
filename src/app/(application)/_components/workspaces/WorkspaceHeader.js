@@ -17,7 +17,6 @@ import { Star, UserPlus } from "lucide-react"; // Assuming StarFill represents a
 import { useRouter } from "next/navigation";
 import { deleteWorkspace } from "@/redux/feautres/userDetailsSlice";
 import Invite from "../header/Invite";
-import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 
 const moduleColors = {
   "work-management": "from-purple-600 to-purple-400",
@@ -31,43 +30,18 @@ export default function WorkspaceHeader({
   module,
   workspaceId,
   workspaceName,
+  isAdmin,
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const [newWorkspaceName, setNewWorkspaceName] = useState(workspaceName);
   const [deleteInput, setDeleteInput] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false);
+
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
 
   const bgColor = moduleColors[module] || moduleColors.default;
-
-  const checkUserRole = async () => {
-    const workspaceId = Cookies.get("workspaceId");
-    const userId = Cookies.get("userId");
-
-    if (workspaceId && userId) {
-      try {
-        console.log(workspaceId, userId);
-        const response = await workflowBackend.post("/users/checkRole", {
-          workspaceId,
-          userId,
-        });
-
-        setIsAdmin(response.data.role === "admin");
-      } catch (error) {
-        console.error("Error checking user role:", error);
-        setIsAdmin(false);
-      }
-    } else {
-      setIsAdmin(false);
-    }
-  };
-
-  useEffect(() => {
-    checkUserRole();
-  }, []);
 
   useEffect(() => {
     const socket = io("http://localhost:4000/", { transports: ["websocket"] });

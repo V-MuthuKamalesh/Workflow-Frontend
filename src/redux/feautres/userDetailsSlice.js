@@ -1,6 +1,7 @@
 const { createSlice } = require("@reduxjs/toolkit");
 
 const initialState = {
+  isAdmin: false,
   workspaces: [],
 };
 
@@ -8,6 +9,9 @@ const userDetailsSlice = createSlice({
   initialState,
   name: "userDetails",
   reducers: {
+    setIsAdmin: (state, action) => {
+      state.isAdmin = action.payload;
+    },
     setWorkspaces: (state, action) => {
       state.workspaces = action.payload;
     },
@@ -22,7 +26,7 @@ const userDetailsSlice = createSlice({
   },
 });
 
-export const { setWorkspaces, addWorkspace, deleteWorkspace } =
+export const { setIsAdmin, setWorkspaces, addWorkspace, deleteWorkspace } =
   userDetailsSlice.actions;
 
 export default userDetailsSlice.reducer;
