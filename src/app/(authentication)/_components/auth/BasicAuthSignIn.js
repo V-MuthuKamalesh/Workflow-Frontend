@@ -20,10 +20,7 @@ export default function BasicAuthSignIn() {
     event.preventDefault();
 
     try {
-      console.log(formData);
       const response = await workflowBackend.post("/users/login", formData);
-
-      console.log(response);
 
       if (response.status === 200) {
         setCookies("fullName", response.data.userName);

@@ -1,35 +1,22 @@
 "use client";
 
-import { useDispatch, useSelector } from "react-redux";
-import { setBoardData, updateGroup } from "@/redux/feautres/boardSlice.js";
 import TaskRow from "./TaskRow";
 import AddTask from "./AddTask";
 import GroupHeader from "./GroupHeader";
-import { io } from "socket.io-client";
 import { useMemo, useState } from "react";
-import { moduleFields } from "@/app/_utils/helpers/fields";
+import getFields, { moduleFields } from "@/app/_utils/helpers/fields";
 import DeleteGroupButton from "./DeleteGroupButton";
+import { socket } from "@/app/_utils/webSocket/webSocketConfig";
 
-export default function Group({ module, boardType, boardId, group }) {
+export default function Group({ module, boardType, group, isAdmin }) {
   const [editingGroupName, setEditingGroupName] = useState(false);
   const [groupName, setGroupName] = useState(group.groupName);
-  const dispatch = useDispatch();
-
-  console.log(group);
 
   const fields = useMemo(() => {
-    if (module === "work-management") {
-      return moduleFields["work-management"];
-    }
-    if (moduleFields[module] && moduleFields[module][boardType]) {
-      return moduleFields[module][boardType];
-    }
-    return [];
+    return getFields(module, boardType);
   }, [module, boardType]);
 
   const handleGroupNameSave = (newName) => {
-    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
-
     socket.emit(
       "updateGroupInBoard",
       { groupId: group.groupId, updateData: { groupName: newName } },
@@ -52,23 +39,6 @@ export default function Group({ module, boardType, boardId, group }) {
   const handleBlur = () => {
     handleGroupNameSave(groupName);
     setEditingGroupName(false);
-  };
-
-  const handleDeleteGroup = (groupId) => {
-    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
-
-    socket.emit(
-      "removeGroupFromBoard",
-      { groupId, type: boardType },
-      (response) => {
-        if (!response) {
-          console.error("Error deleting task.");
-          return;
-        }
-
-        dispatch(setBoardData(response));
-      }
-    );
   };
 
   return (
@@ -94,9 +64,7 @@ export default function Group({ module, boardType, boardId, group }) {
           </span>
         )}
 
-        <DeleteGroupButton
-          onDeleteGroup={() => handleDeleteGroup(group.groupId)}
-        />
+        <DeleteGroupButton groupId={group.groupId} isAdmin={isAdmin} />
       </div>
 
       <table className="table-auto w-full border-collapse border border-gray-300">
@@ -106,18 +74,12 @@ export default function Group({ module, boardType, boardId, group }) {
             <TaskRow
               key={index}
               module={module}
-              boardId={boardId}
-              boardType={boardType}
               item={item}
               fields={fields}
+              isAdmin={isAdmin}
             />
           ))}
-          <AddTask
-            module={module}
-            boardId={boardId}
-            boardType={boardType}
-            groupId={group.groupId}
-          />
+          <AddTask module={module} groupId={group.groupId} isAdmin={isAdmin} />
         </tbody>
       </table>
     </div>

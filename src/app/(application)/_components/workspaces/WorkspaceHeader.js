@@ -16,7 +16,7 @@ import Cookies from "js-cookie";
 import { Star, UserPlus } from "lucide-react"; // Assuming StarFill represents a filled star icon
 import { useRouter } from "next/navigation";
 import { deleteWorkspace } from "@/redux/feautres/userDetailsSlice";
-import Invite from "../header/Invite";
+import Invite from "./Invite";
 
 const moduleColors = {
   "work-management": "from-purple-600 to-purple-400",

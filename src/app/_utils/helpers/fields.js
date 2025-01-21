@@ -1,4 +1,4 @@
-export const moduleFields = {
+const moduleFields = {
   "work-management": ["itemName", "assignedToId", "status", "dueDate"],
   crm: {
     Lead: [
@@ -27,3 +27,15 @@ export const moduleFields = {
     ],
   },
 };
+
+export default function getFields(module, boardType) {
+  if (module === "work-management") {
+    return moduleFields["work-management"];
+  }
+
+  if (moduleFields[module] && moduleFields[module][boardType]) {
+    return moduleFields[module][boardType];
+  }
+
+  return [];
+}

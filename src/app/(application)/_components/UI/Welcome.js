@@ -1,3 +1,7 @@
+import {
+  welcomDescriptions,
+  welcomeGradients,
+} from "@/app/_utils/constants/colors";
 import { greetBasedOnTime } from "@/app/_utils/helpers/helper";
 import { cookies } from "next/headers";
 
@@ -5,20 +9,7 @@ export default async function Welcome({ view, module }) {
   const cookieStore = await cookies();
   const fullName = cookieStore.get("fullName")?.value;
 
-  const descriptions = {
-    dashboard:
-      "Track your performance across all workspaces with insightful metrics and workspace stats, all in one comprehensive dashboard.",
-    favorites: "View and manage your favorite workspaces and boards.",
-  };
-
-  const moduleColors = {
-    "work-management": "from-purple-600 to-purple-400",
-    dev: "from-green-600 to-green-400",
-    crm: "from-yellow-600 to-yellow-400",
-    service: "from-teal-600 to-teal-400",
-  };
-
-  const bgGradient = moduleColors[module] || "from-gray-400 to-gray-600";
+  const bgGradient = welcomeGradients[module] || "from-gray-400 to-gray-600";
 
   return (
     <div
@@ -28,7 +19,7 @@ export default async function Welcome({ view, module }) {
         {greetBasedOnTime()} {fullName || "Unknown User"}!
       </h1>
       <p className="text-lg">
-        {descriptions[view] || "Welcome to your workspace!"}
+        {welcomDescriptions[view] || "Welcome to your workspace!"}
       </p>
     </div>
   );

@@ -1,26 +1,24 @@
 "use client";
 
+import { socket } from "@/app/_utils/webSocket/webSocketConfig";
 import { removeBoard } from "@/redux/feautres/workspaceSlice";
 import { Trash2 } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
-import { io } from "socket.io-client";
+import { useDispatch } from "react-redux";
+import useCheckUserRole from "../../hooks/useCheckUserRole";
+import Cookies from "js-cookie";
 
-export default function DeleteBoard({ boardId }) {
+export default function DeleteBoard({ workspaceId, boardId }) {
   const dispatch = useDispatch();
-  const { isAdmin } = useSelector((state) => state.userDetails);
+  const { isAdmin } = useCheckUserRole(Cookies.get("userId"), workspaceId);
 
   const handleDelete = (event) => {
     event.stopPropagation();
-
-    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
 
     socket.emit("removeBoardFromWorkspace", { boardId }, (response) => {
       if (!response) {
         console.error("Error deleting board.");
         return;
       }
-
-      console.log(response);
 
       for (const boardId of response) {
         dispatch(removeBoard(boardId));

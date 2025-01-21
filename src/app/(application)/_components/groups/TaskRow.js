@@ -23,8 +23,10 @@ import { Plus, Trash2 } from "lucide-react";
 import Priority from "../UI/Priority";
 import RequestType from "../UI/RequestType";
 import Status from "../UI/Status";
+import { socket } from "@/app/_utils/webSocket/webSocketConfig";
+import { stringAvatar } from "@/app/_utils/helpers/helper";
 
-export default function TaskRow({ module, boardId, boardType, item, fields }) {
+export default function TaskRow({ module, item, fields, isAdmin }) {
   const [editingField, setEditingField] = useState(null);
   const [openAddAssignee, setOpenAddAssignee] = useState({
     open: false,
@@ -32,6 +34,8 @@ export default function TaskRow({ module, boardId, boardType, item, fields }) {
   });
   const [selectedMember, setSelectedMember] = useState(null);
   const { members } = useSelector((state) => state.workspace);
+  const { data: boardData } = useSelector((state) => state.board);
+  const { boardId, type: boardType } = boardData;
   const dispatch = useDispatch();
 
   const handleKeyDown = (event) => {
@@ -45,8 +49,6 @@ export default function TaskRow({ module, boardId, boardType, item, fields }) {
   };
 
   const handleEditTask = (field, value) => {
-    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
-
     let updatedItem = { ...item, [field]: value };
 
     socket.emit(
@@ -68,7 +70,9 @@ export default function TaskRow({ module, boardId, boardType, item, fields }) {
   };
 
   const handleDeleteTask = () => {
-    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
+    const socket = io(process.env.NEXT_PUBLIC_WEB_SOCKET_URL, {
+      transports: ["websocket"],
+    });
 
     socket.emit(
       "removeItemFromGroup",
@@ -92,35 +96,7 @@ export default function TaskRow({ module, boardId, boardType, item, fields }) {
     );
   };
 
-  const handleRemoveAssignee = (assigneeId, assigneeType) => {
-    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
-
-    socket.emit(
-      "removeMembersFromItem",
-      {
-        itemId: item.itemId,
-        userId: assigneeId,
-        type: assigneeType,
-      },
-      (response) => {
-        if (!response) {
-          console.error("Error removing assignee from task.");
-        }
-
-        dispatch(
-          updateTaskField({
-            taskId: item.itemId,
-            field: assigneeType,
-            value: response.assignedToId,
-          })
-        );
-      }
-    );
-  };
-
   const handleAddAssignee = () => {
-    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
-
     socket.emit(
       "addMembersToItem",
       {
@@ -145,6 +121,34 @@ export default function TaskRow({ module, boardId, boardType, item, fields }) {
 
     setSelectedMember(null);
     setOpenAddAssignee({ open: false, assigneeType: null });
+  };
+
+  const handleRemoveAssignee = (assigneeId, assigneeType) => {
+    const socket = io(process.env.NEXT_PUBLIC_WEB_SOCKET_URL, {
+      transports: ["websocket"],
+    });
+
+    socket.emit(
+      "removeMembersFromItem",
+      {
+        itemId: item.itemId,
+        userId: assigneeId,
+        type: assigneeType,
+      },
+      (response) => {
+        if (!response) {
+          console.error("Error removing assignee from task.");
+        }
+
+        dispatch(
+          updateTaskField({
+            taskId: item.itemId,
+            field: assigneeType,
+            value: response.assignedToId,
+          })
+        );
+      }
+    );
   };
 
   const getFieldDisplay = (field) => {
@@ -276,10 +280,21 @@ export default function TaskRow({ module, boardId, boardType, item, fields }) {
           </td>
         ))}
         <td className="border border-gray-300 px-1 py-1 w-10">
-          <Trash2
-            className="cursor-pointer text-red-500 hover:text-red-700"
-            onClick={handleDeleteTask}
-          />
+          <Tooltip
+            title={!isAdmin ? "Admins cannot delete tasks" : "Delete Task"}
+            arrow
+          >
+            <span>
+              <Trash2
+                className={`${
+                  isAdmin
+                    ? "text-red-500 hover:text-red-700 cursor-pointer"
+                    : "text-gray-400 cursor-not-allowed"
+                }`}
+                onClick={isAdmin ? handleDeleteTask : undefined}
+              />
+            </span>
+          </Tooltip>
         </td>
       </tr>
 

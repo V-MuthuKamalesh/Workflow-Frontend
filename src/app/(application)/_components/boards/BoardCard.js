@@ -4,11 +4,12 @@ import { ArrowRight, SquareChartGantt, Star } from "lucide-react";
 import Image from "next/image";
 import DeleteBoard from "./DeleteBoard";
 import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
 import { useRouter } from "next/navigation";
+import { socket } from "@/app/_utils/webSocket/webSocketConfig";
 
 export default function BoardCard({
   module,
+  workspaceId,
   workspaceName,
   boardName,
   boardId,
@@ -17,12 +18,10 @@ export default function BoardCard({
   const router = useRouter();
 
   const handleBoardClick = () => {
-    router.push(`/${module}/boards/${boardId}`);
+    router.push(`/${module}/boards/${boardId}?workspaceId=${workspaceId}`);
   };
 
   useEffect(() => {
-    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
-
     socket.emit("isBoardInFavourite", { boardId, type: module }, (response) => {
       if (!response) {
         console.error("Error checking if board is in favourite.");
@@ -37,8 +36,6 @@ export default function BoardCard({
     event.stopPropagation();
 
     setIsFavorite((prev) => !prev);
-
-    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
 
     socket.emit(
       isFavorite ? "removeBoardFromFavourite" : "addBoardToFavourite",
@@ -82,7 +79,7 @@ export default function BoardCard({
             <span>Workspace</span> <ArrowRight /> <span>{workspaceName}</span>
           </div>
 
-          <DeleteBoard boardId={boardId} />
+          <DeleteBoard workspaceId={workspaceId} boardId={boardId} />
         </div>
       </div>
     </div>

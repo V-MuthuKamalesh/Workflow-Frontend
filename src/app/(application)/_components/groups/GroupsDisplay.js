@@ -6,14 +6,14 @@ import Group from "./Group";
 import AddGroupButton from "./AddGroupButton";
 import {
   fetchBoardData,
-  setBoardData,
   updateBoardName,
 } from "@/redux/feautres/boardSlice.js";
 import { io } from "socket.io-client";
 import { fetchBoardsByWorkspaceId } from "@/redux/feautres/workspaceSlice";
+import useCheckUserRole from "../../hooks/useCheckUserRole";
 import Cookies from "js-cookie";
 
-export default function GroupsDisplay({ module, boardId }) {
+export default function GroupsDisplay({ module, workspaceId, boardId }) {
   const {
     data: boardData,
     loading,
@@ -21,14 +21,15 @@ export default function GroupsDisplay({ module, boardId }) {
   } = useSelector((state) => state.board);
   const [editingBoardName, setEditingBoardName] = useState(false);
   const [boardName, setBoardName] = useState(boardData.boardName);
+  const { type: boardType } = boardData;
   const dispatch = useDispatch();
 
-  const boardType = boardData.type;
+  const { isAdmin } = useCheckUserRole(Cookies.get("userId"), workspaceId);
 
   useEffect(() => {
-    dispatch(fetchBoardsByWorkspaceId(Cookies.get("workspaceId")));
+    dispatch(fetchBoardsByWorkspaceId(workspaceId));
     dispatch(fetchBoardData(boardId));
-  }, [boardId, dispatch]);
+  }, [workspaceId, boardId, dispatch]);
 
   useEffect(() => {
     if (boardData.boardName) {
@@ -63,94 +64,6 @@ export default function GroupsDisplay({ module, boardId }) {
   const handleBlur = () => {
     handleBoardNameSave(boardName);
     setEditingBoardName(false);
-  };
-
-  const handleAddGroup = () => {
-    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
-
-    const newItemTemplate = {
-      "work-management": () => ({
-        itemName: "item",
-        assignedToId: [],
-        status: "",
-        dueDate: new Date(),
-      }),
-      crm: {
-        Lead: () => ({
-          leadName: "New Lead",
-          status: "",
-          company: "Company Name",
-          title: "Title",
-          email: "name@company.com",
-          lastInteraction: new Date(),
-        }),
-      },
-      dev: {
-        Bug: () => ({
-          bugName: "New Bug",
-          reporter: [],
-          developer: [],
-          priority: "",
-          status: "",
-        }),
-        Sprint: () => ({
-          sprintName: "New Sprint",
-          sprintGoals: "Type your sprint goals here",
-          startDate: new Date(),
-          endDate: new Date(),
-        }),
-        Task: () => ({
-          taskName: "New Task",
-          person: [],
-          priority: "",
-          status: "",
-        }),
-      },
-      service: {
-        Ticket: () => ({
-          ticketName: "New Ticket",
-          description: "",
-          employee: [],
-          agent: [],
-          priority: "",
-          status: "",
-          requestType: "",
-        }),
-      },
-    };
-
-    const newItem =
-      typeof newItemTemplate[module] === "function"
-        ? newItemTemplate[module]()
-        : newItemTemplate[module]?.[boardType]?.() || {};
-
-    socket.emit(
-      "createItem",
-      { boardId, type: boardType, item: newItem },
-      (response) => {
-        if (!response) {
-          console.error("Error creating item.");
-          return;
-        }
-
-        const newGroup = {
-          groupName: `New Group ${boardData.groups.length + 1}`,
-        };
-
-        socket.emit(
-          "addGroupToBoard",
-          { boardId, group: newGroup, itemId: response.itemId },
-          (response) => {
-            if (!response) {
-              console.error("Error adding group to board.");
-              return;
-            }
-
-            dispatch(setBoardData(response));
-          }
-        );
-      }
-    );
   };
 
   if (loading) {
@@ -190,7 +103,7 @@ export default function GroupsDisplay({ module, boardId }) {
           )}
         </div>
 
-        <AddGroupButton onAddGroup={handleAddGroup} />
+        <AddGroupButton module={module} isAdmin={isAdmin} />
       </div>
 
       <div className="space-y-8">
@@ -204,6 +117,7 @@ export default function GroupsDisplay({ module, boardId }) {
               boardType={boardType}
               boardId={boardId}
               group={group}
+              isAdmin={isAdmin}
             />
           </div>
         ))}

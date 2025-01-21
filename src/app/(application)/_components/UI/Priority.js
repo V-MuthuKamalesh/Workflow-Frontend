@@ -10,7 +10,7 @@ export default function Priority({
 }) {
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
-  const priorityOptionsMap = {
+  const priorityOptions = {
     dev: {
       Bug: ["Critical", "High", "Medium", "Low"],
       Task: ["Critical", "High", "Medium", "Low", "Best Effort"],
@@ -45,7 +45,7 @@ export default function Priority({
     setDropdownVisible(false);
   };
 
-  const options = priorityOptionsMap[module]?.[type] || [];
+  const options = priorityOptions[module]?.[type] || [];
 
   return (
     <div className="relative">

@@ -1,4 +1,4 @@
-import { WorkspaceCard } from "./WorkspaceCard";
+import { WorkspaceCard } from "../workspaces/WorkspaceCard";
 
 export function FavoriteWorkspaces({ module, workspaces }) {
   return (

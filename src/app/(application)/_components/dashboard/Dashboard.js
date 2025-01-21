@@ -14,8 +14,8 @@ import {
   Legend,
   ArcElement,
 } from "chart.js";
-import { io } from "socket.io-client";
 import Cookies from "js-cookie";
+import { socket } from "@/app/_utils/webSocket/webSocketConfig";
 
 ChartJS.register(
   CategoryScale,
@@ -41,8 +41,6 @@ export default function Dashboard({ module }) {
     .join(" ");
 
   useEffect(() => {
-    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
-
     socket.emit(
       "getDashboardDetails",
       { moduleId: Cookies.get("moduleId"), userId: Cookies.get("userId") },
@@ -51,6 +49,8 @@ export default function Dashboard({ module }) {
           console.error("Error getting workspace data.");
           return;
         }
+
+        console.log(response);
 
         const keyMappings = {
           crm: {

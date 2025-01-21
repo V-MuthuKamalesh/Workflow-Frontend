@@ -29,13 +29,8 @@ import {
 } from "@/redux/feautres/workspaceSlice";
 import { usePathname } from "next/navigation";
 import { setWorkspaces } from "@/redux/feautres/userDetailsSlice";
-
-const moduleColors = {
-  "work-management": "bg-purple-100",
-  dev: "bg-green-100",
-  crm: "bg-yellow-100",
-  service: "bg-teal-100",
-};
+import { moduleColors } from "@/app/_utils/constants/colors";
+import { socket } from "@/app/_utils/webSocket/webSocketConfig";
 
 export default function AppSidebar({ module }) {
   const dispatch = useDispatch();
@@ -43,7 +38,6 @@ export default function AppSidebar({ module }) {
   const { workspaceId, workspaceName, loading, error } = useSelector(
     (state) => state.workspace
   );
-  // const [fetchError, setFetchError] = useState(null);
   const pathName = usePathname();
 
   const items = [
@@ -67,8 +61,6 @@ export default function AppSidebar({ module }) {
   }, [pathName, dispatch]);
 
   useEffect(() => {
-    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
-
     socket.emit(
       "getWorkspaces",
       { moduleId: Cookies.get("moduleId"), token: Cookies.get("authToken") },
@@ -81,10 +73,6 @@ export default function AppSidebar({ module }) {
         dispatch(setWorkspaces(response));
       }
     );
-
-    return () => {
-      socket.disconnect();
-    };
   }, [dispatch]);
 
   const handleWorkspaceSelect = (workspaceId) => {

@@ -1,10 +1,10 @@
 "use client";
 
+import { socket } from "@/app/_utils/webSocket/webSocketConfig";
 import { addBoard } from "@/redux/feautres/workspaceSlice";
 import Cookies from "js-cookie";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { io } from "socket.io-client";
 
 export default function CreateBoard({ module, workspaceId }) {
   const [boardName, setBoardName] = useState("");
@@ -28,8 +28,6 @@ export default function CreateBoard({ module, workspaceId }) {
     };
 
     setLoading(true);
-
-    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
 
     socket.emit(
       "addBoardToWorkspace",

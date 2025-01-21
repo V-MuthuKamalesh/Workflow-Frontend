@@ -4,17 +4,12 @@ import { useState } from "react";
 import { ChangeCircleRounded, Person } from "@mui/icons-material";
 import ModuleSwitcher from "./ModuleSwitcher";
 import UserProfile from "./UserProfile";
-
-const moduleColors = {
-  "work-management": "bg-purple-100",
-  dev: "bg-green-100",
-  crm: "bg-yellow-100",
-  service: "bg-teal-100",
-};
+import { moduleColors } from "@/app/_utils/constants/colors";
 
 export default function AppHeader({ module }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+
   const bgColor = moduleColors[module] || "bg-gray-50";
 
   const moduleName = module

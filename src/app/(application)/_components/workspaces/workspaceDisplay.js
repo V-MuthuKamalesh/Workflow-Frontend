@@ -8,42 +8,15 @@ import BoardsDisplay from "../boards/BoardsDisplay";
 import { useEffect } from "react";
 import { fetchBoardsByWorkspaceId } from "@/redux/feautres/workspaceSlice";
 import { setCookies } from "@/app/_utils/helpers/cookies";
-import { setIsAdmin } from "@/redux/feautres/userDetailsSlice";
+import useCheckUserRole from "../../hooks/useCheckUserRole";
 import Cookies from "js-cookie";
-import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 
 export default function WorkspaceDisplay({ module, workspaceId }) {
-  const dispatch = useDispatch();
   const { workspaceName, members, loading, error } = useSelector(
     (state) => state.workspace
   );
-  const { isAdmin } = useSelector((state) => state.userDetails);
-
-  useEffect(() => {
-    const checkUserRole = async () => {
-      const workspaceId = Cookies.get("workspaceId");
-      const userId = Cookies.get("userId");
-
-      if (workspaceId && userId) {
-        try {
-          console.log(workspaceId, userId);
-          const response = await workflowBackend.post("/users/checkRole", {
-            workspaceId,
-            userId,
-          });
-
-          dispatch(setIsAdmin(response.data.role === "admin"));
-        } catch (error) {
-          console.error("Error checking user role:", error);
-          dispatch(setIsAdmin(false));
-        }
-      } else {
-        dispatch(setIsAdmin(false));
-      }
-    };
-
-    checkUserRole();
-  });
+  const { isAdmin } = useCheckUserRole(Cookies.get("userId"), workspaceId);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchBoardsByWorkspaceId(workspaceId));
