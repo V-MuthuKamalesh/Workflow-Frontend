@@ -4,7 +4,30 @@ import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
-import { addWorkspace, setWorkspaces } from "@/redux/feautres/userDetailsSlice";
+import { addWorkspace } from "@/redux/feautres/userDetailsSlice";
+import {
+  Modal,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  IconButton,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "100%",
+  maxWidth: 600,
+  bgcolor: "background.paper",
+  borderRadius: 3,
+  boxShadow: 24,
+  p: 4,
+  outline: "none",
+};
 
 export default function WorkspaceModal({ onClose }) {
   const [workspaceName, setWorkspaceName] = useState("");
@@ -24,7 +47,7 @@ export default function WorkspaceModal({ onClose }) {
   }, []);
 
   const handleWorkspaceCreation = () => {
-    if (!workspaceName || !socket) return;
+    if (!workspaceName.trim() || !socket) return;
 
     socket.emit(
       "createWorkspace",
@@ -32,7 +55,7 @@ export default function WorkspaceModal({ onClose }) {
         moduleId: Cookies.get("moduleId"),
         workspaceData: {
           createdBy: Cookies.get("userId"),
-          workspaceName,
+          workspaceName: workspaceName.trim(),
         },
       },
       (response) => {
@@ -40,8 +63,6 @@ export default function WorkspaceModal({ onClose }) {
           console.error("Error creating workspace.");
           return;
         }
-
-        console.log(response);
 
         dispatch(
           addWorkspace({
@@ -56,33 +77,41 @@ export default function WorkspaceModal({ onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white p-10 rounded-3xl shadow-md min-h-10 w-[35rem] space-y-5">
-        <div className="w-full mt-8 space-y-2">
-          <h2 className="text-3xl font-bold mb-4">Add new workspace</h2>
-          <p className="text-gray-600 text-lg">Workspace name</p>
-          <input
-            className="w-full outline-none border border-gray-300 p-2 rounded-sm"
-            type="text"
-            placeholder="Choose a name for your workspace"
-            onChange={(event) => setWorkspaceName(event.target.value)}
-          />
-        </div>
-        <div className="flex justify-end space-x-2">
-          <button
-            onClick={onClose}
-            className="mt-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition duration-150"
-          >
+    <Modal open onClose={onClose} aria-labelledby="modal-title">
+      <Box sx={modalStyle}>
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Typography id="modal-title" variant="h5" fontWeight="bold">
+            🚀 Create Your Workspace
+          </Typography>
+          <IconButton onClick={onClose}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
+          Start organizing your projects and collaborating seamlessly.
+        </Typography>
+        <TextField
+          fullWidth
+          label="Workspace Name"
+          variant="outlined"
+          sx={{ mt: 3 }}
+          value={workspaceName}
+          onChange={(event) => setWorkspaceName(event.target.value)}
+        />
+        <Box display="flex" justifyContent="flex-end" gap={2} sx={{ mt: 4 }}>
+          <Button variant="outlined" color="error" onClick={onClose}>
             Cancel
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
             onClick={handleWorkspaceCreation}
-            className="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition duration-150"
+            disabled={!workspaceName.trim()}
           >
-            Add Workspace
-          </button>
-        </div>
-      </div>
-    </div>
+            Create Workspace
+          </Button>
+        </Box>
+      </Box>
+    </Modal>
   );
 }

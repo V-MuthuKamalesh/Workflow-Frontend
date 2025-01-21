@@ -107,6 +107,7 @@ export default function CreateBoard({ module, workspaceId }) {
         <button
           type="submit"
           disabled={isCreateDisabled}
+          title={isCreateDisabled ? "Enter Board Name" : "Create Board"}
           className={`px-6 py-2 text-white rounded-lg ${
             isCreateDisabled
               ? "bg-gray-400 cursor-not-allowed"
