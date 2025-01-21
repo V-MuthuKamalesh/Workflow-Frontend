@@ -13,9 +13,11 @@ import { io } from "socket.io-client";
 import { useDispatch } from "react-redux";
 import { updateWorkspaceData } from "@/redux/feautres/workspaceSlice";
 import Cookies from "js-cookie";
-import { Star } from "lucide-react"; // Assuming StarFill represents a filled star icon
+import { Star, UserPlus } from "lucide-react"; // Assuming StarFill represents a filled star icon
 import { useRouter } from "next/navigation";
 import { deleteWorkspace } from "@/redux/feautres/userDetailsSlice";
+import Invite from "../header/Invite";
+import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 
 const moduleColors = {
   "work-management": "from-purple-600 to-purple-400",
@@ -34,10 +36,38 @@ export default function WorkspaceHeader({
   const [isFavorite, setIsFavorite] = useState(false);
   const [newWorkspaceName, setNewWorkspaceName] = useState(workspaceName);
   const [deleteInput, setDeleteInput] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
 
   const bgColor = moduleColors[module] || moduleColors.default;
+
+  const checkUserRole = async () => {
+    const workspaceId = Cookies.get("workspaceId");
+    const userId = Cookies.get("userId");
+
+    if (workspaceId && userId) {
+      try {
+        console.log(workspaceId, userId);
+        const response = await workflowBackend.post("/users/checkRole", {
+          workspaceId,
+          userId,
+        });
+
+        setIsAdmin(response.data.role === "admin");
+      } catch (error) {
+        console.error("Error checking user role:", error);
+        setIsAdmin(false);
+      }
+    } else {
+      setIsAdmin(false);
+    }
+  };
+
+  useEffect(() => {
+    checkUserRole();
+  }, []);
 
   useEffect(() => {
     const socket = io("http://localhost:4000/", { transports: ["websocket"] });
@@ -133,9 +163,9 @@ export default function WorkspaceHeader({
 
   return (
     <div
-      className={`bg-gradient-to-r ${bgColor} text-white p-6 rounded-lg shadow-lg flex justify-between items-center`}
+      className={`bg-gradient-to-r ${bgColor} p-6 rounded-lg shadow-lg flex justify-between items-center`}
     >
-      <div>
+      <div className="text-white">
         <h1 className="text-3xl font-bold leading-tight">{workspaceName}</h1>
         <p className="text-sm opacity-80 mt-1 capitalize">
           {module.replace("-", " ")}
@@ -152,6 +182,16 @@ export default function WorkspaceHeader({
             <Star fill="white" size={24} />
           )}
         </button>
+
+        {isAdmin && (
+          <div
+            className="flex items-center justify-center p-2 rounded-full hover:bg-gray-700 cursor-pointer transition duration-200"
+            onClick={() => setIsInviteModalOpen(true)}
+          >
+            <UserPlus className="" fontSize="medium" />
+          </div>
+        )}
+
         <button
           onClick={() => setIsDialogOpen(true)}
           className="bg-gray-800 text-white py-2 px-6 rounded-lg hover:bg-gray-700 transition-colors duration-300"
@@ -200,6 +240,11 @@ export default function WorkspaceHeader({
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Invite
+        isOpen={isInviteModalOpen}
+        onClose={() => setIsInviteModalOpen(false)}
+      />
     </div>
   );
 }

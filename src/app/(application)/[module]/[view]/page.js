@@ -1,6 +1,6 @@
-import Dashboard from "@/app/_components/dashboard/Dashboard";
-import FavoriteWorkspacesAndBoards from "@/app/_components/favorites/Favorites";
-import Welcome from "@/app/_components/UI/Welcome";
+import Dashboard from "@/app/(application)/_components/dashboard/Dashboard";
+import FavoriteWorkspacesAndBoards from "@/app/(application)/_components/favorites/Favorites";
+import Welcome from "@/app/(application)/_components/UI/Welcome";
 
 export default async function ViewPage({ params }) {
   const { module, view } = await params;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useGoogleLogin } from "@react-oauth/google";
-import Google from "../svg/Google";
+import Google from "../../../(application)/_components/svg/Google";
 import { fetchUserInfo } from "@/app/_utils/api/googleAuth";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 import { useRouter } from "next/navigation";

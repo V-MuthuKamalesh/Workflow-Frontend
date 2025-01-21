@@ -1,3 +1,5 @@
+"use client";
+
 import { Layers, Settings, Users } from "lucide-react";
 import AboutCard from "./AboutCard";
 

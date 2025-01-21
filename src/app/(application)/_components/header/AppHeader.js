@@ -1,14 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { UserPlus } from "lucide-react";
+import { useState } from "react";
 import { ChangeCircleRounded, Person } from "@mui/icons-material";
 import ModuleSwitcher from "./ModuleSwitcher";
 import UserProfile from "./UserProfile";
-import Invite from "./Invite";
-import Cookies from "js-cookie";
-import { workflowBackend } from "@/app/_utils/api/axiosConfig";
-import { usePathname } from "next/navigation";
 
 const moduleColors = {
   "work-management": "bg-purple-100",
@@ -20,51 +15,12 @@ const moduleColors = {
 export default function AppHeader({ module }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const pathName = usePathname();
-  const [currentPath, setCurrentPath] = useState(pathName);
-
   const bgColor = moduleColors[module] || "bg-gray-50";
 
   const moduleName = module
     .split("-")
     .map((str) => str.charAt(0).toUpperCase() + str.slice(1))
     .join(" ");
-
-  const checkUserRole = async () => {
-    const workspaceId = Cookies.get("workspaceId");
-    const userId = Cookies.get("userId");
-
-    if (workspaceId && userId) {
-      try {
-        console.log(workspaceId, userId);
-        const response = await workflowBackend.post("/users/checkRole", {
-          workspaceId,
-          userId,
-        });
-
-        setIsAdmin(response.data.role === "admin");
-      } catch (error) {
-        console.error("Error checking user role:", error);
-        setIsAdmin(false);
-      }
-    } else {
-      setIsAdmin(false);
-    }
-  };
-
-  useEffect(() => {
-    if (pathName !== currentPath) {
-      setCurrentPath(pathName);
-      checkUserRole(); // Trigger role check on path change
-    }
-  }, [pathName]);
-
-  useEffect(() => {
-    // Ensure role check on the first render
-    checkUserRole();
-  }, []);
 
   return (
     <header
@@ -76,15 +32,6 @@ export default function AppHeader({ module }) {
         </h1>
 
         <div className="flex items-center space-x-4 cursor-pointer">
-          {isAdmin && (
-            <div
-              className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200 transition duration-200"
-              onClick={() => setIsInviteModalOpen(true)}
-            >
-              <UserPlus className="text-gray-600" fontSize="medium" />
-            </div>
-          )}
-
           <div
             className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200 transition duration-200"
             onClick={() => setIsModalOpen(true)}
@@ -113,11 +60,6 @@ export default function AppHeader({ module }) {
       <UserProfile
         isProfileOpen={isProfileOpen}
         setIsProfileOpen={setIsProfileOpen}
-      />
-
-      <Invite
-        isOpen={isInviteModalOpen}
-        onClose={() => setIsInviteModalOpen(false)}
       />
     </header>
   );

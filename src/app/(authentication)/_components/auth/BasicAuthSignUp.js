@@ -2,8 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Button from "../UI/Button";
-import Input from "../UI/Input";
+import Button from "../../../(application)/_components/UI/Button";
+import Input from "../../../(application)/_components/UI/Input";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 
 export default function BasicAuthSignUp() {

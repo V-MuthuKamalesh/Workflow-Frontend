@@ -25,7 +25,7 @@ export default function HeroSection({ userId }) {
       </Link>
       <div className="relative mt-8 md:mt-16">
         <Image
-          src="/projectManagement.webp"
+          src="/newProjectManagement.webp"
           alt="Project Management Tool"
           width={1000}
           height={1000}

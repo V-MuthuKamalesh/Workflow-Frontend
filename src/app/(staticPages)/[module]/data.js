@@ -4,9 +4,9 @@ export const moduleStaticPagesData = [
     title: "Do it faster with WorkFlow CRM",
     description:
       "Speed up your sales cycle with an intuitive, AI-powered CRM that your team will love.",
-    imageUrl: "/crm.webp",
+    imageUrl: "/newCrm.jpeg",
     colorSchemes: {
-      bg: "bg-yellow-50",
+      bg: "bg-yellow-100",
       border: "border-yellow-50",
       text: "text-yellow-400",
       hoverBg: "bg-yellow-400",
@@ -17,12 +17,12 @@ export const moduleStaticPagesData = [
     title: "Transform your service operations from reactive to proactive",
     description:
       "Empower service teams to deliver exceptional support experiences faster with smart automations that leverage the power of AI.",
-    imageUrl: "/service.webp",
+    imageUrl: "/newService.png",
     colorSchemes: {
-      bg: "bg-purple-50",
-      border: "border-purple-50",
-      text: "text-purple-400",
-      hoverBg: "bg-purple-400",
+      bg: "bg-teal-100",
+      border: "border-teal-50",
+      text: "text-teal-400",
+      hoverBg: "bg-teal-400",
     },
   },
   {
@@ -30,9 +30,9 @@ export const moduleStaticPagesData = [
     title: "Develop with precision and speed",
     description:
       "Plan roadmaps, manage sprints, and release products fast - on one flexible platform.",
-    imageUrl: "/dev.webp",
+    imageUrl: "/newDev.webp",
     colorSchemes: {
-      bg: "bg-green-50",
+      bg: "bg-green-100",
       border: "border-green-50",
       text: "text-green-400",
       hoverBg: "bg-green-400",
@@ -43,12 +43,12 @@ export const moduleStaticPagesData = [
     title: "Bring your strategy to life",
     description:
       "Gain the clarity and control you need to connect your everyday work to business goals across projects and processes.",
-    imageUrl: "/work-management.webp",
+    imageUrl: "/newWorkManagement.png",
     colorSchemes: {
-      bg: "bg-teal-50",
-      border: "border-teal-50",
-      text: "text-teal-400",
-      hoverBg: "bg-teal-400",
+      bg: "bg-purple-100",
+      border: "border-purple-50",
+      text: "text-purple-400",
+      hoverBg: "bg-purple-400",
     },
   },
 ];

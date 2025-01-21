@@ -1,6 +1,6 @@
 "use client";
 
-import Button from "@/app/_components/UI/Button";
+import Button from "@/app/(application)/_components/UI/Button";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 import { useState } from "react";
 

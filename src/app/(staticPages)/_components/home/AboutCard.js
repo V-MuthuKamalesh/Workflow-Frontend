@@ -13,7 +13,7 @@ export default function AboutCard({ Icon, color, title, description }) {
       <p className="text-gray-300 text-sm leading-6">{description}</p>
       <div>
         <Link
-          href={"/learn-more"}
+          href={"/about-us"}
           className="flex items-center text-sm text-purple-400 hover:underline hover:underline-offset-4"
         >
           Learn more <East className="ml-2" />

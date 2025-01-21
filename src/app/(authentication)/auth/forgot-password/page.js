@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
-import Input from "@/app/_components/UI/Input";
-import Button from "@/app/_components/UI/Button";
+import Input from "@/app/(application)/_components/UI/Input";
+import Button from "@/app/(application)/_components/UI/Button";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");

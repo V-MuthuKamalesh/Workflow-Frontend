@@ -1,5 +1,5 @@
-import AppHeader from "@/app/_components/header/AppHeader";
-import AppSidebar from "@/app/_components/header/AppSidebar";
+import AppHeader from "@/app/(application)/_components/header/AppHeader";
+import AppSidebar from "@/app/(application)/_components/header/AppSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 const moduleColors = {

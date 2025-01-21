@@ -29,22 +29,24 @@ const Testimonials = () => {
   return (
     <div className="mt-20 mx-32">
       <h1 className="text-4xl text-purple-400 text-center font-bold leading-tight mb-8">
-        What our client's say
+        What Our Clients Say
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {testimonialsData.map((testimonial, index) => (
           <div
             key={index}
-            className="bg-white shadow-lg rounded-lg p-6 text-center"
+            className="bg-white shadow-lg rounded-lg p-6 text-center transform transition-transform hover:scale-105 hover:shadow-2xl"
           >
-            <Image
-              src={testimonial.image}
-              alt={testimonial.name}
-              height={100}
-              width={100}
-              className="w-20 h-20 rounded-full mx-auto mb-4"
-            />
-            <h3 className="text-xl font-bold text-purple-400">
+            <div className="relative">
+              <Image
+                src={testimonial.image}
+                alt={testimonial.name}
+                height={100}
+                width={100}
+                className="w-24 h-24 rounded-full mx-auto mb-4 transform transition-transform hover:scale-110"
+              />
+            </div>
+            <h3 className="text-xl font-semibold text-purple-400">
               {testimonial.name}
             </h3>
             <p className="text-sm text-gray-600 italic">{testimonial.role}</p>
