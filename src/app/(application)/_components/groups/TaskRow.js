@@ -213,19 +213,30 @@ export default function TaskRow({ module, item, fields, isAdmin }) {
                 avatar={
                   <Avatar>{assignee.email.charAt(0).toUpperCase()}</Avatar>
                 }
-                onDelete={() => handleRemoveAssignee(assignee.userId, field)}
-                className="bg-gray-100 shadow-sm hover:bg-gray-200"
+                onDelete={
+                  isAdmin
+                    ? () => handleRemoveAssignee(assignee.userId, field)
+                    : undefined
+                }
+                className={`bg-gray-100 shadow-sm ${
+                  isAdmin
+                    ? "hover:bg-gray-200 cursor-pointer"
+                    : "cursor-not-allowed"
+                }`}
               />
             </Tooltip>
           ))}
-          <Chip
-            avatar={<Plus />}
-            label="Add"
-            className="cursor-pointer bg-blue-100 hover:bg-blue-200"
-            onClick={() =>
-              setOpenAddAssignee({ open: true, assigneeType: field })
-            }
-          />
+
+          {isAdmin && (
+            <Chip
+              avatar={<Plus />}
+              label="Add"
+              className="cursor-pointer bg-blue-100 hover:bg-blue-200"
+              onClick={() =>
+                setOpenAddAssignee({ open: true, assigneeType: field })
+              }
+            />
+          )}
         </div>
       );
     }
@@ -281,7 +292,7 @@ export default function TaskRow({ module, item, fields, isAdmin }) {
         ))}
         <td className="border border-gray-300 px-1 py-1 w-10">
           <Tooltip
-            title={!isAdmin ? "Admins cannot delete tasks" : "Delete Task"}
+            title={!isAdmin ? "You are not an admin" : "Delete Task"}
             arrow
           >
             <span>

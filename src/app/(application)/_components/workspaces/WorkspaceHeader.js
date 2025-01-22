@@ -8,12 +8,13 @@ import {
   DialogTitle,
   Button,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import { io } from "socket.io-client";
 import { useDispatch } from "react-redux";
 import { updateWorkspaceData } from "@/redux/feautres/workspaceSlice";
 import Cookies from "js-cookie";
-import { Star, UserPlus } from "lucide-react"; // Assuming StarFill represents a filled star icon
+import { Star, UserPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { deleteWorkspace } from "@/redux/feautres/userDetailsSlice";
 import Invite from "./Invite";
@@ -166,12 +167,27 @@ export default function WorkspaceHeader({
           </div>
         )}
 
-        <button
-          onClick={() => setIsDialogOpen(true)}
-          className="bg-gray-800 text-white py-2 px-6 rounded-lg hover:bg-gray-700 transition-colors duration-300"
+        <Tooltip
+          title={
+            isAdmin
+              ? ""
+              : "You are not an admin. Editing workspace is not allowed."
+          }
+          placement="top"
+          arrow
         >
-          <span>Edit Workspace</span>
-        </button>
+          <button
+            onClick={() => isAdmin && setIsDialogOpen(true)}
+            className={`py-2 px-6 rounded-lg transition-colors duration-300 ${
+              isAdmin
+                ? "bg-gray-800 text-white hover:bg-gray-700"
+                : "bg-gray-500 text-gray-300 cursor-not-allowed"
+            }`}
+            disabled={!isAdmin}
+          >
+            <span>Edit Workspace</span>
+          </button>
+        </Tooltip>
       </div>
 
       <Dialog

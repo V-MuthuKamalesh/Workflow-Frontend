@@ -20,7 +20,7 @@ const moduleDetails = [
   },
   {
     name: "CRM",
-    icon: <GroupRounded fontSize="large" className="text-yellow-600" />,
+    icon: <GroupRounded fontSize="large" className="text-blue-600" />,
     path: "/crm/dashboard",
   },
   {

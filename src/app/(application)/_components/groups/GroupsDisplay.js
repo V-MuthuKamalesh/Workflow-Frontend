@@ -12,6 +12,7 @@ import { io } from "socket.io-client";
 import { fetchBoardsByWorkspaceId } from "@/redux/feautres/workspaceSlice";
 import useCheckUserRole from "../../hooks/useCheckUserRole";
 import Cookies from "js-cookie";
+import GoBackButton from "../UI/GoBackButton";
 
 export default function GroupsDisplay({ module, workspaceId, boardId }) {
   const {
@@ -81,25 +82,37 @@ export default function GroupsDisplay({ module, workspaceId, boardId }) {
   return (
     <div className="bg-gray-50 px-16 py-8 rounded-xl shadow-lg">
       <div className="flex items-center justify-between mb-5">
+        <GoBackButton />
+
         <div className="flex items-center space-x-4">
-          {editingBoardName ? (
+          {editingBoardName && isAdmin ? (
             <input
               type="text"
               value={boardName}
               onChange={(event) => setBoardName(event.target.value)}
               onKeyDown={handleKeyDown}
               onBlur={handleBlur}
-              className="px-2 bg-transparent text-3xl font-extrabold text-indigo-600 focus:outline-none focus:ring focus:ring-indigo-400 focus:rounded-md"
+              className="text-center px-2 bg-transparent text-3xl font-extrabold text-indigo-600 focus:outline-none focus:ring focus:ring-indigo-400 focus:rounded-md"
               autoFocus
             />
           ) : (
-            <h1
-              onClick={() => setEditingBoardName(true)}
-              className="text-3xl font-extrabold text-indigo-600 cursor-pointer border border-transparent rounded-md hover:border-gray-400 px-2 py-1 transition"
-              title="Click to edit"
-            >
-              {boardName}
-            </h1>
+            <div className="relative group">
+              <h1
+                onClick={() => isAdmin && setEditingBoardName(true)}
+                className={`text-3xl font-extrabold ${
+                  isAdmin
+                    ? "text-indigo-600 cursor-pointer border border-transparent rounded-md hover:border-gray-400"
+                    : "text-gray-400"
+                } px-2 py-1 transition`}
+              >
+                {boardName}
+              </h1>
+              <div className="absolute hidden group-hover:block bg-gray-800 text-white text-sm rounded-md px-2 py-1 -bottom-10 left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+                {isAdmin
+                  ? "Click to edit the board name"
+                  : "Only admins can edit the board name"}
+              </div>
+            </div>
           )}
         </div>
 

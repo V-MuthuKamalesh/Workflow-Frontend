@@ -72,7 +72,7 @@ export default function AddTask({ module, groupId, isAdmin }) {
                 className={`flex items-center gap-1 px-2 py-1 rounded-md transition-all ${
                   isAdmin
                     ? "bg-blue-500 text-white hover:bg-blue-600"
-                    : "bg-blue-500 text-white hover:bg-gray-500 cursor-not-allowed"
+                    : "bg-gray-400 text-white cursor-not-allowed"
                 }`}
                 disabled={!isAdmin}
               >

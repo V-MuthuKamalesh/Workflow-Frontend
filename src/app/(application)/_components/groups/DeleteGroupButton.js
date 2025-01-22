@@ -34,13 +34,13 @@ export default function DeleteGroupButton({ groupId, isAdmin }) {
           className={`p-2 rounded-md shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-1 ${
             isAdmin
               ? "bg-red-500 text-white hover:bg-red-600 hover:shadow-lg focus:ring-red-400"
-              : "bg-red-500 text-white hover:bg-gray-500 focus:ring-red-400 cursor-not-allowed"
+              : "bg-gray-400 text-white  cursor-not-allowed"
           }`}
           disabled={!isAdmin}
         >
           <Trash2
             className={`w-5 h-5 ${
-              isAdmin ? "text-white" : "text-gray-400 cursor-not-allowed"
+              isAdmin ? "text-white" : "text-white cursor-not-allowed"
             }`}
           />
         </button>

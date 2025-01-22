@@ -3,25 +3,25 @@ import Image from "next/image";
 const Testimonials = () => {
   const testimonialsData = [
     {
-      name: "Mark Zuckerberg",
-      role: "CEO, Meta",
+      name: "Karthikeyan",
+      role: "Branch Head, Finestcoder",
       feedback:
         "The tools provided have made project management seamless and collaboration effortless. Highly recommend!",
-      image: "/mark.png",
+      image: "/karthikeyan.jpeg",
     },
     {
-      name: "Elon Musk",
-      role: "CEO, Tesla Motors",
+      name: "Arshad Ali",
+      role: "Head of Trainer, Finestcoder",
       feedback:
         "This platform has revolutionized the way we work. The efficiency and results we've seen are unmatched!",
-      image: "/elon.webp",
+      image: "/arshad.jpeg",
     },
     {
-      name: "Bill Gates",
-      role: "CEO, Microsoft Corporation",
+      name: "Thamizharasan",
+      role: "Head of Operations, Finestcoder",
       feedback:
         "Their support and expertise have been invaluable in scaling our operations globally. Truly exceptional.",
-      image: "/gates.webp",
+      image: "/tamil.png",
     },
   ];
 

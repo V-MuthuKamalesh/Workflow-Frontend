@@ -61,6 +61,9 @@ export const workspaceSlice = createSlice({
       const { field, value } = action.payload;
       state[field] = value;
     },
+    setMembers: (state, action) => {
+      state.members = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -89,6 +92,7 @@ export const {
   addBoard,
   removeBoard,
   updateWorkspaceData,
+  setMembers,
 } = workspaceSlice.actions;
 
 export default workspaceSlice.reducer;

@@ -55,7 +55,7 @@ export default function AddGroupButton({ module, isAdmin }) {
           className={`flex items-center gap-2 px-4 py-2 rounded-lg shadow-md transition-all ${
             isAdmin
               ? "bg-green-500 text-white hover:bg-green-600"
-              : "bg-green-500 text-white hover:bg-gray-500 cursor-not-allowed"
+              : "bg-gray-400 text-white cursor-not-allowed"
           }`}
           disabled={!isAdmin}
         >

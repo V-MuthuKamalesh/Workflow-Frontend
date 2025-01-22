@@ -3,12 +3,14 @@
 import Link from "next/link";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { clearAllCookies } from "@/app/_utils/helpers/cookies";
 import { User } from "lucide-react";
 
 export default function Header() {
   const [authToken, setAuthToken] = useState(null);
   const [userId, setUserId] = useState(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     const token = Cookies.get("authToken");
@@ -23,6 +25,14 @@ export default function Header() {
     setAuthToken(null);
   };
 
+  const navLinks = [
+    { href: "/", label: "Home" },
+    { href: "/work-management", label: "Work Management" },
+    { href: "/dev", label: "Dev" },
+    { href: "/crm", label: "CRM" },
+    { href: "/service", label: "Service" },
+  ];
+
   return (
     <header className="bg-white text-gray-800 h-16 flex items-center justify-between px-6 md:px-24 sticky top-0 z-50 shadow-md">
       <nav className="flex items-center justify-between w-full">
@@ -31,36 +41,19 @@ export default function Header() {
         </h1>
 
         <div className="flex space-x-6 mx-auto">
-          <Link
-            href="/"
-            className="hover:text-purple-400 transition-colors duration-300"
-          >
-            Home
-          </Link>
-          <Link
-            href="/work-management"
-            className="hover:text-purple-400 transition-colors duration-300"
-          >
-            Work Management
-          </Link>
-          <Link
-            href="/dev"
-            className="hover:text-purple-400 transition-colors duration-300"
-          >
-            Dev
-          </Link>
-          <Link
-            href="/crm"
-            className="hover:text-purple-400 transition-colors duration-300"
-          >
-            CRM
-          </Link>
-          <Link
-            href="/service"
-            className="hover:text-purple-400 transition-colors duration-300"
-          >
-            Service
-          </Link>
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`relative px-2 py-1 transition-all duration-300 ${
+                pathname === link.href
+                  ? "text-purple-600 font-bold after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-[3px] after:bg-purple-600"
+                  : "hover:text-purple-400"
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
         </div>
 
         <div className="flex items-center space-x-4">
@@ -69,10 +62,9 @@ export default function Header() {
               <User className="text-violet-400 w-6 h-6" />
               <button
                 onClick={handleLogout}
-                className="relative py-2 px-6 rounded-full border border-violet-400 text-violet-400 hover:bg-violet-400 hover:text-white overflow-hidden group transition-all duration-300"
+                className="relative py-2 px-6 rounded-full border border-violet-400 text-violet-400 hover:bg-violet-400 hover:text-white transition-all duration-300"
               >
-                <span className="absolute inset-0 w-full h-full bg-violet-400 transform scale-x-0 origin-right group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
-                <span className="relative z-10">Logout</span>
+                Logout
               </button>
             </div>
           ) : (
@@ -85,10 +77,9 @@ export default function Header() {
               </Link>
               <Link
                 href="/auth/signin"
-                className="relative py-2 px-6 rounded-full border border-violet-400 text-violet-400 hover:bg-violet-400 hover:text-white overflow-hidden group transition-all duration-300"
+                className="relative py-2 px-6 rounded-full border border-violet-400 text-violet-400 hover:bg-violet-400 hover:text-white transition-all duration-300"
               >
-                <span className="absolute inset-0 w-full h-full bg-violet-400 transform scale-x-0 origin-right group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>
-                <span className="relative z-10">Get Started</span>
+                Get Started
               </Link>
             </>
           )}

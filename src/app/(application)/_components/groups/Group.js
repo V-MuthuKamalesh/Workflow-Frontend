@@ -4,7 +4,7 @@ import TaskRow from "./TaskRow";
 import AddTask from "./AddTask";
 import GroupHeader from "./GroupHeader";
 import { useMemo, useState } from "react";
-import getFields, { moduleFields } from "@/app/_utils/helpers/fields";
+import getFields from "@/app/_utils/helpers/fields";
 import DeleteGroupButton from "./DeleteGroupButton";
 import { socket } from "@/app/_utils/webSocket/webSocketConfig";
 
@@ -43,8 +43,8 @@ export default function Group({ module, boardType, group, isAdmin }) {
 
   return (
     <div className="mb-6">
-      <div className="flex justify-between items-center font-semibold mb-2">
-        {editingGroupName ? (
+      <div className="flex justify-between items-center text-lime-700 font-semibold mb-2">
+        {editingGroupName && isAdmin ? (
           <input
             type="text"
             value={groupName}
@@ -55,13 +55,23 @@ export default function Group({ module, boardType, group, isAdmin }) {
             autoFocus
           />
         ) : (
-          <span
-            onClick={() => setEditingGroupName(true)}
-            className="cursor-pointer border border-transparent text-xl rounded-md hover:border-gray-400 px-2 py-1 transition"
-            title="Click to edit"
-          >
-            {groupName}
-          </span>
+          <div className="relative group">
+            <span
+              onClick={() => isAdmin && setEditingGroupName(true)}
+              className={`cursor-pointer border border-transparent text-xl rounded-md px-2 py-1 transition ${
+                isAdmin
+                  ? "hover:border-gray-400 text-lime-700"
+                  : "text-gray-400"
+              }`}
+            >
+              {groupName}
+            </span>
+            <div className="absolute hidden group-hover:block bg-gray-800 text-white text-sm rounded-md px-2 py-1 -bottom-8 left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+              {isAdmin
+                ? "Click to edit group name"
+                : "Only admins can edit the group name"}
+            </div>
+          </div>
         )}
 
         <DeleteGroupButton groupId={group.groupId} isAdmin={isAdmin} />
