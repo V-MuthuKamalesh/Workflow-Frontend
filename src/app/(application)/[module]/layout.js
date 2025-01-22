@@ -1,6 +1,7 @@
 import AppHeader from "@/app/(application)/_components/header/AppHeader";
 import AppSidebar from "@/app/(application)/_components/header/AppSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { cookies } from "next/headers";
 
 const moduleColors = {
   "work-management": "bg-purple-100",
@@ -16,8 +17,22 @@ const moduleBackgrounds = {
   service: "bg-teal-50",
 };
 
+const moduleIds = {
+  "work-management": process.env.WORK_MANAGEMENT_MODULE_ID,
+  dev: process.env.DEV_MODULE_ID,
+  crm: process.env.CRM_MODULE_ID,
+  service: process.env.SERVICE_MODULE_ID,
+};
+
 export default async function Layout({ children, params }) {
   const { module } = await params;
+  const cookieStore = await cookies();
+
+  const moduleId = moduleIds[module];
+
+  if (moduleId) {
+    cookieStore.set("moduleId", moduleId);
+  }
 
   const bgColor = moduleColors[module] || "bg-gray-200";
   const sectionBgColor = moduleBackgrounds[module] || "bg-gray-100";
