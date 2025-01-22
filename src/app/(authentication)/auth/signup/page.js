@@ -1,7 +1,7 @@
-import BasicAuthSignUp from "@/app/(authentication)/_components/auth/BasicAuthSignUp";
-import GoogleAuthButton from "@/app/(authentication)/_components/auth/GoogleAuthButton";
-import SeparatorLine from "@/app/(application)/_components/UI/SeparatorLine";
 import Link from "next/link";
+import GoogleAuthButton from "../../_components/auth/GoogleAuthButton";
+import SeparatorLine from "@/app/(application)/_components/UI/SeparatorLine";
+import BasicAuthSignUp from "../../_components/auth/BasicAuthSignUp";
 
 export function generateMetadata() {
   return {

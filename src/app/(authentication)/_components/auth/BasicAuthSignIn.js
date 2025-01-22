@@ -2,11 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Button from "../../../(application)/_components/UI/Button";
-import Input from "../../../(application)/_components/UI/Input";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 import { setCookies } from "@/app/_utils/helpers/cookies";
-import Link from "next/link";
+import Input from "@/app/(application)/_components/UI/Input";
+import Button from "@/app/(application)/_components/UI/Button";
 
 export default function BasicAuthSignIn() {
   const [formData, setFormData] = useState({
@@ -52,6 +51,7 @@ export default function BasicAuthSignIn() {
         name="email"
         value={formData.email}
         onChange={handleFormDataChange}
+        autocomplete="off"
         required
       />
       <Input

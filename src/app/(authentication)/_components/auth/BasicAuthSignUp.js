@@ -2,9 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Button from "../../../(application)/_components/UI/Button";
-import Input from "../../../(application)/_components/UI/Input";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
+import Input from "@/app/(application)/_components/UI/Input";
+import Button from "@/app/(application)/_components/UI/Button";
 
 export default function BasicAuthSignUp() {
   const [email, setEmail] = useState("");
@@ -47,7 +47,7 @@ export default function BasicAuthSignUp() {
         name="email"
         value={email}
         onChange={handleEmailChange}
-        // autoComplete="off"
+        autoComplete="off"
         required
       />
       {errorMessage !== "" && (

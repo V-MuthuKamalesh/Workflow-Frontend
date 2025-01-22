@@ -1,4 +1,4 @@
-import AccountCreation from "@/app/(application)/_components/account-creation/AccountCreation";
+import AccountCreation from "../../_components/account-creation/AccountCreation";
 
 export default function AccountCreationPage() {
   return <AccountCreation />;

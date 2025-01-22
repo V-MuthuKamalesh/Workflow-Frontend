@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Input from "../UI/Input";
-import Button from "../UI/Button";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 import { useRouter } from "next/navigation";
+import Input from "@/app/(application)/_components/UI/Input";
+import Button from "@/app/(application)/_components/UI/Button";
 
 export default function AccountCreation() {
   const [formData, setFormData] = useState({

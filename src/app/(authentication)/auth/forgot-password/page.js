@@ -47,6 +47,7 @@ export default function ForgotPassword() {
           name="email"
           value={email}
           onChange={handleEmailChange}
+          autocomplete="off"
           required
         />
         {error && (
