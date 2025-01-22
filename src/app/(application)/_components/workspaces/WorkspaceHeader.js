@@ -18,6 +18,7 @@ import { Star, UserPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { deleteWorkspace } from "@/redux/feautres/userDetailsSlice";
 import Invite from "./Invite";
+import { socket } from "@/app/_utils/webSocket/webSocketConfig";
 
 const moduleColors = {
   "work-management": "from-purple-600 to-purple-400",
@@ -45,8 +46,6 @@ export default function WorkspaceHeader({
   const bgColor = moduleColors[module] || moduleColors.default;
 
   useEffect(() => {
-    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
-
     socket.emit(
       "isWorkspaceInFavourite",
       { workspaceId, type: module },
