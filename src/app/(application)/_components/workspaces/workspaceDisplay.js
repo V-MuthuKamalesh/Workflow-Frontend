@@ -52,6 +52,7 @@ export default function WorkspaceDisplay({ module, workspaceId }) {
         <section className="bg-white rounded-lg shadow-lg p-6 space-y-10">
           <WorkspaceMembers
             isAdmin={isAdmin}
+            module={module}
             workspaceId={workspaceId}
             members={members}
           />

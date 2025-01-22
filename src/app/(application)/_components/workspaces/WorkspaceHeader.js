@@ -38,7 +38,6 @@ export default function WorkspaceHeader({
   const [isFavorite, setIsFavorite] = useState(false);
   const [newWorkspaceName, setNewWorkspaceName] = useState(workspaceName);
   const [deleteInput, setDeleteInput] = useState("");
-
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -54,7 +53,6 @@ export default function WorkspaceHeader({
           console.error("Error checking if workspace is in favourite.");
           return;
         }
-
         setIsFavorite(response.isFavourite);
       }
     );
@@ -73,7 +71,6 @@ export default function WorkspaceHeader({
           console.error("Error toggling favorite workspace.");
           return;
         }
-
         console.log(response);
       }
     );
@@ -93,7 +90,6 @@ export default function WorkspaceHeader({
           console.error("Error updating workspace.");
           return;
         }
-
         dispatch(
           updateWorkspaceData({
             field: "workspaceName",
@@ -120,7 +116,6 @@ export default function WorkspaceHeader({
             console.error("Error deleting workspace.");
             return;
           }
-
           Cookies.remove("workspaceId");
         }
       );
@@ -146,24 +141,32 @@ export default function WorkspaceHeader({
         </p>
       </div>
       <div className="flex items-center gap-4">
-        <button
-          onClick={toggleFavorite}
-          className="text-yellow-400 hover:text-yellow-500 focus:outline-none"
+        <Tooltip
+          title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+          placement="top"
+          arrow
         >
-          {isFavorite ? (
-            <Star fill="yellow" size={24} />
-          ) : (
-            <Star fill="white" size={24} />
-          )}
-        </button>
+          <button
+            onClick={toggleFavorite}
+            className="text-yellow-400 hover:text-yellow-500 focus:outline-none"
+          >
+            {isFavorite ? (
+              <Star fill="yellow" size={24} />
+            ) : (
+              <Star fill="white" size={24} />
+            )}
+          </button>
+        </Tooltip>
 
         {isAdmin && (
-          <div
-            className="flex items-center justify-center p-2 rounded-full hover:bg-gray-700 hover:text-gray-100 cursor-pointer transition duration-200"
-            onClick={() => setIsInviteModalOpen(true)}
-          >
-            <UserPlus className="" fontSize="medium" />
-          </div>
+          <Tooltip title="Invite users into workspace" placement="top" arrow>
+            <div
+              className="flex items-center justify-center p-2 rounded-full hover:bg-gray-700 hover:text-gray-100 cursor-pointer transition duration-200"
+              onClick={() => setIsInviteModalOpen(true)}
+            >
+              <UserPlus className="" fontSize="medium" />
+            </div>
+          </Tooltip>
         )}
 
         <Tooltip

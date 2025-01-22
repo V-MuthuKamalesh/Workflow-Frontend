@@ -29,7 +29,7 @@ ChartJS.register(
   ArcElement
 );
 
-export default function DevServiceDashboard({ module }) {
+export default function DevServiceDashboard({ module, userId, workspaceId }) {
   const [chartsData, setChartsData] = useState([]);
   const [hasData, setHasData] = useState(false);
   const [activeTab, setActiveTab] = useState(null);
@@ -42,7 +42,7 @@ export default function DevServiceDashboard({ module }) {
   useEffect(() => {
     socket.emit(
       "getDashboardDetails",
-      { moduleId: Cookies.get("moduleId"), userId: Cookies.get("userId") },
+      { moduleId: Cookies.get("moduleId"), userId, workspaceId },
       (response) => {
         console.log("Response received:", response); // Debug response
 

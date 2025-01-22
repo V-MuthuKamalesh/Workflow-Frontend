@@ -29,7 +29,7 @@ ChartJS.register(
   ArcElement
 );
 
-export default function Dashboard({ module }) {
+export default function Dashboard({ module, userId, workspaceId }) {
   const [barChartData, setBarChartData] = useState(null);
   const [pieChartData, setPieChartData] = useState(null);
   const [lineChartData, setLineChartData] = useState(null);
@@ -67,12 +67,14 @@ export default function Dashboard({ module }) {
   useEffect(() => {
     socket.emit(
       "getDashboardDetails",
-      { moduleId: Cookies.get("moduleId"), userId: Cookies.get("userId") },
+      { moduleId: Cookies.get("moduleId"), userId, workspaceId },
       (response) => {
         if (!response) {
           console.error("Error getting workspace data.");
           return;
         }
+
+        console.log(response);
 
         const keyMappings = {
           "work-management": "itemStats",
@@ -222,8 +224,8 @@ export default function Dashboard({ module }) {
   };
 
   return (
-    <div className="min-h-screen p-6 pb-10 bg-gray-100">
-      <h1 className="text-3xl font-bold mb-14 text-gray-800">
+    <div className="min-h-20 p-6 pb-10 bg-gray-100">
+      <h1 className="text-3xl font-bold mb-3 text-gray-800">
         {moduleName} Dashboard
       </h1>
       {!hasData ? (
@@ -231,7 +233,7 @@ export default function Dashboard({ module }) {
           No data available. Charts cannot be displayed.
         </p>
       ) : (
-        <>
+        <div className="mt-14">
           <div className="h-[30rem] flex flex-col items-center justify-center">
             <h2 className="text-xl font-bold mb-4">{summary}</h2>
             <Bar data={barChartData} options={commonOptions} />
@@ -246,7 +248,7 @@ export default function Dashboard({ module }) {
               <Pie data={pieChartData} options={commonOptions} />
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

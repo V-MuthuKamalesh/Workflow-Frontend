@@ -1,13 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { Trash2, ArrowUpRight } from "lucide-react";
+import { Trash2, ArrowUpRight, ExternalLink } from "lucide-react";
 import { setMembers } from "@/redux/feautres/workspaceSlice";
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
+import Link from "next/link";
 
-export default function WorkspaceMembers({ isAdmin, workspaceId, members }) {
+export default function WorkspaceMembers({
+  isAdmin,
+  module,
+  workspaceId,
+  members,
+}) {
   const [activeTab, setActiveTab] = useState("admin");
   const dispatch = useDispatch();
 
@@ -22,7 +28,7 @@ export default function WorkspaceMembers({ isAdmin, workspaceId, members }) {
   const handleMemberDelete = async (userId) => {
     try {
       const response = await workflowBackend.post("/users/removeMember", {
-        id: workspaceId,
+        workspaceId,
         userId,
         token: Cookies.get("authToken"),
       });
@@ -40,17 +46,17 @@ export default function WorkspaceMembers({ isAdmin, workspaceId, members }) {
 
   const handlePromoteToAdmin = async (userId) => {
     try {
-      // const response = await workflowBackend.post("/users/promoteToAdmin", {
-      //   workspaceId,
-      //   userId: Cookies.get("userId"),
-      // });
+      const response = await workflowBackend.post("/users/promoteToAdmin", {
+        workspaceId,
+        userId,
+      });
 
-      // if (response.status === 200) {
-      const updatedMembers = members.map((member) =>
-        member.userId === userId ? { ...member, role: "admin" } : member
-      );
-      dispatch(setMembers(updatedMembers));
-      // }
+      if (response.status === 200) {
+        const updatedMembers = members.map((member) =>
+          member.userId === userId ? { ...member, role: "admin" } : member
+        );
+        dispatch(setMembers(updatedMembers));
+      }
     } catch (error) {
       console.error("Error promoting member to admin:", error);
     }
@@ -95,10 +101,17 @@ export default function WorkspaceMembers({ isAdmin, workspaceId, members }) {
               <p className="text-xs text-gray-500">{member.email}</p>
             </div>
             {isAdmin && member.role !== "admin" && (
-              <div className="flex items-center space-x-8">
+              <div className="flex items-center space-x-4">
+                <Link
+                  href={`/${module}/dashboard?userId=${member.userId}&workspaceId=${workspaceId}`}
+                  className="text-base text-white bg-blue-600 hover:bg-blue-700 p-2 rounded-lg transition-colors duration-200 flex items-center"
+                >
+                  <span>View Dashboard</span>
+                  <ExternalLink size={20} />
+                </Link>
                 <button
                   onClick={() => handlePromoteToAdmin(member.userId)}
-                  className="text-base text-white bg-green-500 hover:bg-green-600 px-2 py-1 rounded-lg transition-colors duration-200 flex items-center"
+                  className="text-base text-white bg-green-600 hover:bg-green-700 p-2 rounded-lg transition-colors duration-200 flex items-center"
                 >
                   <span>Promote</span>
                   <ArrowUpRight size={20} />

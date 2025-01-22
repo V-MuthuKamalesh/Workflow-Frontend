@@ -63,8 +63,9 @@ export default function Invite({ isOpen, onClose }) {
               type="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter email"
+              autoComplete="off"
             />
           </div>
           <div className="mb-4">
@@ -104,7 +105,7 @@ export default function Invite({ isOpen, onClose }) {
               Cancel
             </button>
             <button
-              className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition"
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
               onClick={handleInvite}
             >
               Invite
@@ -112,6 +113,7 @@ export default function Invite({ isOpen, onClose }) {
           </div>
         </div>
       </div>
+
       <ToastContainer />
     </>
   );
