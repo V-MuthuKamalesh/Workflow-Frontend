@@ -40,6 +40,30 @@ export default function Dashboard({ module }) {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 
+  const getModuleSpecificTexts = () => {
+    if (module === "work-management") {
+      return {
+        summary: "Items Summary",
+        trends: "Items Trends",
+        distribution: "Items Distribution",
+      };
+    }
+    if (module === "crm") {
+      return {
+        summary: "Leads Summary",
+        trends: "Leads Trends",
+        distribution: "Leads Distribution",
+      };
+    }
+    return {
+      summary: "Task Summary",
+      trends: "Task Trends",
+      distribution: "Task Distribution",
+    };
+  };
+
+  const { summary, trends, distribution } = getModuleSpecificTexts();
+
   useEffect(() => {
     socket.emit(
       "getDashboardDetails",
@@ -50,47 +74,50 @@ export default function Dashboard({ module }) {
           return;
         }
 
-        console.log(response);
-
         const keyMappings = {
-          crm: {
-            total: "totalLeads",
-            completed: "completedLeads",
-            inProgress: "inProgressLeads",
-            pending: "pendingLeads",
-          },
-          service: {
-            total: "totalTickets",
-            completed: "completedTickets",
-            inProgress: "inProgressTickets",
-            pending: "pendingTickets",
-          },
-          dev: {
-            total: "totalTasks",
-            completed: "completedTasks",
-            inProgress: "inProgressTasks",
-            pending: "pendingTasks",
-          },
-          "work-management": {
-            total: "totalTasks",
-            completed: "completedTasks",
-            inProgress: "inProgressTasks",
-            pending: "pendingTasks",
-          },
+          "work-management": "itemStats",
+          dev: "taskStats",
+          crm: "leadStats",
+          service: "agentStats",
         };
 
-        const keys = keyMappings[module];
-        if (!keys) return;
+        const statsKey = keyMappings[module];
+        if (!statsKey || !response[statsKey]) return;
 
-        const labels = response.map((workspace) => workspace.workspaceName);
-        const total = response.map((workspace) => workspace[keys.total]);
-        const completed = response.map(
-          (workspace) => workspace[keys.completed]
+        const stats = response[statsKey];
+
+        const normalizedStats = Array.isArray(stats) ? stats : [stats];
+        const labels = normalizedStats.map(
+          (workspace) => workspace.workspaceName
         );
-        const inProgress = response.map(
-          (workspace) => workspace[keys.inProgress]
+        const total = normalizedStats.map(
+          (workspace) =>
+            workspace.totalTasks ||
+            workspace.totalLeads ||
+            workspace.totalTickets ||
+            0
         );
-        const pending = response.map((workspace) => workspace[keys.pending]);
+        const completed = normalizedStats.map(
+          (workspace) =>
+            workspace.completedTasks ||
+            workspace.completedLeads ||
+            workspace.completedTickets ||
+            0
+        );
+        const inProgress = normalizedStats.map(
+          (workspace) =>
+            workspace.inProgressTasks ||
+            workspace.inProgressLeads ||
+            workspace.inProgressTickets ||
+            0
+        );
+        const pending = normalizedStats.map(
+          (workspace) =>
+            workspace.pendingTasks ||
+            workspace.pendingLeads ||
+            workspace.pendingTickets ||
+            0
+        );
 
         const hasTasks =
           total.some((count) => count > 0) ||
@@ -140,7 +167,7 @@ export default function Dashboard({ module }) {
           labels: ["Completed", "Pending", "In Progress"],
           datasets: [
             {
-              label: "Task Distribution",
+              label: `${distribution}`,
               data: [
                 completed.reduce((sum, val) => sum + val, 0),
                 pending.reduce((sum, val) => sum + val, 0),
@@ -182,7 +209,7 @@ export default function Dashboard({ module }) {
         });
       }
     );
-  }, [module]);
+  }, [module, distribution]);
 
   const commonOptions = {
     responsive: true,
@@ -195,8 +222,8 @@ export default function Dashboard({ module }) {
   };
 
   return (
-    <div className="min-h-screen p-6 bg-gray-100">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">
+    <div className="min-h-screen p-6 pb-10 bg-gray-100">
+      <h1 className="text-3xl font-bold mb-14 text-gray-800">
         {moduleName} Dashboard
       </h1>
       {!hasData ? (
@@ -205,17 +232,17 @@ export default function Dashboard({ module }) {
         </p>
       ) : (
         <>
-          <div className="grid grid-cols-2 gap-10">
-            <div className="h-[30rem] flex flex-col items-center justify-center">
-              <h2 className="text-xl font-bold mb-4">Task Summary</h2>
-              <Bar data={barChartData} options={commonOptions} />
-            </div>
-            <div className="h-[30rem] flex flex-col items-center justify-center">
-              <h2 className="text-xl font-bold mb-4">Task Trends</h2>
+          <div className="h-[30rem] flex flex-col items-center justify-center">
+            <h2 className="text-xl font-bold mb-4">{summary}</h2>
+            <Bar data={barChartData} options={commonOptions} />
+          </div>
+          <div className="grid grid-cols-2 gap-10 mt-20">
+            <div className="h-[27rem] flex flex-col items-center justify-center">
+              <h2 className="text-xl font-bold mb-4">{trends}</h2>
               <Line data={lineChartData} options={commonOptions} />
             </div>
-            <div className="col-span-2 h-[27rem] flex flex-col items-center justify-center">
-              <h2 className="text-xl font-bold mb-4">Task Distribution</h2>
+            <div className="h-[27rem] flex flex-col items-center justify-center">
+              <h2 className="text-xl font-bold mb-4">{distribution}</h2>
               <Pie data={pieChartData} options={commonOptions} />
             </div>
           </div>

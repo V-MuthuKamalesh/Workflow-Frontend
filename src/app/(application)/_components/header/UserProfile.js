@@ -12,7 +12,6 @@ export default function UserProfile({ isProfileOpen, setIsProfileOpen }) {
     email: "",
     picture: "",
   });
-  const fileInputRef = useRef(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -50,38 +49,9 @@ export default function UserProfile({ isProfileOpen, setIsProfileOpen }) {
     setIsProfileOpen(false);
   };
 
-  const handleAvatarClick = () => {
-    if (!userDetails.picture) {
-      fileInputRef.current.click();
-    }
-  };
-
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("userId", Cookies.get("userId"));
-
-      try {
-        const response = await workflowBackend.post(
-          "/users/uploadPicture",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-
-        setUserDetails((prev) => ({
-          ...prev,
-          picture: response.data.picture,
-        }));
-      } catch (error) {
-        console.error("Error uploading picture:", error);
-      }
-    }
+  const handleEditProfile = () => {
+    router.push("/profile/edit");
+    setIsProfileOpen(false);
   };
 
   return (
@@ -92,8 +62,13 @@ export default function UserProfile({ isProfileOpen, setIsProfileOpen }) {
       >
         <div className="flex flex-col items-center space-y-6">
           <Avatar
-            src={userDetails.picture}
-            onClick={handleAvatarClick}
+            src={
+              userDetails.picture.startsWith("http")
+                ? userDetails.picture
+                : userDetails.picture
+                ? `data:image/png;base64,${userDetails.picture}`
+                : ""
+            }
             sx={{
               width: 80,
               height: 80,
@@ -104,13 +79,6 @@ export default function UserProfile({ isProfileOpen, setIsProfileOpen }) {
           >
             {userDetails.fullname.charAt(0).toUpperCase()}
           </Avatar>
-          <input
-            type="file"
-            ref={fileInputRef}
-            style={{ display: "none" }}
-            accept="image/*"
-            onChange={handleFileChange}
-          />
           <div className="text-center">
             <Typography variant="h5" className="text-gray-900 font-semibold">
               {userDetails.fullname}
@@ -119,6 +87,27 @@ export default function UserProfile({ isProfileOpen, setIsProfileOpen }) {
               {userDetails.email}
             </Typography>
           </div>
+          <Button
+            variant="outlined"
+            color="primary"
+            fullWidth
+            size="large"
+            sx={{
+              borderRadius: 2,
+              textTransform: "none",
+              fontSize: "1rem",
+              borderColor: "#1976d2",
+              color: "#1976d2",
+              marginBottom: 2,
+              "&:hover": {
+                borderColor: "#115293",
+                backgroundColor: "#e3f2fd",
+              },
+            }}
+            onClick={handleEditProfile}
+          >
+            Edit Profile
+          </Button>
           <Button
             variant="outlined"
             color="error"

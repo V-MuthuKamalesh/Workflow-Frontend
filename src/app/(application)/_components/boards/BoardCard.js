@@ -6,6 +6,11 @@ import DeleteBoard from "./DeleteBoard";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { socket } from "@/app/_utils/webSocket/webSocketConfig";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addBoardToFavorites,
+  removeBoardFromFavorites,
+} from "@/redux/feautres/favoritesSlice";
 
 export default function BoardCard({
   module,
@@ -15,7 +20,9 @@ export default function BoardCard({
   boardId,
 }) {
   const [isFavorite, setIsFavorite] = useState(false);
+  const { workspaces, boards } = useSelector((state) => state.favorites);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const handleBoardClick = () => {
     router.push(`/${module}/boards/${boardId}?workspaceId=${workspaceId}`);
@@ -27,6 +34,8 @@ export default function BoardCard({
         console.error("Error checking if board is in favourite.");
         return;
       }
+
+      console.log(response);
 
       setIsFavorite(response.isFavourite);
     });
@@ -41,7 +50,10 @@ export default function BoardCard({
       isFavorite ? "removeBoardFromFavourite" : "addBoardToFavourite",
       { boardId, type: module },
       (response) => {
-        console.log(response);
+        if (!response) {
+          console.error("Error toggling favorite board.");
+          return;
+        }
       }
     );
   }

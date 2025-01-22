@@ -5,12 +5,16 @@ import { FavoriteBoards } from "./FavoriteBoards";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { socket } from "@/app/_utils/webSocket/webSocketConfig";
+import { useDispatch, useSelector } from "react-redux";
+import { setBoards, setWorkspaces } from "@/redux/feautres/favoritesSlice";
 
 export default function FavoriteWorkspacesAndBoards({ module }) {
-  const [favorites, setFavorites] = useState({
-    workspaces: [],
-    boards: [],
-  });
+  // const [favorites, setFavorites] = useState({
+  //   workspaces: [],
+  //   boards: [],
+  // });
+  const { workspaces, boards } = useSelector((state) => state.favorites);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     socket.emit(
@@ -22,20 +26,19 @@ export default function FavoriteWorkspacesAndBoards({ module }) {
           return;
         }
 
-        console.log(response);
+        console.log(response.boards);
+        console.log(response.workspaces);
 
-        setFavorites({
-          workspaces: response.workspaces,
-          boards: response.boards,
-        });
+        dispatch(setWorkspaces(response.workspaces));
+        dispatch(setBoards(response.boards));
       }
     );
-  }, [module]);
+  }, [module, dispatch]);
 
   return (
     <div className="p-6 rounded-lg shadow-md">
-      <FavoriteWorkspaces module={module} workspaces={favorites.workspaces} />
-      <FavoriteBoards module={module} boards={favorites.boards} />
+      <FavoriteWorkspaces module={module} workspaces={workspaces} />
+      <FavoriteBoards module={module} boards={boards} />
     </div>
   );
 }

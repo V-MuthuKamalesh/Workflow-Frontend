@@ -159,7 +159,7 @@ export default function WorkspaceHeader({
 
         {isAdmin && (
           <div
-            className="flex items-center justify-center p-2 rounded-full hover:bg-gray-700 cursor-pointer transition duration-200"
+            className="flex items-center justify-center p-2 rounded-full hover:bg-gray-700 hover:text-gray-100 cursor-pointer transition duration-200"
             onClick={() => setIsInviteModalOpen(true)}
           >
             <UserPlus className="" fontSize="medium" />

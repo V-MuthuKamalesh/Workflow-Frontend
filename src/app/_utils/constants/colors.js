@@ -1,14 +1,14 @@
 export const moduleColors = {
   "work-management": "bg-purple-100",
   dev: "bg-green-100",
-  crm: "bg-yellow-100",
+  crm: "bg-blue-100",
   service: "bg-teal-100",
 };
 
 export const welcomeGradients = {
   "work-management": "from-purple-600 to-purple-400",
   dev: "from-green-600 to-green-400",
-  crm: "from-yellow-600 to-yellow-400",
+  crm: "from-blue-600 to-blue-400",
   service: "from-teal-600 to-teal-400",
 };
 
