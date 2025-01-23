@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 import Link from "next/link";
+import { groupMembers } from "@/app/_utils/helpers/helper";
 
 export default function WorkspaceMembers({
   isAdmin,
@@ -17,13 +18,7 @@ export default function WorkspaceMembers({
   const [activeTab, setActiveTab] = useState("admin");
   const dispatch = useDispatch();
 
-  const groupedMembers = members.reduce(
-    (acc, member) => {
-      acc[member.role].push(member);
-      return acc;
-    },
-    { admin: [], member: [] }
-  );
+  const groupedMembers = groupMembers(members);
 
   const handleMemberDelete = async (userId) => {
     try {

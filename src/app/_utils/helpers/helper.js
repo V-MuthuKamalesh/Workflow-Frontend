@@ -16,34 +16,6 @@ export const convertFromCamelCasetoNormalText = (str) => {
   return str.replace(/([a-z])([A-Z])/g, "$1 $2");
 };
 
-function stringToColor(string) {
-  let hash = 0;
-  for (let i = 0; i < string.length; i++) {
-    hash = string.charCodeAt(i) + ((hash << 6) - hash);
-  }
-
-  let color = "#";
-  for (let i = 0; i < 3; i++) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.slice(-2);
-  }
-
-  return color;
-}
-
-export const stringAvatar = (name) => {
-  const splitName = name.split(" ");
-  const firstNameInitial = splitName[0] ? splitName[0][0] : "";
-  const lastNameInitial = splitName[1] ? splitName[1][0] : "";
-
-  return {
-    sx: {
-      bgcolor: stringToColor(name), // Generate a color from the full name
-    },
-    children: `${firstNameInitial}${lastNameInitial}`, // Use initials from the name
-  };
-};
-
 export const createNewItem = (module, boardType, initialValue = "") => {
   const newItemTemplate = {
     "work-management": () => ({
@@ -102,4 +74,14 @@ export const createNewItem = (module, boardType, initialValue = "") => {
       : newItemTemplate[module]?.[boardType]?.() || {};
 
   return newItem;
+};
+
+export const groupMembers = (members) => {
+  return members.reduce(
+    (acc, member) => {
+      acc[member.role].push(member);
+      return acc;
+    },
+    { admin: [], member: [] }
+  );
 };

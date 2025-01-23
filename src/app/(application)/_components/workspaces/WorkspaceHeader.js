@@ -1,17 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Button,
-  TextField,
-  Tooltip,
-} from "@mui/material";
+import { Tooltip } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { updateWorkspaceData } from "@/redux/feautres/workspaceSlice";
 import Cookies from "js-cookie";
 import { Star, UserPlus, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -19,6 +10,8 @@ import { deleteWorkspace } from "@/redux/feautres/userDetailsSlice";
 import Invite from "./Invite";
 import { socket } from "@/app/_utils/webSocket/webSocketConfig";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
+import EditWorkspace from "./EditWorkspace";
+import { groupMembers } from "@/app/_utils/helpers/helper";
 
 const moduleColors = {
   "work-management": "from-purple-600 to-purple-400",
@@ -35,25 +28,15 @@ export default function WorkspaceHeader({
   isAdmin,
   members,
 }) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [newWorkspaceName, setNewWorkspaceName] = useState(workspaceName);
-  const [deleteInput, setDeleteInput] = useState("");
+  const [isEditWorkspaceOpen, setIsEditWorkspaceOpen] = useState(false);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
 
   const bgColor = moduleColors[module] || moduleColors.default;
 
-  const groupedMembers = members.reduce(
-    (acc, member) => {
-      acc[member.role].push(member);
-      return acc;
-    },
-    { admin: [], member: [] }
-  );
-
-  console.log(groupedMembers);
+  const groupedMembers = groupMembers(members);
 
   useEffect(() => {
     socket.emit(
@@ -83,55 +66,6 @@ export default function WorkspaceHeader({
         console.log(response);
       }
     );
-  };
-
-  const handleEditWorkspace = () => {
-    socket.emit(
-      "updateWorkspaceById",
-      {
-        id: workspaceId,
-        updateData: { workspaceName: newWorkspaceName },
-      },
-      (response) => {
-        if (!response) {
-          console.error("Error updating workspace.");
-          return;
-        }
-        dispatch(
-          updateWorkspaceData({
-            field: "workspaceName",
-            value: response.workspaceName,
-          })
-        );
-      }
-    );
-
-    setIsDialogOpen(false);
-  };
-
-  const handleDeleteWorkspace = () => {
-    if (deleteInput === `${module}/${workspaceName}`) {
-      socket.emit(
-        "deleteWorkspaceById",
-        { id: workspaceId, moduleId: Cookies.get("moduleId") },
-        (response) => {
-          if (!response) {
-            console.error("Error deleting workspace.");
-            return;
-          }
-
-          Cookies.remove("workspaceId");
-        }
-      );
-
-      dispatch(deleteWorkspace(workspaceId));
-
-      router.push(`/${module}/dashboard`);
-
-      setIsDialogOpen(false);
-    } else {
-      alert("Invalid input. Please enter the correct combination.");
-    }
   };
 
   const handlExitWorkspace = async () => {
@@ -166,7 +100,7 @@ export default function WorkspaceHeader({
 
   return (
     <div
-      className={`bg-gradient-to-r ${bgColor} p-6 rounded-lg shadow-lg flex justify-between items-center`}
+      className={`bg-gradient-to-r ${bgColor} w-full p-6 rounded-lg shadow-lg flex justify-between items-center`}
     >
       <div className="text-white flex flex-col items-start space-y-3">
         <h1 className="text-3xl font-bold leading-tight">{workspaceName}</h1>
@@ -181,7 +115,7 @@ export default function WorkspaceHeader({
           arrow
         >
           <button
-            onClick={() => isAdmin && setIsDialogOpen(true)}
+            onClick={() => isAdmin && setIsEditWorkspaceOpen(true)}
             className={`py-2 px-6 rounded-lg transition-colors duration-300 ${
               isAdmin
                 ? "bg-gray-800 text-white hover:bg-gray-700"
@@ -232,46 +166,13 @@ export default function WorkspaceHeader({
         </Tooltip>
       </div>
 
-      <Dialog
-        open={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle>Edit Workspace</DialogTitle>
-        <DialogContent>
-          <div className="flex flex-col gap-4">
-            <TextField
-              label="Workspace Name"
-              value={newWorkspaceName}
-              onChange={(event) => setNewWorkspaceName(event.target.value)}
-              fullWidth
-            />
-            <TextField
-              label="Delete Confirmation"
-              placeholder={`Enter ${module}/${workspaceName}`}
-              value={deleteInput}
-              onChange={(event) => setDeleteInput(event.target.value)}
-              fullWidth
-            />
-          </div>
-        </DialogContent>
-        <DialogActions>
-          <Button color="error" onClick={() => setIsDialogOpen(false)}>
-            Cancel
-          </Button>
-          <Button onClick={handleEditWorkspace} color="primary">
-            Save
-          </Button>
-          <Button
-            onClick={handleDeleteWorkspace}
-            color="warning"
-            disabled={deleteInput !== `${module}/${workspaceName}`}
-          >
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <EditWorkspace
+        isDialogOpen={isEditWorkspaceOpen}
+        setIsDialogOpen={setIsEditWorkspaceOpen}
+        module={module}
+        workspaceId={workspaceId}
+        workspaceName={workspaceName}
+      />
 
       <Invite
         isOpen={isInviteModalOpen}
