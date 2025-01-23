@@ -7,10 +7,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { socket } from "@/app/_utils/webSocket/webSocketConfig";
 import { useDispatch } from "react-redux";
-import {
-  addBoardToFavorites,
-  removeBoardFromFavorites,
-} from "@/redux/feautres/favoritesSlice";
+import { removeBoardFromFavorites } from "@/redux/feautres/favoritesSlice";
 import Tooltip from "@mui/material/Tooltip";
 
 export default function BoardCard({
@@ -19,7 +16,6 @@ export default function BoardCard({
   workspaceName,
   boardName,
   boardId,
-  boardType,
 }) {
   const [isFavorite, setIsFavorite] = useState(false);
   const router = useRouter();

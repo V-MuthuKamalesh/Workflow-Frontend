@@ -211,7 +211,7 @@ export default function Dashboard({ module, userId, workspaceId }) {
         });
       }
     );
-  }, [module, distribution]);
+  }, [module, distribution, userId, workspaceId]);
 
   const commonOptions = {
     responsive: true,

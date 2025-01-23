@@ -14,6 +14,7 @@ import {
   IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { socket } from "@/app/_utils/webSocket/webSocketConfig";
 
 const modalStyle = {
   position: "absolute",
@@ -31,20 +32,7 @@ const modalStyle = {
 
 export default function WorkspaceModal({ onClose }) {
   const [workspaceName, setWorkspaceName] = useState("");
-  const [socket, setSocket] = useState(null);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const newSocket = io("http://localhost:4000/", {
-      transports: ["websocket"],
-    });
-
-    setSocket(newSocket);
-
-    return () => {
-      newSocket.disconnect();
-    };
-  }, []);
 
   const handleWorkspaceCreation = () => {
     if (!workspaceName.trim() || !socket) return;

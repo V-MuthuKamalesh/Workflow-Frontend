@@ -27,7 +27,7 @@ export default function useCheckUserRole(userId, workspaceId) {
     };
 
     checkUserRole();
-  }, []);
+  }, [userId, workspaceId]);
 
   return { isAdmin };
 }

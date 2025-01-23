@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import CreateWorkspaceButton from "../workspaces/CreateWorkspaceButton";
-import { io } from "socket.io-client";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import {
