@@ -11,7 +11,7 @@ const Testimonials = () => {
     },
     {
       name: "Arshad Ali",
-      role: "Head of Trainer, Finestcoder",
+      role: "Head of Training, Finestcoder",
       feedback:
         "This platform has revolutionized the way we work. The efficiency and results we've seen are unmatched!",
       image: "/arshad.jpeg",

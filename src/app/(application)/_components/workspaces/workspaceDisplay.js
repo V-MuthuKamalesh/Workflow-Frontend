@@ -46,6 +46,7 @@ export default function WorkspaceDisplay({ module, workspaceId }) {
         isAdmin={isAdmin}
         workspaceId={workspaceId}
         workspaceName={workspaceName}
+        members={members}
       />
 
       <div className="container mx-auto px-4 py-8 space-y-8">
