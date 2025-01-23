@@ -1,8 +1,5 @@
+import { socket } from "@/app/_utils/webSocket/webSocketConfig";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
-const { io } = require("socket.io-client");
-
-const socket = io("http://localhost:4000/", { transports: ["websocket"] });
 
 export const fetchBoardsByWorkspaceId = createAsyncThunk(
   "workspace/fetchBoardsByWorkspaceId",
