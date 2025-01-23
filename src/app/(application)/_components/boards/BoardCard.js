@@ -6,11 +6,12 @@ import DeleteBoard from "./DeleteBoard";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { socket } from "@/app/_utils/webSocket/webSocketConfig";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   addBoardToFavorites,
   removeBoardFromFavorites,
 } from "@/redux/feautres/favoritesSlice";
+import Tooltip from "@mui/material/Tooltip";
 
 export default function BoardCard({
   module,
@@ -18,9 +19,9 @@ export default function BoardCard({
   workspaceName,
   boardName,
   boardId,
+  boardType,
 }) {
   const [isFavorite, setIsFavorite] = useState(false);
-  const { workspaces, boards } = useSelector((state) => state.favorites);
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -54,6 +55,11 @@ export default function BoardCard({
           console.error("Error toggling favorite board.");
           return;
         }
+
+        if (isFavorite) {
+          console.log(boardId);
+          dispatch(removeBoardFromFavorites(boardId));
+        }
       }
     );
   }
@@ -78,20 +84,27 @@ export default function BoardCard({
             <SquareChartGantt />
             <span>{boardName}</span>
           </div>
-          <button onClick={toggleFavorite} className="focus:outline-none">
-            {isFavorite ? (
-              <Star fill="yellow" className="text-yellow-500" />
-            ) : (
-              <Star />
-            )}
-          </button>
+          <Tooltip
+            title={isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+          >
+            <button onClick={toggleFavorite} className="focus:outline-none">
+              {isFavorite ? (
+                <Star fill="yellow" className="text-yellow-500" />
+              ) : (
+                <Star />
+              )}
+            </button>
+          </Tooltip>
         </h1>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-1">
             <span>Workspace</span> <ArrowRight /> <span>{workspaceName}</span>
           </div>
-
-          <DeleteBoard workspaceId={workspaceId} boardId={boardId} />
+          <Tooltip title="Delete Board">
+            <div>
+              <DeleteBoard workspaceId={workspaceId} boardId={boardId} />
+            </div>
+          </Tooltip>
         </div>
       </div>
     </div>

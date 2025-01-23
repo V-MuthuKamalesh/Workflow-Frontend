@@ -16,10 +16,12 @@ const favoritesSlice = createSlice({
       state.boards = action.payload;
     },
     addBoardToFavorites: (state, action) => {
-      return [...state.boards, action.payload];
+      state.boards.push(action.payload);
     },
     removeBoardFromFavorites: (state, action) => {
-      return state.boards.filter((board) => board.boardId !== action.payload);
+      state.boards = state.boards.filter(
+        (board) => board.boardId !== action.payload
+      );
     },
   },
 });

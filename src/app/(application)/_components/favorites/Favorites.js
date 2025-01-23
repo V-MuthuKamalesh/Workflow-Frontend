@@ -9,12 +9,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { setBoards, setWorkspaces } from "@/redux/feautres/favoritesSlice";
 
 export default function FavoriteWorkspacesAndBoards({ module }) {
-  // const [favorites, setFavorites] = useState({
-  //   workspaces: [],
-  //   boards: [],
-  // });
   const { workspaces, boards } = useSelector((state) => state.favorites);
   const dispatch = useDispatch();
+
+  console.log(boards);
 
   useEffect(() => {
     socket.emit(
@@ -25,9 +23,6 @@ export default function FavoriteWorkspacesAndBoards({ module }) {
           console.error("Error getting favorite data.");
           return;
         }
-
-        console.log(response.boards);
-        console.log(response.workspaces);
 
         dispatch(setWorkspaces(response.workspaces));
         dispatch(setBoards(response.boards));

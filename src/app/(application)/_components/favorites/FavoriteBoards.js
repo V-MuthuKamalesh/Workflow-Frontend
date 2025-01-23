@@ -16,6 +16,7 @@ export function FavoriteBoards({ module, boards }) {
             module={module}
             boardId={board.boardId}
             boardName={board.boardName}
+            boardType={board.type}
             workspaceId={board.workspaceId}
             workspaceName={board.workspaceName}
           />
