@@ -1,6 +1,6 @@
 import {
+  appGradients,
   welcomDescriptions,
-  welcomeGradients,
 } from "@/app/_utils/constants/colors";
 import { greetBasedOnTime } from "@/app/_utils/helpers/helper";
 import { cookies } from "next/headers";
@@ -9,7 +9,7 @@ export default async function Welcome({ view, module }) {
   const cookieStore = await cookies();
   const fullName = cookieStore.get("fullName")?.value;
 
-  const bgGradient = welcomeGradients[module] || "from-gray-400 to-gray-600";
+  const bgGradient = appGradients[module] || "from-gray-400 to-gray-600";
 
   return (
     <div

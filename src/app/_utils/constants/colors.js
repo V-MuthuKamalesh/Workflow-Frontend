@@ -5,11 +5,12 @@ export const moduleColors = {
   service: "bg-teal-100",
 };
 
-export const welcomeGradients = {
+export const appGradients = {
   "work-management": "from-purple-600 to-purple-400",
   dev: "from-green-600 to-green-400",
   crm: "from-blue-600 to-blue-400",
   service: "from-teal-600 to-teal-400",
+  default: "from-gray-600 to-gray-400",
 };
 
 export const welcomDescriptions = {

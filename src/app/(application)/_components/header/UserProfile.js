@@ -4,7 +4,7 @@ import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 import { Avatar, Box, Button, Modal, Typography } from "@mui/material";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function UserProfile({ isProfileOpen, setIsProfileOpen }) {
   const [userDetails, setUserDetails] = useState({

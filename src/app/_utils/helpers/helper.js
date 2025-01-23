@@ -1,3 +1,5 @@
+import XLSX from "xlsx";
+
 export const greetBasedOnTime = () => {
   const currentHour = new Date().getHours();
 
@@ -84,4 +86,47 @@ export const groupMembers = (members) => {
     },
     { admin: [], member: [] }
   );
+};
+
+export const handleExportGroup = (group) => {
+  const data = group.items.map((item) => {
+    return {
+      "Item Name": item.itemName,
+      "Assigned To": item.assignedToId
+        .map((assignee) => `${assignee.fullname} <${assignee.email}>`)
+        .join(", "),
+      Status: item.status,
+      "Due Date": new Date(item.dueDate).toLocaleDateString(),
+    };
+  });
+
+  const worksheet = XLSX.utils.json_to_sheet(data);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, group.groupName);
+
+  const fileName = `${group.groupName}.xlsx`;
+  XLSX.writeFile(workbook, fileName);
+};
+
+export const handleExportBoard = (board) => {
+  const data = board.groups.flatMap((group) => {
+    return group.items.map((item) => {
+      return {
+        "Group Name": group.groupName,
+        "Item Name": item.itemName,
+        "Assigned To": item.assignedToId
+          .map((assignee) => `${assignee.fullname} <${assignee.email}>`)
+          .join(", "),
+        Status: item.status,
+        "Due Date": new Date(item.dueDate).toLocaleDateString(),
+      };
+    });
+  });
+
+  const worksheet = XLSX.utils.json_to_sheet(data);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, board.boardName);
+
+  const fileName = `${board.boardName}.xlsx`;
+  XLSX.writeFile(workbook, fileName);
 };

@@ -63,8 +63,6 @@ export default function ProfileEditPage() {
     }
   };
 
-  console.log(userDetails.picture);
-
   const handleSaveChanges = async () => {
     try {
       setLoading(true);
@@ -79,7 +77,7 @@ export default function ProfileEditPage() {
 
       Cookies.set("fullName", userDetails.fullname);
 
-      router.push("/work-management/dashboard");
+      router.back();
     } catch (error) {
       console.error("Error updating profile:", error);
     } finally {

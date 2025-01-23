@@ -70,7 +70,7 @@ export default function Dashboard({ module, userId, workspaceId }) {
       { moduleId: Cookies.get("moduleId"), userId, workspaceId },
       (response) => {
         if (!response) {
-          console.error("Error getting workspace data.");
+          console.error("Error getting workspace dashboard data.");
           return;
         }
 

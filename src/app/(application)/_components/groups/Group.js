@@ -7,6 +7,9 @@ import { useMemo, useState } from "react";
 import getFields from "@/app/_utils/helpers/fields";
 import DeleteGroupButton from "./DeleteGroupButton";
 import { socket } from "@/app/_utils/webSocket/webSocketConfig";
+import { Download } from "lucide-react";
+import { Tooltip } from "@mui/material";
+import { handleExportGroup } from "@/app/_utils/helpers/helper";
 
 export default function Group({ module, boardType, group, isAdmin }) {
   const [editingGroupName, setEditingGroupName] = useState(false);
@@ -74,7 +77,13 @@ export default function Group({ module, boardType, group, isAdmin }) {
           </div>
         )}
 
-        <DeleteGroupButton groupId={group.groupId} isAdmin={isAdmin} />
+        <div className="flex items-center space-x-6">
+          <Tooltip title="Export the group .xlsx" arrow>
+            <Download onClick={() => handleExportGroup(group)} />
+          </Tooltip>
+
+          <DeleteGroupButton groupId={group.groupId} isAdmin={isAdmin} />
+        </div>
       </div>
 
       <table className="table-auto w-full border-collapse border border-gray-300">

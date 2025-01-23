@@ -12,14 +12,7 @@ import { socket } from "@/app/_utils/webSocket/webSocketConfig";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 import EditWorkspace from "./EditWorkspace";
 import { groupMembers } from "@/app/_utils/helpers/helper";
-
-const moduleColors = {
-  "work-management": "from-purple-600 to-purple-400",
-  dev: "from-green-600 to-green-400",
-  crm: "from-yellow-600 to-yellow-400",
-  service: "from-teal-600 to-teal-400",
-  default: "from-gray-600 to-gray-400",
-};
+import { appGradients } from "@/app/_utils/constants/colors";
 
 export default function WorkspaceHeader({
   module,
@@ -34,7 +27,7 @@ export default function WorkspaceHeader({
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const bgColor = moduleColors[module] || moduleColors.default;
+  const bgColor = appGradients[module] || appGradients.default;
 
   const groupedMembers = groupMembers(members);
 

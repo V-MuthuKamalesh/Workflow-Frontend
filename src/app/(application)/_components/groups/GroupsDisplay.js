@@ -8,11 +8,14 @@ import {
   fetchBoardData,
   updateBoardName,
 } from "@/redux/feautres/boardSlice.js";
-import { io } from "socket.io-client";
 import { fetchBoardsByWorkspaceId } from "@/redux/feautres/workspaceSlice";
 import useCheckUserRole from "../../hooks/useCheckUserRole";
 import Cookies from "js-cookie";
 import GoBackButton from "../UI/GoBackButton";
+import { Download } from "lucide-react";
+import { Tooltip } from "@mui/material";
+import { socket } from "@/app/_utils/webSocket/webSocketConfig";
+import { handleExportBoard } from "@/app/_utils/helpers/helper";
 
 export default function GroupsDisplay({ module, workspaceId, boardId }) {
   const {
@@ -38,9 +41,7 @@ export default function GroupsDisplay({ module, workspaceId, boardId }) {
     }
   }, [boardData.boardName]);
 
-  const handleBoardNameSave = (newName) => {
-    const socket = io("http://localhost:4000/", { transports: ["websocket"] });
-
+  const handleBoardNameSave = () => {
     socket.emit(
       "updateBoardInWorkspace",
       { boardId, updateData: { boardName: boardName } },
@@ -116,7 +117,12 @@ export default function GroupsDisplay({ module, workspaceId, boardId }) {
           )}
         </div>
 
-        <AddGroupButton module={module} isAdmin={isAdmin} />
+        <div className="flex items-center space-x-6">
+          <Tooltip title="Download the board .xlsx" arrow>
+            <Download onClick={() => handleExportBoard(boardData)} />
+          </Tooltip>
+          <AddGroupButton module={module} isAdmin={isAdmin} />
+        </div>
       </div>
 
       <div className="space-y-8">
