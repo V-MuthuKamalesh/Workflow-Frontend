@@ -11,8 +11,6 @@ export default async function ViewPage({ params, searchParams }) {
 
   userId = userId || cookieStore.get("userId").value;
 
-  console.log(userId);
-
   return (
     <>
       <Welcome view={view} module={module} />

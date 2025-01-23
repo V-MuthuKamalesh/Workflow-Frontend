@@ -51,7 +51,7 @@ export default function BasicAuthSignIn() {
         name="email"
         value={formData.email}
         onChange={handleFormDataChange}
-        autocomplete="off"
+        autoComplete="off"
         required
       />
       <Input
