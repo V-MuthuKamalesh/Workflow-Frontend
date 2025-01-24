@@ -18,7 +18,7 @@ export default function BasicAuthSignUp() {
     try {
       const response = await workflowBackend.post("/users/email", { email });
 
-      setCookies("email", email);
+      setCookies("signupEmail", email);
       router.push("/users/account-creation");
     } catch (error) {
       console.log(error);
@@ -40,19 +40,22 @@ export default function BasicAuthSignUp() {
       onSubmit={handleEmailSubmit}
       className="flex flex-col items-center justify-center space-y-4 w-full"
     >
-      <Input
-        className="w-full outline-none border border-gray-300 p-2 rounded-sm"
-        type="email"
-        placeholder="name@company.com"
-        name="email"
-        value={email}
-        onChange={handleEmailChange}
-        autoComplete="off"
-        required
-      />
-      {errorMessage !== "" && (
-        <span className="text-red-600 text-xs">{errorMessage}</span>
-      )}
+      <div className="w-full">
+        <Input
+          className="w-full outline-none border border-gray-300 p-2 rounded-sm"
+          type="email"
+          placeholder="name@company.com"
+          name="email"
+          value={email}
+          onChange={handleEmailChange}
+          autoComplete="off"
+          required
+        />
+        {errorMessage !== "" && (
+          <span className="text-red-600 text-xs pl-1">{errorMessage}</span>
+        )}
+      </div>
+
       <Button buttonText="Continue" />
     </form>
   );

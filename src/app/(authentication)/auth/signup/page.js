@@ -14,7 +14,7 @@ export function generateMetadata() {
 export default function SignUpPage() {
   return (
     <div className="flex min-h-screen">
-      <div className="w-full md:w-2/3 flex flex-col justify-center items-center px-6 md:px-12 bg-gray-100">
+      <div className="w-full md:w-[60%] flex flex-col justify-center items-center px-6 md:px-12 bg-gray-100">
         <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
           <h1 className="text-3xl md:text-4xl font-medium mb-3 text-center">
             Welcome to WorkFlow
@@ -50,7 +50,7 @@ export default function SignUpPage() {
         </div>
       </div>
 
-      <div className="hidden md:block w-1/3 relative">
+      <div className="hidden md:block w-[40%] relative">
         <Image
           src="/welcome.avif"
           alt="Welcome"
