@@ -5,14 +5,14 @@ import { cookies } from "next/headers";
 
 const moduleColors = {
   "work-management": "bg-purple-100",
-  dev: "bg-green-100",
+  dev: "bg-red-100",
   crm: "bg-blue-100",
   service: "bg-teal-100",
 };
 
 const moduleBackgrounds = {
   "work-management": "bg-purple-50",
-  dev: "bg-green-50",
+  dev: "bg-red-50",
   crm: "bg-blue-50",
   service: "bg-teal-50",
 };

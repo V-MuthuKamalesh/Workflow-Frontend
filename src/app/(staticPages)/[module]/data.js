@@ -1,7 +1,7 @@
 export const moduleStaticPagesData = [
   {
     module: "crm",
-    title: "Do it faster with WorkFlow CRM",
+    title: "Revolutionize Your Sales with WorkFlow CRM",
     description:
       "Speed up your sales cycle with an intuitive, AI-powered CRM that your team will love.",
     imageUrl: "/newCrm.jpeg",
@@ -14,7 +14,7 @@ export const moduleStaticPagesData = [
   },
   {
     module: "service",
-    title: "Transform your service operations from reactive to proactive",
+    title: "Elevate Customer Service with Proactive Solutions",
     description:
       "Empower service teams to deliver exceptional support experiences faster with smart automations that leverage the power of AI.",
     imageUrl: "/newService.png",
@@ -27,7 +27,7 @@ export const moduleStaticPagesData = [
   },
   {
     module: "dev",
-    title: "Develop with precision and speed",
+    title: "Streamline Development with Precision and Speed",
     description:
       "Plan roadmaps, manage sprints, and release products fast - on one flexible platform.",
     imageUrl: "/newDev.webp",
@@ -40,7 +40,7 @@ export const moduleStaticPagesData = [
   },
   {
     module: "work-management",
-    title: "Bring your strategy to life",
+    title: "Transform Your Workflows with Integrated Management",
     description:
       "Gain the clarity and control you need to connect your everyday work to business goals across projects and processes.",
     imageUrl: "/newWorkManagement.png",

@@ -5,6 +5,8 @@ import { ChangeCircleRounded, Person } from "@mui/icons-material";
 import ModuleSwitcher from "./ModuleSwitcher";
 import UserProfile from "./UserProfile";
 import { moduleColors } from "@/app/_utils/constants/colors";
+import { Avatar } from "@mui/material";
+import Cookies from "js-cookie";
 
 export default function AppHeader({ module }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,6 +45,7 @@ export default function AppHeader({ module }) {
             onClick={() => setIsProfileOpen(true)}
           >
             <Person className="text-gray-600" fontSize="medium" />
+            {/* <Avatar>{Cookies.get("fullName").charAt(0).toUpperCase()}</Avatar> */}
           </div>
         </div>
       </nav>
