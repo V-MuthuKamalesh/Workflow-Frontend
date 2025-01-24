@@ -15,7 +15,7 @@ export default function HeroSection({ userId }) {
         </p>
       </div>
       <Link
-        href={userId ? "/work-management/dashboard" : "/auth/signin"}
+        href={userId ? "/work-management/view/dashboard" : "/auth/signin"}
         className="relative inline-flex items-center justify-center px-6 py-3 text-lg font-semibold text-violet-400 bg-white rounded-full border border-violet-400 overflow-hidden group transform transition-all duration-300 hover:bg-violet-400 hover:text-white"
       >
         <span className="absolute inset-0 w-full h-full bg-violet-400 transform scale-x-0 origin-right group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>

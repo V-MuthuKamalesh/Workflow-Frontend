@@ -29,7 +29,7 @@ export default async function ModulePageUI({ params }) {
         </div>
 
         <Link
-          href={userId ? `/${module}/dashboard` : `/auth/signin`}
+          href={userId ? `/${module}/view/dashboard` : `/auth/signin`}
           className={`relative inline-flex items-center justify-center px-6 py-3 text-lg font-semibold ${colorSchemes.text} bg-white rounded-full border overflow-hidden group transform transition-all duration-300  hover:text-white`}
         >
           <span className="absolute inset-0 w-full h-full bg-black transform scale-x-0 origin-right group-hover:scale-x-100 transition-transform duration-300 rounded-full"></span>

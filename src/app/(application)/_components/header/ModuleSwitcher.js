@@ -11,22 +11,22 @@ const moduleDetails = [
   {
     name: "Work Management",
     icon: <WorkRounded fontSize="large" className="text-purple-600" />,
-    path: "/work-management/dashboard",
+    path: "/work-management/view/dashboard",
   },
   {
     name: "Development",
     icon: <CodeRounded fontSize="large" className="text-green-600" />,
-    path: "/dev/dashboard",
+    path: "/dev/view/dashboard",
   },
   {
     name: "CRM",
     icon: <GroupRounded fontSize="large" className="text-blue-600" />,
-    path: "/crm/dashboard",
+    path: "/crm/view/dashboard",
   },
   {
     name: "Service",
     icon: <BuildRounded fontSize="large" className="text-teal-600" />,
-    path: "/service/dashboard",
+    path: "/service/view/dashboard",
   },
 ];
 

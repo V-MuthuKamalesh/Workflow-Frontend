@@ -5,6 +5,7 @@ import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 import { useRouter } from "next/navigation";
 import Input from "@/app/(application)/_components/UI/Input";
 import Button from "@/app/(application)/_components/UI/Button";
+import Cookies from "js-cookie";
 
 export default function AccountCreation() {
   const [formData, setFormData] = useState({
@@ -26,13 +27,11 @@ export default function AccountCreation() {
 
     try {
       const response = await workflowBackend.post("/users/signup", {
-        email: localStorage.getItem("email"),
+        email: Cookies.get("email"),
         password: formData.password,
         fullname: formData.fullName,
       });
 
-      console.log(response);
-      localStorage.removeItem("email");
       router.push("/auth/signin");
     } catch (error) {
       setErrorMessage("Something went wrong. Please try again.");

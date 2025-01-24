@@ -1,7 +1,7 @@
 import Dashboard from "@/app/(application)/_components/dashboard/Dashboard";
 import FavoriteWorkspacesAndBoards from "@/app/(application)/_components/favorites/Favorites";
 import Welcome from "@/app/(application)/_components/UI/Welcome";
-import DevServiceDashboard from "../../_components/dashboard/DevServiceDashboard";
+import DevServiceDashboard from "../../../_components/dashboard/DevServiceDashboard";
 import { cookies } from "next/headers";
 
 export default async function ViewPage({ params, searchParams }) {

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 import Input from "@/app/(application)/_components/UI/Input";
 import Button from "@/app/(application)/_components/UI/Button";
+import { setCookies } from "@/app/_utils/helpers/cookies";
 
 export default function BasicAuthSignUp() {
   const [email, setEmail] = useState("");
@@ -16,9 +17,8 @@ export default function BasicAuthSignUp() {
 
     try {
       const response = await workflowBackend.post("/users/email", { email });
-      console.log(response);
 
-      localStorage.setItem("email", email);
+      setCookies("email", email);
       router.push("/users/account-creation");
     } catch (error) {
       console.log(error);

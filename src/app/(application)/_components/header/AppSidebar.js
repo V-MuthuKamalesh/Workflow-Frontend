@@ -42,12 +42,12 @@ export default function AppSidebar({ module }) {
   const items = [
     {
       title: "Dashboard",
-      url: `/${module}/dashboard`,
+      url: `/${module}/view/dashboard`,
       icon: BarChartIcon,
     },
     {
       title: "Favorites",
-      url: `/${module}/favorites`,
+      url: `/${module}/view/favorites`,
       icon: Star,
     },
   ];

@@ -17,8 +17,6 @@ export default function FavoriteWorkspacesAndBoards({ module }) {
   );
   const dispatch = useDispatch();
 
-  console.log(favoriteBoards);
-
   useEffect(() => {
     socket.emit(
       "getFavourite",

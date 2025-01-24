@@ -144,10 +144,7 @@ export default function ProfileEditPage() {
         />
 
         <div className="flex justify-end space-x-4">
-          <Button
-            variant="outlined"
-            onClick={() => router.push("/work-management/dashboard")}
-          >
+          <Button variant="outlined" onClick={() => router.back()}>
             Cancel
           </Button>
           <Button

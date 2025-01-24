@@ -18,7 +18,7 @@ export default function CallToAction({ userId }) {
           Contact Us
         </Link>
         <Link
-          href={userId ? "/work-management/dashboard" : "/auth/signin"}
+          href={userId ? "/work-management/view/dashboard" : "/auth/signin"}
           className="bg-purple-600 px-8 py-4 rounded-lg font-semibold transition-transform transform hover:scale-105 hover:bg-purple-700 shadow-md"
         >
           Get Started

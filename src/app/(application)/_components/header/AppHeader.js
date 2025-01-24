@@ -13,13 +13,9 @@ import { Avatar, Badge, InputBase } from "@mui/material";
 import Cookies from "js-cookie";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 
-export default function AppHeader({ module }) {
+export default function AppHeader({ module, userDetails }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [userDetails, setUserDetails] = useState({
-    fullname: "User",
-    picture: "",
-  });
 
   const bgColor = moduleColors[module] || "bg-gray-50";
 
@@ -27,32 +23,6 @@ export default function AppHeader({ module }) {
     .split("-")
     .map((str) => str.charAt(0).toUpperCase() + str.slice(1))
     .join(" ");
-
-  useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        const response = await workflowBackend.get("/users/getuserdetails", {
-          params: {
-            userId: Cookies.get("userId"),
-          },
-          headers: {
-            Authorization: `Bearer ${Cookies.get("authToken")}`,
-          },
-        });
-
-        const { fullname, picture } = response.data;
-
-        setUserDetails({
-          fullname,
-          picture: picture || "",
-        });
-      } catch (error) {
-        console.log("Error fetching user details.", error);
-      }
-    };
-
-    fetchUserDetails();
-  }, []);
 
   return (
     <header
@@ -124,6 +94,7 @@ export default function AppHeader({ module }) {
       <UserProfile
         isProfileOpen={isProfileOpen}
         setIsProfileOpen={setIsProfileOpen}
+        userDetails={userDetails}
       />
     </header>
   );

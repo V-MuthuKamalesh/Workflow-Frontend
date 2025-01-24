@@ -2,46 +2,32 @@ import { NextResponse } from "next/server";
 import { workflowBackend } from "./app/_utils/api/axiosConfig";
 
 export async function middleware(request) {
-  //   const publicPaths = [
-  //     "/auth/signin",
-  //     "/auth/signup",
-  //     "/auth/forgot-password",
-  //     "/auth/reset-password",
-  //     "/users/account-creation",
-  //   ];
+  const authToken = request.cookies.get("authToken");
 
-  //   if (publicPaths.some((path) => request.nextUrl.pathname.startsWith(path))) {
-  //     return NextResponse.next();
-  //   }
+  if (!authToken) {
+    return NextResponse.redirect(new URL("/auth/signin", request.url));
+  }
 
-  //   const moduleMatcher = [
-  //     "/:module/:view",
-  //     "/:module/boards/:boardId",
-  //     "/:module/workspace/:workspaceId",
-  //   ];
+  try {
+    const response = await workflowBackend.post(
+      "/users/tokenexpired",
+      {
+        token: authToken.value,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${authToken.value}`,
+        },
+      }
+    );
 
-  //   const matchesModuleRoute = moduleMatcher.some((matcher) =>
-  //     request.nextUrl.pathname.match(new RegExp(matcher))
-  //   );
-
-  //   const authToken = request.cookies.get("authToken");
-
-  //   if (!authToken) {
-  //     return NextResponse.redirect(new URL("/auth/signin", request.url));
-  //   }
-
-  //   try {
-  //     const response = await workflowBackend.post("/users/tokenexpired", {
-  //       token: authToken.value,
-  //     });
-
-  //     if (response.status !== 200) {
-  //       return NextResponse.redirect(new URL("/auth/signin", request.url));
-  //     }
-  //   } catch (error) {
-  //     console.error("Error verifying token:", error);
-  //     return NextResponse.redirect(new URL("/auth/signin", request.url));
-  //   }
+    if (response.status !== 200) {
+      return NextResponse.redirect(new URL("/auth/signin", request.url));
+    }
+  } catch (error) {
+    console.error("Error verifying token:", error);
+    return NextResponse.redirect(new URL("/auth/signin", request.url));
+  }
 
   const moduleSelected = request.nextUrl.pathname.split("/")[1];
 
@@ -67,12 +53,10 @@ export async function middleware(request) {
   return NextResponse.next();
 }
 
-// export const config = {
-//   matcher: [
-//     "/auth/signin",
-//     "/auth/signup",
-//     "/:module/:view",
-//     "/:module/boards/:boardId",
-//     "/:module/workspace/:workspaceId",
-//   ],
-// };
+export const config = {
+  matcher: [
+    "/:module/view/:view",
+    "/:module/boards/:boardId",
+    "/:module/workspace/:workspaceId",
+  ],
+};
