@@ -76,11 +76,19 @@ export default function WorkspaceHeader({
       }
     }
     try {
-      const response = await workflowBackend.post("/users/removeMember", {
-        workspaceId,
-        userId: Cookies.get("userId"),
-        token: Cookies.get("authToken"),
-      });
+      const response = await workflowBackend.post(
+        "/users/removeMember",
+        {
+          workspaceId,
+          userId: Cookies.get("userId"),
+          token: Cookies.get("authToken"),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("authToken")}`,
+          },
+        }
+      );
 
       if (response.status === 200) {
         dispatch(deleteWorkspace(workspaceId));

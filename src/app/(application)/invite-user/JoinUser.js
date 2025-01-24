@@ -1,13 +1,22 @@
 "use client";
 
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
+import Cookies from "js-cookie";
 
 export default function JoinUser({ token }) {
   const handleJoinUser = async () => {
     try {
-      const response = await workflowBackend.post("/users/addMember", {
-        token,
-      });
+      const response = await workflowBackend.post(
+        "/users/addMember",
+        {
+          token,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("authToken")}`,
+          },
+        }
+      );
 
       window.close();
     } catch (error) {

@@ -11,10 +11,18 @@ export default function useCheckUserRole(userId, workspaceId) {
     const checkUserRole = async () => {
       if (userId && workspaceId) {
         try {
-          const response = await workflowBackend.post("/users/checkRole", {
-            workspaceId,
-            userId,
-          });
+          const response = await workflowBackend.post(
+            "/users/checkRole",
+            {
+              workspaceId,
+              userId,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${Cookies.get("authToken")}`,
+              },
+            }
+          );
 
           setIsAdmin(response.data.role === "admin");
         } catch (error) {

@@ -18,6 +18,7 @@ export function FavoriteWorkspaces({ module, workspaces }) {
             key={workspace.workspaceId}
             module={module}
             workspace={workspace}
+            isFavorite={true}
           />
         ))}
       </ul>

@@ -1,25 +1,25 @@
 const { createSlice } = require("@reduxjs/toolkit");
 
 const initialState = {
-  workspaces: [],
-  boards: [],
+  favoriteWorkspaces: [],
+  favoriteBoards: [],
 };
 
 const favoritesSlice = createSlice({
   initialState,
   name: "favorites",
   reducers: {
-    setWorkspaces: (state, action) => {
-      state.workspaces = action.payload;
+    setFavoriteWorkspaces: (state, action) => {
+      state.favoriteWorkspaces = action.payload;
     },
-    setBoards: (state, action) => {
-      state.boards = action.payload;
+    setFavoriteBoards: (state, action) => {
+      state.favoriteBoards = action.payload;
     },
     addBoardToFavorites: (state, action) => {
-      state.boards.push(action.payload);
+      state.favoriteBoards.push(action.payload);
     },
     removeBoardFromFavorites: (state, action) => {
-      state.boards = state.boards.filter(
+      state.favoriteBoards = state.favoriteBoards.filter(
         (board) => board.boardId !== action.payload
       );
     },
@@ -27,8 +27,8 @@ const favoritesSlice = createSlice({
 });
 
 export const {
-  setBoards,
-  setWorkspaces,
+  setFavoriteBoards,
+  setFavoriteWorkspaces,
   addBoardToFavorites,
   removeBoardFromFavorites,
 } = favoritesSlice.actions;

@@ -22,11 +22,19 @@ export default function WorkspaceMembers({
 
   const handleMemberDelete = async (userId) => {
     try {
-      const response = await workflowBackend.post("/users/removeMember", {
-        workspaceId,
-        userId,
-        token: Cookies.get("authToken"),
-      });
+      const response = await workflowBackend.post(
+        "/users/removeMember",
+        {
+          workspaceId,
+          userId,
+          token: Cookies.get("authToken"),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("authToken")}`,
+          },
+        }
+      );
 
       if (response.status === 200) {
         const updatedMembers = members.filter(
@@ -41,10 +49,18 @@ export default function WorkspaceMembers({
 
   const handlePromoteToAdmin = async (userId) => {
     try {
-      const response = await workflowBackend.post("/users/promoteToAdmin", {
-        workspaceId,
-        userId,
-      });
+      const response = await workflowBackend.post(
+        "/users/promoteToAdmin",
+        {
+          workspaceId,
+          userId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("authToken")}`,
+          },
+        }
+      );
 
       if (response.status === 200) {
         const updatedMembers = members.map((member) =>

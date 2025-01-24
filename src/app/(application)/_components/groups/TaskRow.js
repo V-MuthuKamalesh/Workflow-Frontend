@@ -70,10 +70,6 @@ export default function TaskRow({ module, item, fields, isAdmin }) {
   };
 
   const handleDeleteTask = () => {
-    const socket = io(process.env.NEXT_PUBLIC_WEB_SOCKET_URL, {
-      transports: ["websocket"],
-    });
-
     socket.emit(
       "removeItemFromGroup",
       {
@@ -85,6 +81,8 @@ export default function TaskRow({ module, item, fields, isAdmin }) {
           console.error("Error deleting task.");
           return;
         }
+
+        console.log(response);
 
         dispatch(
           removeItemFromGroup({
@@ -124,10 +122,6 @@ export default function TaskRow({ module, item, fields, isAdmin }) {
   };
 
   const handleRemoveAssignee = (assigneeId, assigneeType) => {
-    const socket = io(process.env.NEXT_PUBLIC_WEB_SOCKET_URL, {
-      transports: ["websocket"],
-    });
-
     socket.emit(
       "removeMembersFromItem",
       {

@@ -19,12 +19,20 @@ export default function Invite({ isOpen, onClose }) {
     onClose();
 
     try {
-      const response = await workflowBackend.post("/users/sendinvite", {
-        email,
-        role,
-        workspaceId: Cookies.get("workspaceId"),
-        adminId: Cookies.get("userId"),
-      });
+      const response = await workflowBackend.post(
+        "/users/sendinvite",
+        {
+          email,
+          role,
+          workspaceId: Cookies.get("workspaceId"),
+          adminId: Cookies.get("userId"),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("authToken")}`,
+          },
+        }
+      );
 
       console.log(response.status);
 

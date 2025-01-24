@@ -27,6 +27,7 @@ export default function ProfileEditPage() {
     const fetchUserDetails = async () => {
       try {
         const response = await workflowBackend.get("/users/getuserdetails", {
+          headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
           params: { userId: Cookies.get("userId") },
         });
 
@@ -67,13 +68,21 @@ export default function ProfileEditPage() {
     try {
       setLoading(true);
 
-      await workflowBackend.put("/users/updateUser", {
-        userId: Cookies.get("userId"),
-        userData: {
-          fullname: userDetails.fullname,
-          imgUrl: userDetails.picture,
+      await workflowBackend.put(
+        "/users/updateUser",
+        {
+          userId: Cookies.get("userId"),
+          userData: {
+            fullname: userDetails.fullname,
+            imgUrl: userDetails.picture,
+          },
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("authToken")}`,
+          },
+        }
+      );
 
       Cookies.set("fullName", userDetails.fullname);
 

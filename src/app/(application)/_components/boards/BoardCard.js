@@ -7,15 +7,19 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { socket } from "@/app/_utils/webSocket/webSocketConfig";
 import { useDispatch } from "react-redux";
-import { removeBoardFromFavorites } from "@/redux/feautres/favoritesSlice";
+import {
+  addBoardToFavorites,
+  removeBoardFromFavorites,
+} from "@/redux/feautres/favoritesSlice";
 import Tooltip from "@mui/material/Tooltip";
 
 export default function BoardCard({
   module,
   workspaceId,
   workspaceName,
-  boardName,
   boardId,
+  boardName,
+  boardType,
 }) {
   const [isFavorite, setIsFavorite] = useState(false);
   const router = useRouter();
@@ -55,6 +59,16 @@ export default function BoardCard({
         if (isFavorite) {
           console.log(boardId);
           dispatch(removeBoardFromFavorites(boardId));
+        } else {
+          dispatch(
+            addBoardToFavorites({
+              workspaceId,
+              workspaceName,
+              boardId,
+              boardName,
+              type: boardType,
+            })
+          );
         }
       }
     );
