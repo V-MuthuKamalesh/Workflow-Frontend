@@ -109,7 +109,7 @@ export default function CreateBoard({ module, workspaceId }) {
           className={`px-6 py-2 text-white rounded-lg ${
             isCreateDisabled
               ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-500 hover:bg-blue-600"
+              : "bg-purple-500 hover:bg-purple-600"
           }`}
         >
           {loading ? "Creating..." : "Create"}

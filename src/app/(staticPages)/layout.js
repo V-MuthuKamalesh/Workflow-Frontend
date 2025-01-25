@@ -6,16 +6,23 @@ import Header from "./_components/header/Header";
 export default async function ApplicationLayout({ children }) {
   const cookieStore = await cookies();
 
-  const response = await workflowBackend.get("/users/getuserdetails", {
-    params: {
-      userId: cookieStore.get("userId").value,
-    },
-    headers: {
-      Authorization: `Bearer ${cookieStore.get("authToken").value}`,
-    },
-  });
+  const userId = cookieStore.get("userId")?.value;
+  const authToken = cookieStore.get("authToken")?.value;
 
-  const userDetails = response.data;
+  let userDetails;
+
+  if (userId && authToken) {
+    const response = await workflowBackend.get("/users/getuserdetails", {
+      params: {
+        userId,
+      },
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+
+    userDetails = response.data;
+  }
 
   return (
     <>

@@ -17,17 +17,9 @@ export default async function ViewPage({ params, searchParams }) {
       {view === "dashboard" ? (
         <div className="p-3 space-y-8">
           {module === "work-management" || module === "crm" ? (
-            <Dashboard
-              module={module}
-              userId={userId}
-              workspaceId={workspaceId}
-            />
+            <Dashboard module={module} userId={userId} workspaceId={workspaceId} />
           ) : (
-            <DevServiceDashboard
-              module={module}
-              userId={userId}
-              workspaceId={workspaceId}
-            />
+            <DevServiceDashboard module={module} userId={userId} workspaceId={workspaceId} />
           )}
         </div>
       ) : view === "favorites" ? (

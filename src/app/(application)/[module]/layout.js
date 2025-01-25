@@ -1,22 +1,9 @@
 import AppHeader from "@/app/(application)/_components/header/AppHeader";
 import AppSidebar from "@/app/(application)/_components/header/AppSidebar";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
+import { moduleBackgrounds, moduleColors } from "@/app/_utils/constants/colors";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { cookies } from "next/headers";
-
-const moduleColors = {
-  "work-management": "bg-purple-100",
-  dev: "bg-red-100",
-  crm: "bg-blue-100",
-  service: "bg-teal-100",
-};
-
-const moduleBackgrounds = {
-  "work-management": "bg-purple-50",
-  dev: "bg-red-50",
-  crm: "bg-blue-50",
-  service: "bg-teal-50",
-};
 
 export default async function Layout({ children, params }) {
   const { module } = await params;
@@ -44,9 +31,7 @@ export default async function Layout({ children, params }) {
           <AppSidebar module={module} />
           <main className="flex-1">
             <SidebarTrigger />
-            <section
-              className={`min-h-32 ${sectionBgColor} mb-5 ml-7 -mt-7 rounded-l-3xl`}
-            >
+            <section className={`min-h-32 ${sectionBgColor} mb-5 ml-7 -mt-7 rounded-l-3xl`}>
               {children}
             </section>
           </main>

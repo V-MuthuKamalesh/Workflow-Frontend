@@ -47,12 +47,7 @@ export default function SignInPage() {
       </div>
 
       <div className="hidden md:block w-[40%] relative">
-        <Image
-          src="/welcome.avif"
-          alt="welcome"
-          fill
-          className="object-cover"
-        />
+        <Image src="/welcome.avif" alt="welcome" fill className="object-cover" />
       </div>
     </div>
   );

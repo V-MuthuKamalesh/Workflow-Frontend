@@ -69,7 +69,7 @@ export default function EditWorkspace({
 
       dispatch(deleteWorkspace(workspaceId));
 
-      router.push(`/${module}/dashboard`);
+      router.push(`/${module}/view/dashboard`);
 
       setIsDialogOpen(false);
     } else {
@@ -78,12 +78,7 @@ export default function EditWorkspace({
   };
 
   return (
-    <Dialog
-      open={isDialogOpen}
-      onClose={() => setIsDialogOpen(false)}
-      maxWidth="sm"
-      fullWidth
-    >
+    <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)} maxWidth="sm" fullWidth>
       <DialogTitle>Edit Workspace</DialogTitle>
       <DialogContent>
         <div className="flex flex-col gap-4">

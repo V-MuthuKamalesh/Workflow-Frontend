@@ -1,28 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import Cookies from "js-cookie";
-import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { clearAllCookies } from "@/app/_utils/helpers/cookies";
 import { User } from "lucide-react";
 
 export default function Header({ userDetails }) {
-  const [authToken, setAuthToken] = useState(null);
-  const [userId, setUserId] = useState(null);
   const pathname = usePathname();
 
-  useEffect(() => {
-    const token = Cookies.get("authToken");
-    const userId = Cookies.get("userId");
-    setAuthToken(token);
-    setUserId(userId);
-  }, []);
+  console.log(userDetails);
 
   const handleLogout = () => {
     clearAllCookies();
     window.location.reload();
-    setAuthToken(null);
   };
 
   const navLinks = [
@@ -57,9 +47,8 @@ export default function Header({ userDetails }) {
         </div>
 
         <div className="flex items-center space-x-4">
-          {authToken && userId ? (
+          {userDetails ? (
             <div className="flex items-center space-x-5">
-              <span>{userDetails.fullname}</span>
               <User className="text-violet-400 w-6 h-6" />
               <button
                 onClick={handleLogout}

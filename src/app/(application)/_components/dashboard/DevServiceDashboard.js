@@ -71,10 +71,7 @@ export default function DevServiceDashboard({ module, userId, workspaceId }) {
 
           const total = normalizedStats.map(
             (workspace) =>
-              workspace.totalTasks ||
-              workspace.totalBugs ||
-              workspace.totalTickets ||
-              0
+              workspace.totalTasks || workspace.totalBugs || workspace.totalTickets || 0
           );
 
           const completed = normalizedStats.map(
@@ -95,10 +92,7 @@ export default function DevServiceDashboard({ module, userId, workspaceId }) {
 
           const pending = normalizedStats.map(
             (workspace) =>
-              workspace.pendingTasks ||
-              workspace.pendingBugs ||
-              workspace.pendingTickets ||
-              0
+              workspace.pendingTasks || workspace.pendingBugs || workspace.pendingTickets || 0
           );
 
           const hasTasks =
@@ -209,10 +203,8 @@ export default function DevServiceDashboard({ module, userId, workspaceId }) {
   };
 
   return (
-    <div className="min-h-screen p-6 bg-gray-100">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">
-        {moduleName} Dashboard
-      </h1>
+    <div className="min-h-20 p-6 pb-10 bg-gray-100">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">{moduleName} Dashboard</h1>
       {!hasData ? (
         <p className="text-lg text-gray-600 italic">
           No data available. Charts cannot be displayed.

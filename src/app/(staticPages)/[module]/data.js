@@ -19,10 +19,10 @@ export const moduleStaticPagesData = [
       "Empower service teams to deliver exceptional support experiences faster with smart automations that leverage the power of AI.",
     imageUrl: "/newService.png",
     colorSchemes: {
-      bg: "bg-teal-100",
-      border: "border-teal-50",
-      text: "text-teal-800",
-      hoverBg: "bg-teal-400",
+      bg: "bg-customBrown-100",
+      border: "border-customBrown-50",
+      text: "text-customBrown-800",
+      hoverBg: "bg-customBrown-400",
     },
   },
   {
@@ -32,10 +32,10 @@ export const moduleStaticPagesData = [
       "Plan roadmaps, manage sprints, and release products fast - on one flexible platform.",
     imageUrl: "/newDev.webp",
     colorSchemes: {
-      bg: "bg-green-100",
-      border: "border-green-50",
-      text: "text-green-800",
-      hoverBg: "bg-green-400",
+      bg: "bg-customGreen-100",
+      border: "border-customGreen-50",
+      text: "text-customGreen-800",
+      hoverBg: "bg-customGreen-400",
     },
   },
   {

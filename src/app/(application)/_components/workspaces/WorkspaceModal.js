@@ -1,18 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { io } from "socket.io-client";
+import { useState } from "react";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { addWorkspace } from "@/redux/feautres/userDetailsSlice";
-import {
-  Modal,
-  Box,
-  Typography,
-  TextField,
-  Button,
-  IconButton,
-} from "@mui/material";
+import { Modal, Box, Typography, TextField, Button, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { socket } from "@/app/_utils/webSocket/webSocketConfig";
 
