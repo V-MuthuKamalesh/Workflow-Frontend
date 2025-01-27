@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Search,
   Notifications,
@@ -8,44 +8,22 @@ import {
 } from "@mui/icons-material";
 import ModuleSwitcher from "./ModuleSwitcher";
 import UserProfile from "./UserProfile";
-import { moduleColors } from "@/app/_utils/constants/colors";
+import { appBgColors, moduleColors } from "@/app/_utils/constants/colors";
 import { Avatar, Badge, InputBase } from "@mui/material";
-import Cookies from "js-cookie";
-import { workflowBackend } from "@/app/_utils/api/axiosConfig";
+import NotificationsModal from "./NotificationsModal";
 
 export default function AppHeader({ module, userDetails }) {
-  // const [userDetails, setUserDetails] = useState({
-  //   email: "user@example.com",
-  //   fullname: "User",
-  //   picture: "",
-  // });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-
-  // useEffect(() => {
-  //   const fetchUserDetails = async () => {
-  //     try {
-  //       const response = await workflowBackend.get("/users/getuserdetails", {
-  //         params: {
-  //           userId: Cookies.get("userId"),
-  //         },
-  //         headers: {
-  //           Authorization: `Bearer ${Cookies.get("authToken")}`,
-  //         },
-  //       });
-
-  //       setUserDetails(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching user details:", error);
-  //     }
-  //   };
-
-  //   fetchUserDetails();
-  // }, []);
-
-  // console.log(userDetails);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(() => {
+    return userDetails.notifications.filter(
+      (notification) => notification.status === "Unread"
+    ).length;
+  });
 
   const bgColor = moduleColors[module] || "bg-gray-50";
+  const appBgColor = appBgColors[module];
 
   const moduleName = module
     .split("-")
@@ -70,11 +48,12 @@ export default function AppHeader({ module, userDetails }) {
         </div>
 
         <div className="flex items-center space-x-6">
-          <Badge badgeContent={3} color="error">
+          <Badge badgeContent={unreadCount} color="error">
             <Notifications
               className="text-gray-600 cursor-pointer hover:text-gray-800 transition"
               fontSize="medium"
               titleAccess="Notifications"
+              onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
             />
           </Badge>
 
@@ -113,6 +92,15 @@ export default function AppHeader({ module, userDetails }) {
           </div>
         </div>
       </nav>
+
+      {isNotificationsOpen && (
+        <NotificationsModal
+          isOpen={isNotificationsOpen}
+          setIsOpen={setIsNotificationsOpen}
+          setUnreadCount={setUnreadCount}
+          bgColor={appBgColor}
+        />
+      )}
 
       <ModuleSwitcher
         isModalOpen={isModalOpen}

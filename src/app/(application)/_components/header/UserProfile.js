@@ -28,8 +28,6 @@ export default function UserProfile({ isProfileOpen, setIsProfileOpen }) {
 
         const { fullname, email, picture } = response.data;
 
-        console.log(response.data);
-
         setUserDetails({
           fullname,
           email,

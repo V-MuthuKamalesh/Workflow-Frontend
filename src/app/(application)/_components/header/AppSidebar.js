@@ -71,7 +71,7 @@ export default function AppSidebar({ module }) {
 
         dispatch(setWorkspaces(response));
       }
-    );  
+    );
   }, [dispatch]);
 
   const handleWorkspaceSelect = (workspaceId) => {
