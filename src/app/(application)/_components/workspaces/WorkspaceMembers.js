@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Trash2, ArrowUpRight, ExternalLink } from "lucide-react";
 import { setMembers } from "@/redux/feautres/workspaceSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 import Link from "next/link";
@@ -15,10 +15,10 @@ import {
 } from "@/app/_utils/constants/colors";
 
 export default function WorkspaceMembers({
-  isAdmin,
   module,
   workspaceId,
   members,
+  isAdmin,
 }) {
   const [activeTab, setActiveTab] = useState("admin");
   const dispatch = useDispatch();
@@ -162,7 +162,7 @@ export default function WorkspaceMembers({
               <p className="text-xs text-gray-500">{member.email}</p>
             </div>
             <div className="flex items-center space-x-4">
-              {member.role === "member" && (
+              {isAdmin && member.role === "member" && (
                 <Link
                   href={`/${module}/view/dashboard?userId=${member.userId}&workspaceId=${workspaceId}`}
                   className={`text-base text-white ${appButtonColor} p-2 rounded-lg transition-colors duration-200 flex items-center`}
@@ -172,7 +172,7 @@ export default function WorkspaceMembers({
                 </Link>
               )}
 
-              {member.role === "admin" && (
+              {/* {isAdmin && member.role === "admin" && (
                 <button
                   onClick={() => handleDepromoteAdmin(member.userId)}
                   className="text-base text-white bg-zinc-700 hover:bg-zinc-800 p-2 rounded-lg transition-colors duration-200 flex items-center"
@@ -180,9 +180,9 @@ export default function WorkspaceMembers({
                   <span>Depromote</span>
                   <ArrowUpRight size={20} />
                 </button>
-              )}
+              )} */}
 
-              {member.role !== "admin" && (
+              {isAdmin && member.role !== "admin" && (
                 <button
                   onClick={() => handlePromoteToAdmin(member.userId)}
                   className="text-base text-white bg-zinc-700 hover:bg-zinc-800 p-2 rounded-lg transition-colors duration-200 flex items-center"
@@ -192,7 +192,7 @@ export default function WorkspaceMembers({
                 </button>
               )}
 
-              {member.role === "member" && (
+              {isAdmin && member.role === "member" && (
                 <button
                   onClick={() => handleMemberDelete(member.userId)}
                   className="text-red-500 hover:text-red-600 transition-colors duration-200"
