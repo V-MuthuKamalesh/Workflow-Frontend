@@ -36,12 +36,12 @@ export const appBgColors = {
   default: "bg-gray-500",
 };
 
-export const appHoverColors = {
-  "work-management": "text-purple-600 hover:text-purple-700",
-  dev: "text-customGreen-600 hover:text-customGreen-700",
-  crm: "text-blue-600 hover:text-blue-700",
-  service: "text-customBrown-600 hover:text-customBrown-700",
-  default: "text-gray-700 hover:text-gray-800",
+export const appButtonColors = {
+  "work-management": "bg-purple-600 hover:bg-purple-700",
+  dev: "bg-customGreen-600 hover:bg-customGreen-700",
+  crm: "bg-blue-600 hover:bg-blue-700",
+  service: "bg-customBrown-600 hover:bg-customBrown-700",
+  default: "bg-gray-600 hover:bg-gray-700",
 };
 
 export const welcomeDescriptions = {

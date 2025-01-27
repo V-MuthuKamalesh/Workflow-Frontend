@@ -1,7 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, Notifications, ChangeCircleRounded } from "@mui/icons-material";
+import {
+  Search,
+  Notifications,
+  ChangeCircleRounded,
+} from "@mui/icons-material";
 import ModuleSwitcher from "./ModuleSwitcher";
 import UserProfile from "./UserProfile";
 import { moduleColors } from "@/app/_utils/constants/colors";
@@ -10,8 +14,36 @@ import Cookies from "js-cookie";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 
 export default function AppHeader({ module, userDetails }) {
+  // const [userDetails, setUserDetails] = useState({
+  //   email: "user@example.com",
+  //   fullname: "User",
+  //   picture: "",
+  // });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+
+  // useEffect(() => {
+  //   const fetchUserDetails = async () => {
+  //     try {
+  //       const response = await workflowBackend.get("/users/getuserdetails", {
+  //         params: {
+  //           userId: Cookies.get("userId"),
+  //         },
+  //         headers: {
+  //           Authorization: `Bearer ${Cookies.get("authToken")}`,
+  //         },
+  //       });
+
+  //       setUserDetails(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching user details:", error);
+  //     }
+  //   };
+
+  //   fetchUserDetails();
+  // }, []);
+
+  // console.log(userDetails);
 
   const bgColor = moduleColors[module] || "bg-gray-50";
 
@@ -82,7 +114,10 @@ export default function AppHeader({ module, userDetails }) {
         </div>
       </nav>
 
-      <ModuleSwitcher isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+      <ModuleSwitcher
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+      />
 
       <UserProfile
         isProfileOpen={isProfileOpen}

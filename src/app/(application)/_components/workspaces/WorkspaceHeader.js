@@ -92,7 +92,7 @@ export default function WorkspaceHeader({
 
       if (response.status === 200) {
         dispatch(deleteWorkspace(workspaceId));
-        router.push(`/${module}/dashboard`);
+        router.push(`/${module}/view/dashboard`);
       }
     } catch (error) {
       console.error("Error exiting workspace:", error);

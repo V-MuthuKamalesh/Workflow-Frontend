@@ -8,7 +8,11 @@ import Cookies from "js-cookie";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 import Link from "next/link";
 import { groupMembers } from "@/app/_utils/helpers/helper";
-import { appBgColors } from "@/app/_utils/constants/colors";
+import {
+  appBgColors,
+  appButtonColors,
+  appTextColors,
+} from "@/app/_utils/constants/colors";
 
 export default function WorkspaceMembers({
   isAdmin,
@@ -20,7 +24,10 @@ export default function WorkspaceMembers({
   const dispatch = useDispatch();
 
   const groupedMembers = groupMembers(members);
-  const appColor = appBgColors[module];
+
+  const appTextColor = appTextColors[module];
+  const appBgColor = appBgColors[module];
+  const appButtonColor = appButtonColors[module];
 
   const handleMemberDelete = async (userId) => {
     try {
@@ -88,7 +95,7 @@ export default function WorkspaceMembers({
             onClick={() => setActiveTab(role)}
             className={`px-4 py-2 rounded-md text-sm font-medium ${
               activeTab === role
-                ? `${appColor} text-white`
+                ? `${appBgColor} text-white`
                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"
             } transition`}
           >
@@ -105,7 +112,7 @@ export default function WorkspaceMembers({
             className="flex items-center p-3 h-14 bg-gray-50 rounded-md shadow-sm hover:shadow transition"
           >
             <div
-              className={`flex-shrink-0 w-8 h-8 bg-blue-100 text-purple-500 rounded-full flex items-center justify-center font-medium`}
+              className={`flex-shrink-0 w-8 h-8 bg-blue-100 ${appTextColor} rounded-full flex items-center justify-center font-medium`}
             >
               {member.fullname.charAt(0)}
             </div>
@@ -119,7 +126,7 @@ export default function WorkspaceMembers({
               <div className="flex items-center space-x-4">
                 <Link
                   href={`/${module}/view/dashboard?userId=${member.userId}&workspaceId=${workspaceId}`}
-                  className="text-base text-white bg-purple-600 hover:bg-purple-700 p-2 rounded-lg transition-colors duration-200 flex items-center"
+                  className={`text-base text-white ${appButtonColor} p-2 rounded-lg transition-colors duration-200 flex items-center`}
                 >
                   <span>View Dashboard</span>
                   <ExternalLink size={20} />

@@ -31,7 +31,9 @@ export default async function Layout({ children, params }) {
           <AppSidebar module={module} />
           <main className="flex-1">
             <SidebarTrigger />
-            <section className={`min-h-32 ${sectionBgColor} mb-5 ml-7 -mt-7 rounded-l-3xl`}>
+            <section
+              className={`min-h-32 ${sectionBgColor} mb-5 ml-7 -mt-7 rounded-l-3xl`}
+            >
               {children}
             </section>
           </main>

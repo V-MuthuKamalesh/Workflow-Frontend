@@ -1,5 +1,6 @@
 "use client";
 
+import { appButtonColors } from "@/app/_utils/constants/colors";
 import { socket } from "@/app/_utils/webSocket/webSocketConfig";
 import { addBoard } from "@/redux/feautres/workspaceSlice";
 import Cookies from "js-cookie";
@@ -12,6 +13,8 @@ export default function CreateBoard({ module, workspaceId }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const dispatch = useDispatch();
+
+  const appButtonColor = appButtonColors[module];
 
   const handleCreateBoard = (event) => {
     event.preventDefault();
@@ -109,7 +112,7 @@ export default function CreateBoard({ module, workspaceId }) {
           className={`px-6 py-2 text-white rounded-lg ${
             isCreateDisabled
               ? "bg-gray-400 cursor-not-allowed"
-              : "bg-purple-500 hover:bg-purple-600"
+              : `${appButtonColor}`
           }`}
         >
           {loading ? "Creating..." : "Create"}
