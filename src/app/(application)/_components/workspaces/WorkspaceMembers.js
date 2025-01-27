@@ -83,6 +83,18 @@ export default function WorkspaceMembers({
   };
 
   const handleDepromoteAdmin = async (userId) => {
+    if (groupedMembers.admin.length === 1) {
+      if (groupedMembers.member.length === 0) {
+        alert(
+          "You cannot depromote the last admin if there are no other members in the workspace."
+        );
+        return;
+      } else {
+        alert("At least one admin is required. Make a member an admin.");
+        return;
+      }
+    }
+
     try {
       const response = await workflowBackend.post(
         "/users/dePromoteToMember",
@@ -101,6 +113,7 @@ export default function WorkspaceMembers({
         const updatedMembers = members.map((member) =>
           member.userId === userId ? { ...member, role: "member" } : member
         );
+
         dispatch(setMembers(updatedMembers));
       }
     } catch (error) {

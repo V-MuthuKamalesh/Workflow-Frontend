@@ -65,16 +65,17 @@ export default function WorkspaceHeader({
     if (groupedMembers.admin.length === 1) {
       if (groupedMembers.member.length === 0) {
         alert(
-          "Cannot exit workspace with only one admin and no members. Delete the workspace."
+          "You cannot exit the workspace because you are the only admin, and there are no members left. Please delete the workspace instead."
         );
         return;
       } else {
         alert(
-          "Cannot exit workspace with only one admin. Make a member as admin."
+          "You cannot exit the workspace as the only admin. Please promote another member to admin before you leave."
         );
         return;
       }
     }
+
     try {
       const response = await workflowBackend.post(
         "/users/removeMember",
