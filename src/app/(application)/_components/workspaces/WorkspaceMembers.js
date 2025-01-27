@@ -82,6 +82,32 @@ export default function WorkspaceMembers({
     }
   };
 
+  const handleDepromoteAdmin = async (userId) => {
+    try {
+      const response = await workflowBackend.post(
+        "/users/dePromoteToMember",
+        {
+          workspaceId,
+          userId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("authToken")}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        const updatedMembers = members.map((member) =>
+          member.userId === userId ? { ...member, role: "member" } : member
+        );
+        dispatch(setMembers(updatedMembers));
+      }
+    } catch (error) {
+      console.error("Error depromoting admin:", error);
+    }
+  };
+
   return (
     <div className="mt-6 p-4 bg-white shadow-md rounded-md">
       <h3 className="text-xl font-semibold text-gray-700 mb-4">
@@ -122,8 +148,8 @@ export default function WorkspaceMembers({
               </p>
               <p className="text-xs text-gray-500">{member.email}</p>
             </div>
-            {isAdmin && member.role !== "admin" && (
-              <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-4">
+              {member.role === "member" && (
                 <Link
                   href={`/${module}/view/dashboard?userId=${member.userId}&workspaceId=${workspaceId}`}
                   className={`text-base text-white ${appButtonColor} p-2 rounded-lg transition-colors duration-200 flex items-center`}
@@ -131,6 +157,19 @@ export default function WorkspaceMembers({
                   <span>View Dashboard</span>
                   <ExternalLink size={20} />
                 </Link>
+              )}
+
+              {member.role === "admin" && (
+                <button
+                  onClick={() => handleDepromoteAdmin(member.userId)}
+                  className="text-base text-white bg-zinc-700 hover:bg-zinc-800 p-2 rounded-lg transition-colors duration-200 flex items-center"
+                >
+                  <span>Depromote</span>
+                  <ArrowUpRight size={20} />
+                </button>
+              )}
+
+              {member.role !== "admin" && (
                 <button
                   onClick={() => handlePromoteToAdmin(member.userId)}
                   className="text-base text-white bg-zinc-700 hover:bg-zinc-800 p-2 rounded-lg transition-colors duration-200 flex items-center"
@@ -138,6 +177,9 @@ export default function WorkspaceMembers({
                   <span>Promote</span>
                   <ArrowUpRight size={20} />
                 </button>
+              )}
+
+              {member.role === "member" && (
                 <button
                   onClick={() => handleMemberDelete(member.userId)}
                   className="text-red-500 hover:text-red-600 transition-colors duration-200"
@@ -145,8 +187,8 @@ export default function WorkspaceMembers({
                 >
                   <Trash2 size={25} />
                 </button>
-              </div>
-            )}
+              )}
+            </div>
           </li>
         ))}
         {groupedMembers[activeTab].length === 0 && (
