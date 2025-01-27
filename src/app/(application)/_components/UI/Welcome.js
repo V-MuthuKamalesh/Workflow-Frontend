@@ -1,13 +1,14 @@
+"use client";
+
 import {
   appGradients,
   welcomeDescriptions,
 } from "@/app/_utils/constants/colors";
 import { greetBasedOnTime } from "@/app/_utils/helpers/helper";
-import { cookies } from "next/headers";
+import Cookies from "js-cookie";
 
-export default async function Welcome({ view, module }) {
-  const cookieStore = await cookies();
-  const fullName = cookieStore.get("fullName")?.value;
+export default function Welcome({ view, module }) {
+  const fullName = Cookies.get("fullName") || "User";
 
   const bgGradient = appGradients[module] || "from-gray-400 to-gray-600";
 
