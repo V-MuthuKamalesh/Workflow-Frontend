@@ -20,6 +20,30 @@ export const appGradients = {
   default: "from-gray-600 to-gray-400",
 };
 
+export const appTextColors = {
+  "work-management": "text-purple-500",
+  dev: "text-customGreen-500",
+  crm: "text-blue-500",
+  service: "text-customBrown-500",
+  default: "text-gray-700",
+};
+
+export const appBgColors = {
+  "work-management": "bg-purple-500",
+  dev: "bg-customGreen-500",
+  crm: "bg-blue-500",
+  service: "bg-customBrown-500",
+  default: "bg-gray-500",
+};
+
+export const appHoverColors = {
+  "work-management": "text-purple-600 hover:text-purple-700",
+  dev: "text-customGreen-600 hover:text-customGreen-700",
+  crm: "text-blue-600 hover:text-blue-700",
+  service: "text-customBrown-600 hover:text-customBrown-700",
+  default: "text-gray-700 hover:text-gray-800",
+};
+
 export const welcomeDescriptions = {
   dashboard: "Check out the latest updates and performance!",
   favorites: "View your favorite workspaces and boards!",
