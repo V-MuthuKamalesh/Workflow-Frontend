@@ -11,18 +11,14 @@ export default function DeleteBoard({ workspaceId, boardId }) {
   const dispatch = useDispatch();
   const { isAdmin } = useCheckUserRole(Cookies.get("userId"), workspaceId);
 
-  const handleDelete = (event) => {
-    event.stopPropagation();
-
+  const handleDelete = () => {
     socket.emit("removeBoardFromWorkspace", { boardId }, (response) => {
       if (!response) {
         console.error("Error deleting board.");
         return;
       }
 
-      for (const boardId of response) {
-        dispatch(removeBoard(boardId));
-      }
+      dispatch(removeBoard(boardId));
     });
   };
 

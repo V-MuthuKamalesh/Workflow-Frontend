@@ -1,61 +1,26 @@
 "use client";
 
+import { useState, useMemo } from "react";
+import { useDispatch } from "react-redux";
+import Cookies from "js-cookie";
 import { appButtonColors } from "@/app/_utils/constants/colors";
 import { socket } from "@/app/_utils/webSocket/webSocketConfig";
 import { addBoard } from "@/redux/feautres/workspaceSlice";
-import Cookies from "js-cookie";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
 
 export default function CreateBoard({ module, workspaceId }) {
-  const [boardName, setBoardName] = useState("");
-  const [boardType, setBoardType] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const dispatch = useDispatch();
 
+  const [formState, setFormState] = useState({
+    boardName: "",
+    boardType: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const { boardName, boardType } = formState;
   const appButtonColor = appButtonColors[module];
 
-  const handleCreateBoard = (event) => {
-    event.preventDefault();
-
-    if (!boardName.trim()) {
-      setError("Board name is required");
-      return;
-    }
-
-    const board = {
-      boardName,
-      type: boardType,
-      createdById: Cookies.get("userId"),
-    };
-
-    setLoading(true);
-
-    socket.emit(
-      "addBoardToWorkspace",
-      { id: workspaceId, board },
-      (response) => {
-        if (!response) {
-          setError("Error creating board.");
-          setLoading(false);
-          return;
-        }
-
-        console.log(response);
-
-        for (const board of response) {
-          dispatch(addBoard(board));
-        }
-
-        setBoardName("");
-        setBoardType("");
-        setLoading(false);
-      }
-    );
-  };
-
-  const getOptionsForModule = () => {
+  const moduleOptions = useMemo(() => {
     switch (module) {
       case "service":
         return [{ value: "Ticket", label: "Ticket" }];
@@ -69,13 +34,55 @@ export default function CreateBoard({ module, workspaceId }) {
       default:
         return [];
     }
-  };
-
-  const moduleOptions = getOptionsForModule();
+  }, [module]);
 
   const isWorkManagement = module === "work-management";
   const isCreateDisabled =
     !boardName.trim() || (!isWorkManagement && !boardType.trim()) || loading;
+
+  const handleInputChange = (field) => (event) => {
+    setFormState((prevState) => ({
+      ...prevState,
+      [field]: event.target.value,
+    }));
+  };
+
+  const handleCreateBoard = async (event) => {
+    event.preventDefault();
+
+    if (!boardName.trim()) {
+      setError("Board name is required");
+      return;
+    }
+
+    setError("");
+    setLoading(true);
+
+    const board = {
+      boardName,
+      type: boardType,
+      createdById: Cookies.get("userId"),
+    };
+
+    socket.emit(
+      "addBoardToWorkspace",
+      { id: workspaceId, board },
+      (response) => {
+        setLoading(false);
+
+        if (!response) {
+          setError("Error creating board.");
+          return;
+        }
+
+        response.forEach((board) => {
+          dispatch(addBoard(board));
+        });
+
+        setFormState({ boardName: "", boardType: "" });
+      }
+    );
+  };
 
   return (
     <form onSubmit={handleCreateBoard} className="mt-1 max-w-md">
@@ -83,7 +90,7 @@ export default function CreateBoard({ module, workspaceId }) {
         <input
           type="text"
           value={boardName}
-          onChange={(event) => setBoardName(event.target.value)}
+          onChange={handleInputChange("boardName")}
           placeholder="Enter board name"
           className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -91,15 +98,15 @@ export default function CreateBoard({ module, workspaceId }) {
         {moduleOptions.length > 0 && (
           <select
             value={boardType}
-            onChange={(event) => setBoardType(event.target.value)}
+            onChange={handleInputChange("boardType")}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="" disabled>
               Select type
             </option>
-            {moduleOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
+            {moduleOptions.map(({ value, label }) => (
+              <option key={value} value={value}>
+                {label}
               </option>
             ))}
           </select>
@@ -110,9 +117,7 @@ export default function CreateBoard({ module, workspaceId }) {
           disabled={isCreateDisabled}
           title={isCreateDisabled ? "Enter Board Name" : "Create Board"}
           className={`px-6 py-2 text-white rounded-lg ${
-            isCreateDisabled
-              ? "bg-gray-400 cursor-not-allowed"
-              : `${appButtonColor}`
+            isCreateDisabled ? "bg-gray-400 cursor-not-allowed" : appButtonColor
           }`}
         >
           {loading ? "Creating..." : "Create"}
