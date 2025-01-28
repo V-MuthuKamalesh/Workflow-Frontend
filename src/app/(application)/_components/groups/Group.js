@@ -8,8 +8,8 @@ import getFields from "@/app/_utils/helpers/fields";
 import DeleteGroupButton from "./DeleteGroupButton";
 import { socket } from "@/app/_utils/webSocket/webSocketConfig";
 import { Download } from "lucide-react";
-import { Tooltip } from "@mui/material";
 import { handleExportGroup } from "@/app/_utils/helpers/helper";
+import { CustomTooltip } from "../UI/CustomTooltip";
 
 export default function Group({ module, boardType, group, isAdmin }) {
   const [editingGroupName, setEditingGroupName] = useState(false);
@@ -26,7 +26,6 @@ export default function Group({ module, boardType, group, isAdmin }) {
       (response) => {
         if (!response) {
           console.error("Error updating group name.");
-          return;
         }
       }
     );
@@ -44,43 +43,54 @@ export default function Group({ module, boardType, group, isAdmin }) {
     setEditingGroupName(false);
   };
 
+  const renderGroupName = () => {
+    if (editingGroupName && isAdmin) {
+      return (
+        <input
+          type="text"
+          value={groupName}
+          onChange={(event) => setGroupName(event.target.value)}
+          onKeyDown={handleKeyDown}
+          onBlur={handleBlur}
+          className="px-2 bg-transparent text-xl focus:outline-none focus:ring focus:ring-gray-400 focus:rounded-md"
+          autoFocus
+        />
+      );
+    }
+
+    return (
+      <div className="relative group">
+        <span
+          onClick={isAdmin ? () => setEditingGroupName(true) : () => {}}
+          className={`cursor-pointer border border-transparent text-xl rounded-md px-2 py-1 transition ${
+            isAdmin ? "hover:border-gray-400 text-lime-700" : "text-gray-400"
+          }`}
+        >
+          {groupName}
+        </span>
+        <div className="absolute hidden group-hover:block bg-gray-800 text-white text-sm rounded-md px-2 py-1 -bottom-8 left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+          {isAdmin
+            ? "Click to edit group name"
+            : "Only admins can edit the group name"}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="mb-6">
       <div className="flex justify-between items-center text-lime-700 font-semibold mb-2">
-        {editingGroupName && isAdmin ? (
-          <input
-            type="text"
-            value={groupName}
-            onChange={(event) => setGroupName(event.target.value)}
-            onKeyDown={handleKeyDown}
-            onBlur={handleBlur}
-            className="px-2 bg-transparent text-xl focus:outline-none focus:ring focus:ring-gray-400 focus:rounded-md"
-            autoFocus
-          />
-        ) : (
-          <div className="relative group">
-            <span
-              onClick={() => isAdmin && setEditingGroupName(true)}
-              className={`cursor-pointer border border-transparent text-xl rounded-md px-2 py-1 transition ${
-                isAdmin
-                  ? "hover:border-gray-400 text-lime-700"
-                  : "text-gray-400"
-              }`}
-            >
-              {groupName}
-            </span>
-            <div className="absolute hidden group-hover:block bg-gray-800 text-white text-sm rounded-md px-2 py-1 -bottom-8 left-1/2 transform -translate-x-1/2 whitespace-nowrap">
-              {isAdmin
-                ? "Click to edit group name"
-                : "Only admins can edit the group name"}
-            </div>
-          </div>
-        )}
+        {renderGroupName()}
 
         <div className="flex items-center space-x-6">
-          <Tooltip title="Export the group .xlsx" arrow>
-            <Download onClick={() => handleExportGroup(group)} />
-          </Tooltip>
+          <CustomTooltip text="Export the group .xlsx">
+            <button
+              onClick={() => handleExportGroup(group)}
+              className="p-2 rounded-md bg-gray-500 text-white"
+            >
+              <Download className="w-5 h-5" />
+            </button>
+          </CustomTooltip>
 
           <DeleteGroupButton groupId={group.groupId} isAdmin={isAdmin} />
         </div>

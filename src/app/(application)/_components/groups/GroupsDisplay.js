@@ -13,11 +13,26 @@ import useCheckUserRole from "../../hooks/useCheckUserRole";
 import Cookies from "js-cookie";
 import GoBackButton from "../UI/GoBackButton";
 import { Download } from "lucide-react";
-import { Tooltip } from "@mui/material";
 import { socket } from "@/app/_utils/webSocket/webSocketConfig";
 import { handleExportBoard } from "@/app/_utils/helpers/helper";
+import { CustomTooltip } from "../UI/CustomTooltip";
+
+const saveBoardName = (boardId, boardName, dispatch) => {
+  socket.emit(
+    "updateBoardInWorkspace",
+    { boardId, updateData: { boardName } },
+    (response) => {
+      if (response) {
+        dispatch(updateBoardName(response.boardName));
+      } else {
+        console.error("Error updating board name.");
+      }
+    }
+  );
+};
 
 export default function GroupsDisplay({ module, workspaceId, boardId }) {
+  const dispatch = useDispatch();
   const {
     data: boardData,
     loading,
@@ -26,8 +41,6 @@ export default function GroupsDisplay({ module, workspaceId, boardId }) {
   const [editingBoardName, setEditingBoardName] = useState(false);
   const [boardName, setBoardName] = useState(boardData.boardName);
   const { type: boardType } = boardData;
-  const dispatch = useDispatch();
-
   const { isAdmin } = useCheckUserRole(Cookies.get("userId"), workspaceId);
 
   useEffect(() => {
@@ -41,30 +54,17 @@ export default function GroupsDisplay({ module, workspaceId, boardId }) {
     }
   }, [boardData.boardName]);
 
-  const handleBoardNameSave = () => {
-    socket.emit(
-      "updateBoardInWorkspace",
-      { boardId, updateData: { boardName: boardName } },
-      (response) => {
-        if (!response) {
-          console.error("Error updating board name.");
-          return;
-        }
-
-        dispatch(updateBoardName(response.boardName));
-      }
-    );
-  };
+  const handleBoardNameChange = (event) => setBoardName(event.target.value);
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      handleBoardNameSave(boardName);
+      saveBoardName(boardId, boardName, dispatch);
       setEditingBoardName(false);
     }
   };
 
   const handleBlur = () => {
-    handleBoardNameSave(boardName);
+    saveBoardName(boardId, boardName, dispatch);
     setEditingBoardName(false);
   };
 
@@ -90,7 +90,7 @@ export default function GroupsDisplay({ module, workspaceId, boardId }) {
             <input
               type="text"
               value={boardName}
-              onChange={(event) => setBoardName(event.target.value)}
+              onChange={handleBoardNameChange}
               onKeyDown={handleKeyDown}
               onBlur={handleBlur}
               className="text-center px-2 bg-transparent text-3xl font-extrabold text-indigo-600 focus:outline-none focus:ring focus:ring-indigo-400 focus:rounded-md"
@@ -118,9 +118,14 @@ export default function GroupsDisplay({ module, workspaceId, boardId }) {
         </div>
 
         <div className="flex items-center space-x-6">
-          <Tooltip title="Download the board .xlsx" arrow>
-            <Download onClick={() => handleExportBoard(boardData)} />
-          </Tooltip>
+          <CustomTooltip text="Download the board .xlsx">
+            <button
+              onClick={() => handleExportBoard(boardData)}
+              className="p-2 rounded-md bg-gray-500 text-white"
+            >
+              <Download className="w-5 h-5" />
+            </button>
+          </CustomTooltip>
           <AddGroupButton module={module} isAdmin={isAdmin} />
         </div>
       </div>
