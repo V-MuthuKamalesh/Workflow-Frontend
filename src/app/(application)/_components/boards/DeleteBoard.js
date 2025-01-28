@@ -27,7 +27,7 @@ export default function DeleteBoard({ workspaceId, boardId }) {
   };
 
   return (
-    <button
+    <div
       onClick={isAdmin ? handleDelete : undefined}
       className={`text-gray-500 ${
         isAdmin
@@ -36,9 +36,8 @@ export default function DeleteBoard({ workspaceId, boardId }) {
       } z-50`}
       aria-label="Delete board"
       disabled={!isAdmin}
-      title={!isAdmin ? "You are not an admin" : "Delete board"}
     >
       <Trash2 />
-    </button>
+    </div>
   );
 }

@@ -6,6 +6,7 @@ export const setCookies = (name, value, expires) => {
 
 export const clearAllCookies = () => {
   const allCookies = Cookies.get();
+
   for (const cookieName in allCookies) {
     Cookies.remove(cookieName);
   }

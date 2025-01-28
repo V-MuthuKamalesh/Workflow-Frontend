@@ -1,4 +1,4 @@
-export async function fetchUserInfo(tokenType, accessToken) {
+export const fetchUserInfo = async (tokenType, accessToken) => {
   try {
     const response = await fetch(
       "https://www.googleapis.com/oauth2/v1/userinfo?alt=json",
@@ -13,4 +13,4 @@ export async function fetchUserInfo(tokenType, accessToken) {
   } catch (error) {
     console.error("Failed to fetch user info:", error);
   }
-}
+};
