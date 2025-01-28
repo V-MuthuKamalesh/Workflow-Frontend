@@ -1,8 +1,8 @@
 "use client";
 
 export default function TooltipButton({
+  children,
   onClick,
-  icon,
   tooltipText,
   isActive,
   activeClass,
@@ -14,7 +14,7 @@ export default function TooltipButton({
         className={`focus:outline-none ${isActive ? activeClass : ""}`}
         title={tooltipText}
       >
-        {icon}
+        {children}
       </button>
     </div>
   );

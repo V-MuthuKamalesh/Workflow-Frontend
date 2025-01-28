@@ -43,18 +43,17 @@ export default function BoardCard({
           </div>
           <TooltipButton
             onClick={toggleFavorite}
-            icon={
-              <Star
-                fill={isFavorite ? "yellow" : "none"}
-                className={isFavorite ? "text-yellow-500" : "text-gray-600"}
-              />
-            }
             tooltipText={
               isFavorite ? "Remove from Favorites" : "Add to Favorites"
             }
             isActive={isFavorite}
             activeClass="text-yellow-500"
-          />
+          >
+            <Star
+              fill={isFavorite ? "yellow" : "none"}
+              className={isFavorite ? "text-yellow-500" : "text-gray-600"}
+            />
+          </TooltipButton>
         </h1>
 
         <div className="flex items-center justify-between">
@@ -63,9 +62,10 @@ export default function BoardCard({
           </div>
           <TooltipButton
             onClick={(e) => e.stopPropagation()}
-            icon={<DeleteBoard workspaceId={workspaceId} boardId={boardId} />}
             tooltipText="Delete Board"
-          />
+          >
+            <DeleteBoard workspaceId={workspaceId} boardId={boardId} />
+          </TooltipButton>
         </div>
       </div>
     </div>
