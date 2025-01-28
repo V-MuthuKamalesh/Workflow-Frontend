@@ -1,37 +1,49 @@
 "use client";
 
-import { FavoriteWorkspaces } from "./FavoriteWorkspaces";
-import { FavoriteBoards } from "./FavoriteBoards";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import { socket } from "@/app/_utils/webSocket/webSocketConfig";
-import { useDispatch, useSelector } from "react-redux";
 import {
   setFavoriteBoards,
   setFavoriteWorkspaces,
 } from "@/redux/feautres/favoritesSlice";
+import { FavoriteWorkspaces } from "./FavoriteWorkspaces";
+import { FavoriteBoards } from "./FavoriteBoards";
 
 export default function FavoriteWorkspacesAndBoards({ module }) {
+  const dispatch = useDispatch();
   const { favoriteWorkspaces, favoriteBoards } = useSelector(
     (state) => state.favorites
   );
-  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    socket.emit(
-      "getFavourite",
-      { userId: Cookies.get("userId"), type: module },
-      (response) => {
-        if (!response) {
-          console.error("Error getting favorite data.");
-          return;
-        }
+    const userId = Cookies.get("userId");
+    if (!userId) {
+      console.error("User ID not found.");
+      setIsLoading(false);
+      return;
+    }
 
-        dispatch(setFavoriteWorkspaces(response.workspaces));
-        dispatch(setFavoriteBoards(response.boards));
+    socket.emit("getFavourite", { userId, type: module }, (response) => {
+      if (!response) {
+        console.error("Error getting favorite data.");
+      } else {
+        dispatch(setFavoriteWorkspaces(response.workspaces || []));
+        dispatch(setFavoriteBoards(response.boards || []));
       }
-    );
+      setIsLoading(false);
+    });
   }, [module, dispatch]);
+
+  if (isLoading) {
+    return (
+      <div className="p-6 rounded-lg shadow-md flex items-center justify-center">
+        <p className="text-lg text-gray-500">Loading favorites...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 rounded-lg shadow-md">

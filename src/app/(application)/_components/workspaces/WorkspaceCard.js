@@ -1,32 +1,38 @@
-import { BriefcaseBusiness } from "lucide-react";
+import { LayoutGrid } from "lucide-react";
 import Link from "next/link";
 
 export function WorkspaceCard({ module, workspace, isFavorite }) {
   return (
-    <div className="p-4 flex flex-col space-y-3 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-100 transition">
-      <div className="flex items-center space-x-2">
-        <BriefcaseBusiness className="text-gray-600 w-6 h-6" />
-        <span className="font-semibold text-lg">{workspace.workspaceName}</span>
+    <div className="p-5 flex flex-col bg-white border border-gray-300 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-100">
+      <div className="flex items-center space-x-3">
+        <LayoutGrid className="text-purple-500 w-7 h-7" />
+        <h3 className="text-lg font-semibold text-gray-800">
+          {workspace.workspaceName}
+        </h3>
       </div>
-      <div className="text-sm text-gray-600">
-        {workspace.members.length}{" "}
-        {workspace.members.length > 1 ? "members" : "member"}
+
+      <div className="mt-3 text-gray-600 text-sm space-y-1">
+        <p>
+          <span className="font-medium">{workspace.members.length}</span>
+          {workspace.members.length === 1 ? " member" : " members"}
+        </p>
+        <p>
+          Number of Boards:{" "}
+          <span className="font-medium">{workspace.boards.length}</span>
+        </p>
       </div>
-      <div className="text-sm text-gray-400">
-        Number of Boards: {workspace.boards.length}
-      </div>
-      <div className="flex justify-between items-center">
+
+      <div className="mt-4 flex justify-between items-center">
         {isFavorite && (
-          <span className="text-xs bg-yellow-100 text-yellow-600 px-2 py-1 rounded-full">
-            Favorite
+          <span className="text-xs font-medium bg-purple-100 text-purple-700 px-3 py-1 rounded-full">
+            💜 Favorite
           </span>
         )}
-
         <Link
-          className="text-sm text-blue-600 hover:underline"
+          className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
           href={`/${module}/workspace/${workspace.workspaceId}`}
         >
-          View Details
+          View Details →
         </Link>
       </div>
     </div>
