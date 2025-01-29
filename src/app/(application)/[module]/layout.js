@@ -7,25 +7,13 @@ import { cookies } from "next/headers";
 
 export default async function Layout({ children, params }) {
   const { module } = await params;
-  const cookieStore = await cookies();
 
   const bgColor = moduleColors[module] || "bg-gray-200";
   const sectionBgColor = moduleBackgrounds[module] || "bg-gray-100";
 
-  const response = await workflowBackend.get("/users/getuserdetails", {
-    params: {
-      userId: cookieStore.get("userId").value,
-    },
-    headers: {
-      Authorization: `Bearer ${cookieStore.get("authToken").value}`,
-    },
-  });
-
-  const userDetails = response.data;
-
   return (
     <div className={`flex flex-col min-h-screen ${bgColor}`}>
-      <AppHeader module={module} userDetails={userDetails} />
+      <AppHeader module={module} />
       <div className="flex flex-1">
         <SidebarProvider>
           <AppSidebar module={module} />

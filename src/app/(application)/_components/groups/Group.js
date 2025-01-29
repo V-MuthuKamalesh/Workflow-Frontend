@@ -20,15 +20,11 @@ export default function Group({ module, boardType, group, isAdmin }) {
   }, [module, boardType]);
 
   const handleGroupNameSave = (newName) => {
-    socket.emit(
-      "updateGroupInBoard",
-      { groupId: group.groupId, updateData: { groupName: newName } },
-      (response) => {
-        if (!response) {
-          console.error("Error updating group name.");
-        }
+    socket.emit("updateGroupInBoard", { groupId: group.groupId, updateData: { groupName: newName } }, (response) => {
+      if (!response) {
+        console.error("Error updating group name.");
       }
-    );
+    });
   };
 
   const handleKeyDown = (event) => {
@@ -45,34 +41,15 @@ export default function Group({ module, boardType, group, isAdmin }) {
 
   const renderGroupName = () => {
     if (editingGroupName && isAdmin) {
-      return (
-        <input
-          type="text"
-          value={groupName}
-          onChange={(event) => setGroupName(event.target.value)}
-          onKeyDown={handleKeyDown}
-          onBlur={handleBlur}
-          className="px-2 bg-transparent text-xl focus:outline-none focus:ring focus:ring-gray-400 focus:rounded-md"
-          autoFocus
-        />
-      );
+      return <input type="text" value={groupName} onChange={(event) => setGroupName(event.target.value)} onKeyDown={handleKeyDown} onBlur={handleBlur} className="px-2 bg-transparent text-xl focus:outline-none focus:ring focus:ring-gray-400 focus:rounded-md" autoFocus />;
     }
 
     return (
       <div className="relative group">
-        <span
-          onClick={isAdmin ? () => setEditingGroupName(true) : () => {}}
-          className={`cursor-pointer border border-transparent text-xl rounded-md px-2 py-1 transition ${
-            isAdmin ? "hover:border-gray-400 text-lime-700" : "text-gray-400"
-          }`}
-        >
+        <span onClick={isAdmin ? () => setEditingGroupName(true) : () => {}} className={`cursor-pointer border border-transparent text-xl rounded-md px-2 py-1 transition ${isAdmin ? "hover:border-gray-400 text-lime-700" : "text-gray-400"}`}>
           {groupName}
         </span>
-        <div className="absolute hidden group-hover:block bg-gray-800 text-white text-sm rounded-md px-2 py-1 -bottom-8 left-1/2 transform -translate-x-1/2 whitespace-nowrap">
-          {isAdmin
-            ? "Click to edit group name"
-            : "Only admins can edit the group name"}
-        </div>
+        <div className="absolute hidden group-hover:block bg-gray-800 text-white text-sm rounded-md px-2 py-1 -bottom-8 left-1/2 transform -translate-x-1/2 whitespace-nowrap">{isAdmin ? "Click to edit group name" : "Only admins can edit the group name"}</div>
       </div>
     );
   };
@@ -84,10 +61,7 @@ export default function Group({ module, boardType, group, isAdmin }) {
 
         <div className="flex items-center space-x-6">
           <CustomTooltip text="Export the group .xlsx">
-            <button
-              onClick={() => handleExportGroup(group)}
-              className="p-2 rounded-md bg-gray-500 text-white"
-            >
+            <button onClick={() => handleExportGroup(group)} className="p-2 rounded-md bg-gray-500 text-white">
               <Download className="w-5 h-5" />
             </button>
           </CustomTooltip>
@@ -100,13 +74,7 @@ export default function Group({ module, boardType, group, isAdmin }) {
         <tbody>
           <GroupHeader fields={fields} />
           {group.items.map((item, index) => (
-            <TaskRow
-              key={index}
-              module={module}
-              item={item}
-              fields={fields}
-              isAdmin={isAdmin}
-            />
+            <TaskRow key={index} module={module} item={item} fields={fields} isAdmin={isAdmin} />
           ))}
           <AddTask module={module} groupId={group.groupId} isAdmin={isAdmin} />
         </tbody>

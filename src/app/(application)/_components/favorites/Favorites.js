@@ -4,18 +4,13 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import { socket } from "@/app/_utils/webSocket/webSocketConfig";
-import {
-  setFavoriteBoards,
-  setFavoriteWorkspaces,
-} from "@/redux/feautres/favoritesSlice";
+import { setFavoriteBoards, setFavoriteWorkspaces } from "@/redux/feautres/favoritesSlice";
 import { FavoriteWorkspaces } from "./FavoriteWorkspaces";
 import { FavoriteBoards } from "./FavoriteBoards";
 
 export default function FavoriteWorkspacesAndBoards({ module }) {
   const dispatch = useDispatch();
-  const { favoriteWorkspaces, favoriteBoards } = useSelector(
-    (state) => state.favorites
-  );
+  const { favoriteWorkspaces, favoriteBoards } = useSelector((state) => state.favorites);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

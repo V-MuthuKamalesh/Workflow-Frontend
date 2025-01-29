@@ -8,17 +8,17 @@ export default function NotificationsModal({
   isOpen,
   setIsOpen,
   setUnreadCount,
+  notifications,
+  setNotifications,
   bgColor,
 }) {
-  const [notifications, setNotifications] = useState([]);
-
   useEffect(() => {
     if (isOpen) {
       socket.emit("getNotifications", {}, (response) => {
         setNotifications(response.notifications);
       });
     }
-  }, [isOpen]);
+  }, [isOpen, setNotifications]);
 
   const handleClose = () => {
     const updatedNotifications = notifications.map((notification) => ({

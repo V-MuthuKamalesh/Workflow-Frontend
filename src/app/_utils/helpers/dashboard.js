@@ -20,13 +20,7 @@ export function getModuleSpecificTexts(module) {
   return texts[module] || texts.default;
 }
 
-export function createBarChartData(
-  labels,
-  total,
-  completed,
-  inProgress,
-  pending
-) {
+export function createBarChartData(labels, total, completed, inProgress, pending) {
   return {
     labels,
     datasets: [
@@ -64,16 +58,8 @@ export function createPieChartData(completed, pending, inProgress) {
     datasets: [
       {
         label: "Task Distribution",
-        data: [
-          completed.reduce((sum, val) => sum + val, 0),
-          pending.reduce((sum, val) => sum + val, 0),
-          inProgress.reduce((sum, val) => sum + val, 0),
-        ],
-        backgroundColor: [
-          "rgba(54, 162, 235, 0.5)",
-          "rgba(255, 99, 132, 0.5)",
-          "rgba(255, 159, 64, 0.5)",
-        ],
+        data: [completed.reduce((sum, val) => sum + val, 0), pending.reduce((sum, val) => sum + val, 0), inProgress.reduce((sum, val) => sum + val, 0)],
+        backgroundColor: ["rgba(54, 162, 235, 0.5)", "rgba(255, 99, 132, 0.5)", "rgba(255, 159, 64, 0.5)"],
       },
     ],
   };
@@ -105,28 +91,13 @@ export function processChartData(stats, key) {
   if (!stats) return null;
   const normalizedStats = Array.isArray(stats) ? stats : [stats];
 
-  const labels = normalizedStats.map(
-    (ws) => ws.workspaceName || "Unnamed Workspace"
-  );
-  const total = normalizedStats.map(
-    (ws) => ws.totalTasks || ws.totalBugs || ws.totalTickets || 0
-  );
-  const completed = normalizedStats.map(
-    (ws) => ws.completedTasks || ws.fixedBugs || ws.completedTickets || 0
-  );
-  const inProgress = normalizedStats.map(
-    (ws) => ws.inProgressTasks || ws.inProgressBugs || ws.inProgressTickets || 0
-  );
-  const pending = normalizedStats.map(
-    (ws) => ws.pendingTasks || ws.pendingBugs || ws.pendingTickets || 0
-  );
+  const labels = normalizedStats.map((ws) => ws.workspaceName || "Unnamed Workspace");
+  const total = normalizedStats.map((ws) => ws.totalTasks || ws.totalBugs || ws.totalTickets || 0);
+  const completed = normalizedStats.map((ws) => ws.completedTasks || ws.fixedBugs || ws.completedTickets || 0);
+  const inProgress = normalizedStats.map((ws) => ws.inProgressTasks || ws.inProgressBugs || ws.inProgressTickets || 0);
+  const pending = normalizedStats.map((ws) => ws.pendingTasks || ws.pendingBugs || ws.pendingTickets || 0);
 
-  if (
-    ![...total, ...completed, ...inProgress, ...pending].some(
-      (count) => count > 0
-    )
-  )
-    return null;
+  if (![...total, ...completed, ...inProgress, ...pending].some((count) => count > 0)) return null;
 
   return {
     key,
@@ -148,40 +119,12 @@ export function mapDataForCharts(response, module) {
   const normalizedStats = Array.isArray(stats) ? stats : [stats];
 
   const labels = normalizedStats.map((workspace) => workspace.workspaceName);
-  const total = normalizedStats.map(
-    (workspace) =>
-      workspace.totalTasks ||
-      workspace.totalLeads ||
-      workspace.totalTickets ||
-      0
-  );
-  const completed = normalizedStats.map(
-    (workspace) =>
-      workspace.completedTasks ||
-      workspace.completedLeads ||
-      workspace.completedTickets ||
-      0
-  );
-  const inProgress = normalizedStats.map(
-    (workspace) =>
-      workspace.inProgressTasks ||
-      workspace.inProgressLeads ||
-      workspace.inProgressTickets ||
-      0
-  );
-  const pending = normalizedStats.map(
-    (workspace) =>
-      workspace.pendingTasks ||
-      workspace.pendingLeads ||
-      workspace.pendingTickets ||
-      0
-  );
+  const total = normalizedStats.map((workspace) => workspace.totalTasks || workspace.totalLeads || workspace.totalTickets || 0);
+  const completed = normalizedStats.map((workspace) => workspace.completedTasks || workspace.completedLeads || workspace.completedTickets || 0);
+  const inProgress = normalizedStats.map((workspace) => workspace.inProgressTasks || workspace.inProgressLeads || workspace.inProgressTickets || 0);
+  const pending = normalizedStats.map((workspace) => workspace.pendingTasks || workspace.pendingLeads || workspace.pendingTickets || 0);
 
-  const hasTasks =
-    total.some((count) => count > 0) ||
-    completed.some((count) => count > 0) ||
-    inProgress.some((count) => count > 0) ||
-    pending.some((count) => count > 0);
+  const hasTasks = total.some((count) => count > 0) || completed.some((count) => count > 0) || inProgress.some((count) => count > 0) || pending.some((count) => count > 0);
 
   return {
     hasTasks,
@@ -220,21 +163,9 @@ export function mapDataForCharts(response, module) {
         datasets: [
           {
             label: "Items Distribution",
-            data: [
-              completed.reduce((sum, val) => sum + val, 0),
-              pending.reduce((sum, val) => sum + val, 0),
-              inProgress.reduce((sum, val) => sum + val, 0),
-            ],
-            backgroundColor: [
-              "rgba(54, 162, 235, 0.5)",
-              "rgba(255, 99, 132, 0.5)",
-              "rgba(255, 159, 64, 0.5)",
-            ],
-            borderColor: [
-              "rgba(54, 162, 235, 1)",
-              "rgba(255, 99, 132, 1)",
-              "rgba(255, 159, 64, 1)",
-            ],
+            data: [completed.reduce((sum, val) => sum + val, 0), pending.reduce((sum, val) => sum + val, 0), inProgress.reduce((sum, val) => sum + val, 0)],
+            backgroundColor: ["rgba(54, 162, 235, 0.5)", "rgba(255, 99, 132, 0.5)", "rgba(255, 159, 64, 0.5)"],
+            borderColor: ["rgba(54, 162, 235, 1)", "rgba(255, 99, 132, 1)", "rgba(255, 159, 64, 1)"],
           },
         ],
       },

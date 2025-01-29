@@ -70,10 +70,7 @@ export const createNewItem = (module, boardType, initialValue = "") => {
     },
   };
 
-  const newItem =
-    typeof newItemTemplate[module] === "function"
-      ? newItemTemplate[module]()
-      : newItemTemplate[module]?.[boardType]?.() || {};
+  const newItem = typeof newItemTemplate[module] === "function" ? newItemTemplate[module]() : newItemTemplate[module]?.[boardType]?.() || {};
 
   return newItem;
 };
@@ -92,9 +89,7 @@ export const handleExportGroup = (group) => {
   const data = group.items.map((item) => {
     return {
       "Item Name": item.itemName,
-      "Assigned To": item.assignedToId
-        .map((assignee) => `${assignee.fullname} <${assignee.email}>`)
-        .join(", "),
+      "Assigned To": item.assignedToId.map((assignee) => `${assignee.fullname} <${assignee.email}>`).join(", "),
       Status: item.status,
       "Due Date": new Date(item.dueDate).toLocaleDateString(),
     };
@@ -114,9 +109,7 @@ export const handleExportBoard = (board) => {
       return {
         "Group Name": group.groupName,
         "Item Name": item.itemName,
-        "Assigned To": item.assignedToId
-          .map((assignee) => `${assignee.fullname} <${assignee.email}>`)
-          .join(", "),
+        "Assigned To": item.assignedToId.map((assignee) => `${assignee.fullname} <${assignee.email}>`).join(", "),
         Status: item.status,
         "Due Date": new Date(item.dueDate).toLocaleDateString(),
       };

@@ -2,36 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { Bar, Pie, Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  LineElement,
-  PointElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement,
-} from "chart.js";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend, ArcElement } from "chart.js";
 import Cookies from "js-cookie";
 import { socket } from "@/app/_utils/webSocket/webSocketConfig";
-import {
-  getModuleSpecificTexts,
-  mapDataForCharts,
-} from "@/app/_utils/helpers/dashboard";
+import { getModuleSpecificTexts, mapDataForCharts } from "@/app/_utils/helpers/dashboard";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  LineElement,
-  PointElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement
-);
+ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend, ArcElement);
 
 export default function Dashboard({ module, userId, workspaceId }) {
   const [chartData, setChartData] = useState(null);
@@ -48,25 +24,21 @@ export default function Dashboard({ module, userId, workspaceId }) {
   useEffect(() => {
     setIsLoading(true);
 
-    socket.emit(
-      "getDashboardDetails",
-      { moduleId: Cookies.get("moduleId"), userId, workspaceId },
-      (response) => {
-        if (!response) {
-          console.error("Error getting workspace dashboard data.");
-          setIsLoading(false);
-          return;
-        }
-
-        const { hasTasks, data } = mapDataForCharts(response, module);
-
-        setHasData(hasTasks);
-        if (hasTasks) {
-          setChartData(data);
-        }
+    socket.emit("getDashboardDetails", { moduleId: Cookies.get("moduleId"), userId, workspaceId }, (response) => {
+      if (!response) {
+        console.error("Error getting workspace dashboard data.");
         setIsLoading(false);
+        return;
       }
-    );
+
+      const { hasTasks, data } = mapDataForCharts(response, module);
+
+      setHasData(hasTasks);
+      if (hasTasks) {
+        setChartData(data);
+      }
+      setIsLoading(false);
+    });
   }, [module, userId, workspaceId]);
 
   const commonOptions = {
@@ -90,51 +62,24 @@ export default function Dashboard({ module, userId, workspaceId }) {
   if (!hasData) {
     return (
       <div className="min-h-20 p-6 pb-10 bg-gray-100">
-        <h1 className="text-3xl font-bold mb-3 text-gray-800">
-          {moduleName} Dashboard
-        </h1>
-        <p className="text-lg text-gray-600 italic">
-          No data available. Charts cannot be displayed.
-        </p>
+        <h1 className="text-3xl font-bold mb-3 text-gray-800">{moduleName} Dashboard</h1>
+        <p className="text-lg text-gray-600 italic">No data available. Charts cannot be displayed.</p>
       </div>
     );
   }
 
   return (
     <div className="min-h-20 p-6 pb-10 bg-gray-100">
-      <h1 className="text-3xl font-bold mb-3 text-gray-800 text-center">
-        {moduleName} Dashboard
-      </h1>
+      <h1 className="text-3xl font-bold mb-3 text-gray-800 text-center">{moduleName} Dashboard</h1>
       <div className="mt-14">
         <div className="flex justify-center mb-10 space-x-4">
-          <button
-            className={`px-6 py-3 text-base font-medium rounded-lg border transition-all duration-200 ${
-              activeTab === "summary"
-                ? "bg-blue-600 text-white border-blue-600 shadow-md"
-                : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100 hover:shadow-sm"
-            }`}
-            onClick={() => setActiveTab("summary")}
-          >
+          <button className={`px-6 py-3 text-base font-medium rounded-lg border transition-all duration-200 ${activeTab === "summary" ? "bg-blue-600 text-white border-blue-600 shadow-md" : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100 hover:shadow-sm"}`} onClick={() => setActiveTab("summary")}>
             {summary}
           </button>
-          <button
-            className={`px-6 py-3 text-base font-medium rounded-lg border transition-all duration-200 ${
-              activeTab === "trends"
-                ? "bg-blue-600 text-white border-blue-600 shadow-md"
-                : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100 hover:shadow-sm"
-            }`}
-            onClick={() => setActiveTab("trends")}
-          >
+          <button className={`px-6 py-3 text-base font-medium rounded-lg border transition-all duration-200 ${activeTab === "trends" ? "bg-blue-600 text-white border-blue-600 shadow-md" : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100 hover:shadow-sm"}`} onClick={() => setActiveTab("trends")}>
             {trends}
           </button>
-          <button
-            className={`px-6 py-3 text-base font-medium rounded-lg border transition-all duration-200 ${
-              activeTab === "distribution"
-                ? "bg-blue-600 text-white border-blue-600 shadow-md"
-                : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100 hover:shadow-sm"
-            }`}
-            onClick={() => setActiveTab("distribution")}
-          >
+          <button className={`px-6 py-3 text-base font-medium rounded-lg border transition-all duration-200 ${activeTab === "distribution" ? "bg-blue-600 text-white border-blue-600 shadow-md" : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100 hover:shadow-sm"}`} onClick={() => setActiveTab("distribution")}>
             {distribution}
           </button>
         </div>

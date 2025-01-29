@@ -1,30 +1,14 @@
 "use client";
 
-import {
-  removeItemFromGroup,
-  updateTaskField,
-} from "@/redux/feautres/boardSlice";
+import { removeItemFromGroup, updateTaskField } from "@/redux/feautres/boardSlice";
 import { useState } from "react";
-import {
-  Avatar,
-  Chip,
-  Tooltip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Button,
-  Autocomplete,
-  TextField,
-} from "@mui/material";
+import { Avatar, Chip, Tooltip, Dialog, DialogActions, DialogContent, DialogTitle, Button, Autocomplete, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { io } from "socket.io-client";
 import { Plus, Trash2 } from "lucide-react";
 import Priority from "../UI/Priority";
 import RequestType from "../UI/RequestType";
 import Status from "../UI/Status";
 import { socket } from "@/app/_utils/webSocket/webSocketConfig";
-import { stringAvatar } from "@/app/_utils/helpers/helper";
 
 export default function TaskRow({ module, item, fields, isAdmin }) {
   const [editingField, setEditingField] = useState(null);
@@ -147,48 +131,18 @@ export default function TaskRow({ module, item, fields, isAdmin }) {
 
   const getFieldDisplay = (field) => {
     if (field === "status") {
-      return (
-        <Status
-          module={module}
-          type={boardType}
-          currentStatus={item[field]}
-          onStatusChange={(newStatus) => handleEditTask(field, newStatus)}
-        />
-      );
+      return <Status module={module} type={boardType} currentStatus={item[field]} onStatusChange={(newStatus) => handleEditTask(field, newStatus)} />;
     }
 
     if (field === "priority") {
-      return (
-        <Priority
-          module={module}
-          type={boardType}
-          currentPriority={item[field]}
-          onPriorityChange={(newPriority) => handleEditTask(field, newPriority)}
-        />
-      );
+      return <Priority module={module} type={boardType} currentPriority={item[field]} onPriorityChange={(newPriority) => handleEditTask(field, newPriority)} />;
     }
 
     if (field === "requestType") {
-      return (
-        <RequestType
-          module={module}
-          type={boardType}
-          currentRequestType={item[field]}
-          onRequestTypeChange={(newRequestType) =>
-            handleEditTask(field, newRequestType)
-          }
-        />
-      );
+      return <RequestType module={module} type={boardType} currentRequestType={item[field]} onRequestTypeChange={(newRequestType) => handleEditTask(field, newRequestType)} />;
     }
 
-    if (
-      field === "assignedToId" ||
-      field === "person" ||
-      field === "reporter" ||
-      field === "developer" ||
-      field === "employee" ||
-      field === "agent"
-    ) {
+    if (field === "assignedToId" || field === "person" || field === "reporter" || field === "developer" || field === "employee" || field === "agent") {
       return (
         <div className="flex flex-wrap gap-1">
           {item[field]?.map((assignee, index) => (
@@ -203,69 +157,22 @@ export default function TaskRow({ module, item, fields, isAdmin }) {
               }
               arrow
             >
-              <Chip
-                avatar={
-                  <Avatar>{assignee.email.charAt(0).toUpperCase()}</Avatar>
-                }
-                onDelete={
-                  isAdmin
-                    ? () => handleRemoveAssignee(assignee.userId, field)
-                    : undefined
-                }
-                className={`bg-gray-100 shadow-sm ${
-                  isAdmin
-                    ? "hover:bg-gray-200 cursor-pointer"
-                    : "cursor-not-allowed"
-                }`}
-              />
+              <Chip avatar={<Avatar>{assignee.email.charAt(0).toUpperCase()}</Avatar>} onDelete={isAdmin ? () => handleRemoveAssignee(assignee.userId, field) : undefined} className={`bg-gray-100 shadow-sm ${isAdmin ? "hover:bg-gray-200 cursor-pointer" : "cursor-not-allowed"}`} />
             </Tooltip>
           ))}
 
-          {isAdmin && (
-            <Chip
-              avatar={<Plus />}
-              label="Add"
-              className="cursor-pointer bg-blue-100 hover:bg-blue-200"
-              onClick={() =>
-                setOpenAddAssignee({ open: true, assigneeType: field })
-              }
-            />
-          )}
+          {isAdmin && <Chip avatar={<Plus />} label="Add" className="cursor-pointer bg-blue-100 hover:bg-blue-200" onClick={() => setOpenAddAssignee({ open: true, assigneeType: field })} />}
         </div>
       );
     }
 
     if (editingField === field) {
-      return (
-        <input
-          type={
-            field === "dueDate" ||
-            field === "startDate" ||
-            field === "endDate" ||
-            field === "lastInteraction"
-              ? "date"
-              : "text"
-          }
-          value={field === "dueDate" ? item[field]?.split("T")[0] : item[field]}
-          className="w-full bg-transparent border border-gray-300 rounded-md focus:outline-none"
-          onChange={(event) => handleEditTask(field, event.target.value)}
-          onKeyDown={(event) => handleKeyDown(event, field)}
-          onBlur={handleBlur}
-          autoFocus
-        />
-      );
+      return <input type={field === "dueDate" || field === "startDate" || field === "endDate" || field === "lastInteraction" ? "date" : "text"} value={field === "dueDate" ? item[field]?.split("T")[0] : item[field]} className="w-full bg-transparent border border-gray-300 rounded-md focus:outline-none" onChange={(event) => handleEditTask(field, event.target.value)} onKeyDown={(event) => handleKeyDown(event, field)} onBlur={handleBlur} autoFocus />;
     }
 
     return (
-      <span
-        onClick={() => setEditingField(field)}
-        className="cursor-pointer border border-transparent rounded-md hover:border-gray-400 px-1 py-0.5 transition"
-        title="Click to edit"
-      >
-        {field === "dueDate" ||
-        field === "startDate" ||
-        field === "endDate" ||
-        field === "lastInteraction"
+      <span onClick={() => setEditingField(field)} className="cursor-pointer border border-transparent rounded-md hover:border-gray-400 px-1 py-0.5 transition" title="Click to edit">
+        {field === "dueDate" || field === "startDate" || field === "endDate" || field === "lastInteraction"
           ? new Date(item[field]).toLocaleDateString("en-US", {
               day: "2-digit",
               month: "short",
@@ -285,56 +192,24 @@ export default function TaskRow({ module, item, fields, isAdmin }) {
           </td>
         ))}
         <td className="border border-gray-300 px-1 py-1 w-10">
-          <Tooltip
-            title={!isAdmin ? "You are not an admin" : "Delete Task"}
-            arrow
-          >
+          <Tooltip title={!isAdmin ? "You are not an admin" : "Delete Task"} arrow>
             <span>
-              <Trash2
-                className={`${
-                  isAdmin
-                    ? "text-red-500 hover:text-red-700 cursor-pointer"
-                    : "text-gray-400 cursor-not-allowed"
-                }`}
-                onClick={isAdmin ? handleDeleteTask : undefined}
-              />
+              <Trash2 className={`${isAdmin ? "text-red-500 hover:text-red-700 cursor-pointer" : "text-gray-400 cursor-not-allowed"}`} onClick={isAdmin ? handleDeleteTask : undefined} />
             </span>
           </Tooltip>
         </td>
       </tr>
 
-      <Dialog
-        open={openAddAssignee.open}
-        onClose={() => setOpenAddAssignee({ open: false, assigneeType: null })}
-        maxWidth="sm"
-        fullWidth
-      >
+      <Dialog open={openAddAssignee.open} onClose={() => setOpenAddAssignee({ open: false, assigneeType: null })} maxWidth="sm" fullWidth>
         <DialogTitle>Add Assignee</DialogTitle>
         <DialogContent>
-          <Autocomplete
-            options={members}
-            getOptionLabel={(option) => `${option.fullname} (${option.email})`}
-            renderInput={(params) => (
-              <TextField {...params} label="Select Member" />
-            )}
-            value={selectedMember}
-            onChange={(event, newValue) => setSelectedMember(newValue)}
-          />
+          <Autocomplete options={members} getOptionLabel={(option) => `${option.fullname} (${option.email})`} renderInput={(params) => <TextField {...params} label="Select Member" />} value={selectedMember} onChange={(event, newValue) => setSelectedMember(newValue)} />
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={() =>
-              setOpenAddAssignee({ open: false, assigneeType: null })
-            }
-            color="error"
-          >
+          <Button onClick={() => setOpenAddAssignee({ open: false, assigneeType: null })} color="error">
             Cancel
           </Button>
-          <Button
-            onClick={handleAddAssignee}
-            color="primary"
-            disabled={!selectedMember}
-          >
+          <Button onClick={handleAddAssignee} color="primary" disabled={!selectedMember}>
             Add
           </Button>
         </DialogActions>

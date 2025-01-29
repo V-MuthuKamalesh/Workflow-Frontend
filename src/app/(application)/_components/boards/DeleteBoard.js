@@ -25,17 +25,7 @@ export default function DeleteBoard({ workspaceId, boardId }) {
   };
 
   return (
-    <div
-      onClick={handleDelete}
-      disabled={!isAdmin}
-      aria-label="Delete board"
-      title={isAdmin ? "Delete Board" : "Admin access required"}
-      className={`text-gray-500 z-50 ${
-        isAdmin
-          ? "hover:text-red-500 transition duration-100 cursor-pointer"
-          : "cursor-not-allowed"
-      }`}
-    >
+    <div onClick={handleDelete} disabled={!isAdmin} aria-label="Delete board" title={isAdmin ? "Delete Board" : "Admin access required"} className={`text-gray-500 z-50 ${isAdmin ? "hover:text-red-500 transition duration-100 cursor-pointer" : "cursor-not-allowed"}`}>
       <Trash2 />
     </div>
   );
