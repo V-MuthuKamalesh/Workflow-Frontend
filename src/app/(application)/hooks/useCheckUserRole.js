@@ -1,41 +1,28 @@
 "use client";
 
+import { useEffect, useState, useCallback } from "react";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
 
 export default function useCheckUserRole(userId, workspaceId) {
   const [isAdmin, setIsAdmin] = useState(false);
 
-  useEffect(() => {
-    const checkUserRole = async () => {
-      if (userId && workspaceId) {
-        try {
-          const response = await workflowBackend.post(
-            "/users/checkRole",
-            {
-              workspaceId,
-              userId,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${Cookies.get("authToken")}`,
-              },
-            }
-          );
+  const checkUserRole = useCallback(async () => {
+    if (!userId || !workspaceId) return setIsAdmin(false);
 
-          setIsAdmin(response.data.role === "admin");
-        } catch (error) {
-          console.error("Error checking user role:", error);
-          setIsAdmin(false);
-        }
-      } else {
-        setIsAdmin(false);
-      }
-    };
+    try {
+      const { data } = await workflowBackend.post("/users/checkRole", { workspaceId, userId }, { headers: { Authorization: `Bearer ${Cookies.get("authToken")}` } });
 
-    checkUserRole();
+      setIsAdmin(data.role === "admin");
+    } catch (error) {
+      console.error("Error checking user role:", error);
+      setIsAdmin(false);
+    }
   }, [userId, workspaceId]);
+
+  useEffect(() => {
+    checkUserRole();
+  }, [checkUserRole]);
 
   return { isAdmin };
 }
