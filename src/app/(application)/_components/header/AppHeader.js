@@ -22,8 +22,12 @@ export default function AppHeader({ module }) {
   const fetchUserDetails = useCallback(async () => {
     try {
       const response = await workflowBackend.get("/users/getuserdetails", {
-        params: { userId: Cookies.get("userId") },
-        headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
+        params: {
+          userId: Cookies.get("userId"),
+        },
+        headers: {
+          Authorization: `Bearer ${Cookies.get("authToken")}`,
+        },
       });
       setUserDetails(response.data);
     } catch (error) {
@@ -47,7 +51,7 @@ export default function AppHeader({ module }) {
     });
 
     return () => {
-      socket.off("newNotification", handleNewNotification);
+      socket.off("newNotification");
     };
   }, [userDetails]);
 

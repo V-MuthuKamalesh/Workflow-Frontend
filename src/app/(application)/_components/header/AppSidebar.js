@@ -1,31 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { ChevronDown, Star } from "lucide-react";
-import BarChartIcon from "@mui/icons-material/BarChart";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar";
+import { useEffect } from "react";
+import { ChevronDown, Star, BarChart } from "lucide-react";
+import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import Link from "next/link";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import CreateWorkspaceButton from "../workspaces/CreateWorkspaceButton";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  clearWorkspaceData,
-  fetchBoardsByWorkspaceId,
-} from "@/redux/feautres/workspaceSlice";
+import { clearWorkspaceData, fetchBoardsByWorkspaceId } from "@/redux/feautres/workspaceSlice";
 import { usePathname } from "next/navigation";
 import { setWorkspaces } from "@/redux/feautres/userDetailsSlice";
 import { moduleColors } from "@/app/_utils/constants/colors";
@@ -34,16 +18,14 @@ import { socket } from "@/app/_utils/webSocket/webSocketConfig";
 export default function AppSidebar({ module }) {
   const dispatch = useDispatch();
   const { workspaces } = useSelector((state) => state.userDetails);
-  const { workspaceId, workspaceName, loading, error } = useSelector(
-    (state) => state.workspace
-  );
+  const { workspaceId, workspaceName, loading, error } = useSelector((state) => state.workspace);
   const pathName = usePathname();
 
-  const items = [
+  const navLinks = [
     {
       title: "Dashboard",
       url: `/${module}/view/dashboard`,
-      icon: BarChartIcon,
+      icon: BarChart,
     },
     {
       title: "Favorites",
@@ -60,18 +42,13 @@ export default function AppSidebar({ module }) {
   }, [pathName, dispatch]);
 
   useEffect(() => {
-    socket.emit(
-      "getWorkspaces",
-      { moduleId: Cookies.get("moduleId"), token: Cookies.get("authToken") },
-      (response) => {
-        if (!response) {
-          setFetchError("Error getting workspaces.");
-          return;
-        }
-
-        dispatch(setWorkspaces(response));
+    socket.emit("getWorkspaces", { moduleId: Cookies.get("moduleId"), token: Cookies.get("authToken") }, (response) => {
+      if (!response) {
+        setFetchError("Error getting workspaces.");
+        return;
       }
-    );
+      dispatch(setWorkspaces(response));
+    });
   }, [dispatch]);
 
   const handleWorkspaceSelect = (workspaceId) => {
@@ -85,17 +62,12 @@ export default function AppSidebar({ module }) {
           <div className="mt-16"></div>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
+              {navLinks.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <Link
-                      href={item.url}
-                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200 transition duration-200"
-                    >
+                    <Link href={item.url} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200 transition duration-200">
                       <item.icon className="text-gray-600" />
-                      <span className="font-medium text-gray-800">
-                        {item.title}
-                      </span>
+                      <span className="font-medium text-gray-800">{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -111,27 +83,12 @@ export default function AppSidebar({ module }) {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-full mt-2 max-h-60 overflow-y-auto bg-white rounded-lg shadow-md">
                     {error ? (
-                      <div className="text-red-500 text-center p-2">
-                        {error}
-                      </div>
+                      <div className="text-red-500 text-center p-2">{error}</div>
                     ) : workspaces.length === 0 ? (
-                      <div className="text-center text-gray-600 p-4">
-                        No workspaces available
-                      </div>
+                      <div className="text-center text-gray-600 p-4">No workspaces available</div>
                     ) : (
                       workspaces.map((workspace) => (
-                        <Link
-                          key={workspace.workspaceId}
-                          href={`/${module}/workspace/${workspace.workspaceId}`}
-                          onClick={() =>
-                            handleWorkspaceSelect(workspace.workspaceId)
-                          }
-                          className={`block border border-gray-300 rounded-md p-3 mb-2 hover:bg-gray-200 transition ${
-                            workspaceId === workspace.workspaceId
-                              ? "bg-gray-300"
-                              : ""
-                          }`}
-                        >
+                        <Link key={workspace.workspaceId} href={`/${module}/workspace/${workspace.workspaceId}`} onClick={() => handleWorkspaceSelect(workspace.workspaceId)} className={`block border border-gray-300 rounded-md p-3 mb-2 hover:bg-gray-200 transition ${workspaceId === workspace.workspaceId ? "bg-gray-300" : ""}`}>
                           {workspace.workspaceName}
                         </Link>
                       ))
@@ -142,14 +99,8 @@ export default function AppSidebar({ module }) {
               {workspaceId && (
                 <SidebarMenuItem>
                   <div className="p-4 bg-gray-200 rounded-lg flex items-center justify-between">
-                    <span className="font-medium text-gray-700">
-                      {workspaceName}
-                    </span>
-                    {loading && (
-                      <span className="text-sm italic text-gray-500">
-                        Loading...
-                      </span>
-                    )}
+                    <span className="font-medium text-gray-700">{workspaceName}</span>
+                    {loading && <span className="text-sm italic text-gray-500">Loading...</span>}
                   </div>
                 </SidebarMenuItem>
               )}
