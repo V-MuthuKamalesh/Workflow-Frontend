@@ -1,24 +1,17 @@
 import { socket } from "@/app/_utils/webSocket/webSocketConfig";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-export const fetchBoardsByWorkspaceId = createAsyncThunk(
-  "workspace/fetchBoardsByWorkspaceId",
-  async (workspaceId, { rejectWithValue }) => {
-    return new Promise((resolve) => {
-      socket.emit(
-        "getBoardsByWorkspaceById",
-        { id: workspaceId },
-        (response) => {
-          if (!response) {
-            return rejectWithValue("Error fetching boards by workspace Id.");
-          }
-          console.log(response);
-          resolve(response);
-        }
-      );
+export const fetchBoardsByWorkspaceId = createAsyncThunk("workspace/fetchBoardsByWorkspaceId", async (workspaceId, { rejectWithValue }) => {
+  return new Promise((resolve) => {
+    socket.emit("getBoardsByWorkspaceById", { id: workspaceId }, (response) => {
+      if (!response) {
+        return rejectWithValue("Error fetching boards by workspace Id.");
+      }
+      console.log(response);
+      resolve(response);
     });
-  }
-);
+  });
+});
 
 export const workspaceSlice = createSlice({
   name: "workspace",
@@ -50,13 +43,12 @@ export const workspaceSlice = createSlice({
       state.boards.push(action.payload);
     },
     removeBoard: (state, action) => {
-      state.boards = state.boards.filter(
-        (board) => board.boardId !== action.payload
-      );
+      state.boards = state.boards.filter((board) => board.boardId !== action.payload);
     },
     updateWorkspaceData: (state, action) => {
       const { field, value } = action.payload;
       state[field] = value;
+      console.log("Workspace slice: ", state.workspaceName);
     },
     setMembers: (state, action) => {
       state.members = action.payload;
@@ -83,13 +75,6 @@ export const workspaceSlice = createSlice({
   },
 });
 
-export const {
-  setWorkspaceData,
-  clearWorkspaceData,
-  addBoard,
-  removeBoard,
-  updateWorkspaceData,
-  setMembers,
-} = workspaceSlice.actions;
+export const { setWorkspaceData, clearWorkspaceData, addBoard, removeBoard, updateWorkspaceData, setMembers } = workspaceSlice.actions;
 
 export default workspaceSlice.reducer;

@@ -12,11 +12,9 @@ import useCheckUserRole from "../../hooks/useCheckUserRole";
 import Cookies from "js-cookie";
 
 export default function WorkspaceDisplay({ module, workspaceId }) {
-  const { workspaceName, members, loading, error } = useSelector(
-    (state) => state.workspace
-  );
-  const { isAdmin } = useCheckUserRole(Cookies.get("userId"), workspaceId);
   const dispatch = useDispatch();
+  const { workspaceName, members, loading, error } = useSelector((state) => state.workspace);
+  const { isAdmin } = useCheckUserRole(Cookies.get("userId"), workspaceId);
 
   useEffect(() => {
     dispatch(fetchBoardsByWorkspaceId(workspaceId));
@@ -41,23 +39,10 @@ export default function WorkspaceDisplay({ module, workspaceId }) {
 
   return (
     <>
-      <WorkspaceHeader
-        module={module}
-        isAdmin={isAdmin}
-        workspaceId={workspaceId}
-        workspaceName={workspaceName}
-        members={members}
-      />
-
+      <WorkspaceHeader module={module} workspaceId={workspaceId} workspaceName={workspaceName} members={members} />
       <div className="container mx-auto px-4 py-8 space-y-8">
         <section className="bg-white rounded-lg shadow-lg p-6 space-y-10">
-          <WorkspaceMembers
-            isAdmin={isAdmin}
-            module={module}
-            workspaceId={workspaceId}
-            members={members}
-          />
-
+          <WorkspaceMembers module={module} workspaceId={workspaceId} members={members} />
           <div className="space-y-8">
             {isAdmin && (
               <div>
@@ -65,7 +50,6 @@ export default function WorkspaceDisplay({ module, workspaceId }) {
                 <CreateBoard module={module} workspaceId={workspaceId} />
               </div>
             )}
-
             <div>
               <h1 className="text-2xl font-semibold">Boards</h1>
               <BoardsDisplay module={module} />

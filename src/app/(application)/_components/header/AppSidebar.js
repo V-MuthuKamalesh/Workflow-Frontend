@@ -51,6 +51,12 @@ export default function AppSidebar({ module }) {
     });
   }, [dispatch]);
 
+  useEffect(() => {
+    socket.on("workspacesUpdated", (data) => {
+      dispatch(setWorkspaces(data));
+    });
+  }, [dispatch]);
+
   const handleWorkspaceSelect = (workspaceId) => {
     dispatch(fetchBoardsByWorkspaceId(workspaceId));
   };
