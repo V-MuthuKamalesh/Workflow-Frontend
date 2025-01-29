@@ -5,16 +5,14 @@ import Cookies from "js-cookie";
 
 export default function JoinUser({ token }) {
   const handleJoinUser = async () => {
+    if (!token) return;
+
     try {
-      const response = await workflowBackend.post(
+      await workflowBackend.post(
         "/users/addMember",
+        { token },
         {
-          token,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("authToken")}`,
-          },
+          headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
         }
       );
 
@@ -25,10 +23,7 @@ export default function JoinUser({ token }) {
   };
 
   return (
-    <button
-      className="bg-green-500 hover:bg-green-600 text-white text-xl px-4 py-2 mt-6 rounded-md"
-      onClick={handleJoinUser}
-    >
+    <button className="bg-green-500 hover:bg-green-600 text-white text-xl px-4 py-2 mt-6 rounded-md" onClick={handleJoinUser} disabled={!token}>
       Join
     </button>
   );
