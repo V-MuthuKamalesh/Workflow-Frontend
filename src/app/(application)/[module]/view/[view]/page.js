@@ -5,29 +5,34 @@ import DevServiceDashboard from "../../../_components/dashboard/DevServiceDashbo
 import { cookies } from "next/headers";
 
 export default async function ViewPage({ params, searchParams }) {
-  const { module, view } = await params;
-  let { userId, workspaceId } = await searchParams;
-  const cookieStore = await cookies();
+  const { module, view } = params;
+  let { userId, workspaceId } = searchParams;
 
-  userId = userId || cookieStore.get("userId").value;
+  const cookieStore = cookies();
+  userId = userId || cookieStore.get("userId")?.value;
+
+  const isDashboardView = view === "dashboard";
+  const isFavoritesView = view === "favorites";
+  const isWorkManagementOrCRM = module === "work-management" || module === "crm";
+
+  const getDashboardComponent = () => {
+    if (isWorkManagementOrCRM) {
+      return <Dashboard module={module} userId={userId} workspaceId={workspaceId} />;
+    }
+
+    return <DevServiceDashboard module={module} userId={userId} workspaceId={workspaceId} />;
+  };
 
   return (
     <>
       <Welcome view={view} module={module} />
-      {view === "dashboard" ? (
-        <div className="p-3 space-y-8">
-          {module === "work-management" || module === "crm" ? (
-            <Dashboard module={module} userId={userId} workspaceId={workspaceId} />
-          ) : (
-            <DevServiceDashboard module={module} userId={userId} workspaceId={workspaceId} />
-          )}
-        </div>
-      ) : view === "favorites" ? (
+
+      {isDashboardView && <div className="p-3 space-y-8">{getDashboardComponent()}</div>}
+
+      {isFavoritesView && (
         <div className="mt-8">
           <FavoriteWorkspacesAndBoards module={module} />
         </div>
-      ) : (
-        <></>
       )}
     </>
   );
