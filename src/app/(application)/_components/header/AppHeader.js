@@ -18,6 +18,7 @@ export default function AppHeader({ module }) {
   const [userDetails, setUserDetails] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [loadingProfile, setLoadingProfile] = useState(true);
 
   const fetchUserDetails = useCallback(async () => {
     try {
@@ -32,6 +33,8 @@ export default function AppHeader({ module }) {
       setUserDetails(response.data);
     } catch (error) {
       console.error("Error fetching user details:", error);
+    } finally {
+      setLoadingProfile(false);
     }
   }, []);
 
@@ -84,8 +87,14 @@ export default function AppHeader({ module }) {
             <RefreshCcw className="text-gray-600" size={24} />
           </div>
 
-          <div className="cursor-pointer rounded-full bg-gray-200" onClick={() => setIsProfileOpen(true)}>
-            {userDetails?.picture ? <Image src={userDetails.picture.startsWith("http") ? userDetails.picture : `data:image/png;base64,${userDetails.picture}`} alt="Profile" height={100} width={100} className="w-10 h-10 rounded-full" /> : <div className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-500 text-white text-lg">{userDetails?.fullname?.charAt(0).toUpperCase()}</div>}
+          <div className="cursor-pointer rounded-full bg-blue-500" onClick={() => setIsProfileOpen(true)}>
+            {loadingProfile ? (
+              <div className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-200 animate-pulse"></div>
+            ) : userDetails?.picture ? (
+              <Image src={userDetails.picture.startsWith("http") ? userDetails.picture : `data:image/png;base64,${userDetails.picture}`} alt="Profile" height={100} width={100} className="w-10 h-10 rounded-full" />
+            ) : (
+              <div className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-500 text-white text-lg">{userDetails?.fullname?.charAt(0).toUpperCase()}</div>
+            )}
           </div>
         </div>
       </nav>
