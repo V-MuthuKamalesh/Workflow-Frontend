@@ -1,6 +1,5 @@
 "use client";
 
-import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import CreateWorkspace from "./CreateWorkspace";
@@ -12,14 +11,10 @@ export default function CreateWorkspaceButton() {
 
   return (
     <>
-      <SidebarMenuItem>
-        <SidebarMenuButton asChild>
-          <button className="hover:bg-gray-300 flex items-center justify-between w-full" onClick={toggleModal}>
-            <span>Add Workspace</span>
-            <Plus className="ml-auto" />
-          </button>
-        </SidebarMenuButton>
-      </SidebarMenuItem>
+      <button className="flex items-center justify-between w-full p-3 rounded-lg bg-gray-200 text-gray-800 hover:bg-gray-300 transition duration-200" onClick={toggleModal}>
+        <span>Add Workspace</span>
+        <Plus className="ml-auto" />
+      </button>
 
       {isModalOpen && <CreateWorkspace onClose={() => setIsModalOpen(false)} />}
     </>

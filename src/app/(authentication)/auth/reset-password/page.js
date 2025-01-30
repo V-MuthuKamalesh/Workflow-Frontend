@@ -9,8 +9,8 @@ export function generateMetadata() {
   };
 }
 
-export default function ResetPasswordPage({ searchParams }) {
-  const { token } = searchParams;
+export default async function ResetPasswordPage({ searchParams }) {
+  const { token } = await searchParams;
 
   return (
     <div className="flex min-h-screen">

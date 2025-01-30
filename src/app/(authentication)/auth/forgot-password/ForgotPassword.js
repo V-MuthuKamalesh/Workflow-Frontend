@@ -1,3 +1,5 @@
+"use client";
+
 import Button from "@/app/(application)/_components/UI/Button";
 import Input from "@/app/(application)/_components/UI/Input";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
@@ -56,4 +58,3 @@ export default function ForgotPassword() {
     </form>
   );
 }
-

@@ -62,32 +62,48 @@ export default function ProfileEditPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100 p-6">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Edit Profile</h1>
-      <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-lg space-y-6">
-        <div className="flex flex-col items-center">
-          {loading ? (
-            <div className="w-24 h-24 rounded-full bg-gray-300 animate-pulse" />
-          ) : (
-            <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer overflow-hidden" onClick={handleAvatarClick}>
-              {userDetails.picture ? <Image src={`data:image/png;base64,${userDetails.picture}`} alt="Profile" height={100} width={100} className="w-full h-full object-cover" /> : <span className="text-gray-600 text-xl">{userDetails.fullname.charAt(0).toUpperCase()}</span>}
+    <div className="flex min-h-screen">
+      <div className="w-full md:w-[60%] flex flex-col justify-center items-center px-6 md:px-12 bg-white">
+        <div className="bg-black p-8 rounded-lg shadow-lg w-full max-w-xl space-y-6 border border-gray-200">
+          <h1 className="text-3xl font-bold text-center text-purple-500">Edit Profile</h1>
+          <p className="text-center text-gray-300">Update your personal details and profile picture.</p>
+
+          <div className="flex flex-col items-center space-y-4">
+            {loading ? (
+              <div className="w-24 h-24 rounded-full bg-gray-300 animate-pulse" />
+            ) : (
+              <div className="relative w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer overflow-hidden border-2 border-gray-300" onClick={handleAvatarClick}>
+                {userDetails.picture ? <Image src={`data:image/png;base64,${userDetails.picture}`} alt="Profile" height={100} width={100} className="w-full h-full object-cover" /> : <span className="text-gray-600 text-xl font-semibold">{userDetails.fullname.charAt(0).toUpperCase()}</span>}
+                <div className="absolute bottom-0 w-full bg-black bg-opacity-50 text-white text-xs text-center py-1">Change</div>
+              </div>
+            )}
+            <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <label className="text-gray-300 font-semibold">Full Name</label>
+              <input type="text" name="fullname" value={userDetails.fullname} onChange={handleInputChange} className="w-full p-3 outline-none rounded-md " placeholder="Enter your full name" />
             </div>
-          )}
-          <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
+            <div>
+              <label className="text-gray-300 font-semibold">Email</label>
+              <input title="Not editable" type="email" name="email" value={userDetails.email} disabled className="w-full p-3 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed" />
+            </div>
+          </div>
+
+          <div className="flex justify-between items-center mt-6">
+            <button className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-md text-white transition" onClick={() => router.back()}>
+              Cancel
+            </button>
+            <button className="px-5 py-2 bg-purple-600 text-white font-semibold rounded-md hover:bg-purple-700 transition disabled:bg-gray-400" onClick={handleSaveChanges} disabled={saving}>
+              {saving ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
         </div>
+      </div>
 
-        {loading ? <div className="w-full h-10 bg-gray-300 rounded-md animate-pulse" /> : <input type="text" name="fullname" value={userDetails.fullname} onChange={handleInputChange} className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300" placeholder="Full Name" />}
-
-        {loading ? <div className="w-full h-10 bg-gray-300 rounded-md animate-pulse" /> : <input type="email" name="email" value={userDetails.email} disabled className="w-full p-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed" />}
-
-        <div className="flex justify-end space-x-4">
-          <button className="px-4 py-2 border border-gray-400 rounded-md text-gray-700 hover:bg-gray-200" onClick={() => router.back()}>
-            Cancel
-          </button>
-          <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400" onClick={handleSaveChanges} disabled={saving}>
-            {saving ? "Saving..." : "Save Changes"}
-          </button>
-        </div>
+      <div className="hidden md:block w-[40%] relative">
+        <Image src="/editProfile.avif" alt="Welcome" fill className="object-cover" />
       </div>
     </div>
   );

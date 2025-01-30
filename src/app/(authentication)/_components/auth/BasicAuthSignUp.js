@@ -21,7 +21,6 @@ export default function BasicAuthSignUp() {
       setCookies("signupEmail", email);
       router.push("/users/account-creation");
     } catch (error) {
-      console.log(error);
       if (error.response?.status === 409) {
         setErrorMessage("Email already exists. Please try another one.");
       } else {
@@ -36,27 +35,18 @@ export default function BasicAuthSignUp() {
   }
 
   return (
-    <form
-      onSubmit={handleEmailSubmit}
-      className="flex flex-col items-center justify-center space-y-4 w-full"
-    >
-      <div className="w-full">
-        <Input
-          className="w-full outline-none border border-gray-300 p-2 rounded-sm"
-          type="email"
-          placeholder="name@company.com"
-          name="email"
-          value={email}
-          onChange={handleEmailChange}
-          autoComplete="off"
-          required
-        />
-        {errorMessage !== "" && (
-          <span className="text-red-600 text-xs pl-1">{errorMessage}</span>
-        )}
-      </div>
+    <div className="flex flex-col items-center justify-center w-full space-y-4">
+      {errorMessage && (
+        <div className="w-full p-3 bg-red-100 border border-red-400 text-red-700 rounded-md">
+          <span className="block font-medium">Error</span>
+          <p className="text-sm mt-1">{errorMessage}</p>
+        </div>
+      )}
 
-      <Button buttonText="Continue" />
-    </form>
+      <form onSubmit={handleEmailSubmit} className="w-full flex flex-col items-center space-y-4">
+        <Input className="w-full outline-none border border-gray-300 p-2 rounded-sm" type="email" placeholder="name@company.com" name="email" value={email} onChange={handleEmailChange} autoComplete="off" required />
+        <Button buttonText="Continue" />
+      </form>
+    </div>
   );
 }

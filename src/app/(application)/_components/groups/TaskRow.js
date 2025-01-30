@@ -9,6 +9,7 @@ import Priority from "../UI/Priority";
 import RequestType from "../UI/RequestType";
 import Status from "../UI/Status";
 import { socket } from "@/app/_utils/webSocket/webSocketConfig";
+import { CustomTooltip } from "../UI/CustomTooltip";
 
 export default function TaskRow({ module, item, fields, isAdmin }) {
   const [editingField, setEditingField] = useState(null);
@@ -34,99 +35,45 @@ export default function TaskRow({ module, item, fields, isAdmin }) {
 
   const handleEditTask = (field, value) => {
     let updatedItem = { ...item, [field]: value };
-
-    socket.emit(
-      "updateItemInGroup",
-      {
-        boardId,
-        type: boardType,
-        itemId: item.itemId,
-        updateData: updatedItem,
-      },
-      (response) => {
-        if (!response) {
-          console.error("Error updating task.");
-        }
+    socket.emit("updateItemInGroup", { boardId, type: boardType, itemId: item.itemId, updateData: updatedItem }, (response) => {
+      if (!response) {
+        console.error("Error updating task.");
+        return;
       }
-    );
-
+    });
     dispatch(updateTaskField({ taskId: item.itemId, field, value }));
   };
 
   const handleDeleteTask = () => {
-    socket.emit(
-      "removeItemFromGroup",
-      {
-        itemId: item.itemId,
-        type: boardType,
-      },
-      (response) => {
-        if (!response) {
-          console.error("Error deleting task.");
-          return;
-        }
-
-        console.log(response);
-
-        dispatch(
-          removeItemFromGroup({
-            groupId: response.groupId,
-            itemId: item.itemId,
-          })
-        );
+    socket.emit("removeItemFromGroup", { itemId: item.itemId, type: boardType }, (response) => {
+      if (!response) {
+        console.error("Error deleting task.");
+        return;
       }
-    );
+      dispatch(removeItemFromGroup({ groupId: response.groupId, itemId: item.itemId }));
+    });
   };
 
   const handleAddAssignee = () => {
-    socket.emit(
-      "addMembersToItem",
-      {
-        itemId: item.itemId,
-        userId: selectedMember.userId,
-        type: openAddAssignee.assigneeType,
-      },
-      (response) => {
-        if (!response) {
-          console.error("Error adding assignee to task.");
-        }
-
-        dispatch(
-          updateTaskField({
-            taskId: item.itemId,
-            field: openAddAssignee.assigneeType,
-            value: response.assignedToId,
-          })
-        );
+    socket.emit("addMembersToItem", { itemId: item.itemId, userId: selectedMember.userId, type: openAddAssignee.assigneeType }, (response) => {
+      if (!response) {
+        console.error("Error adding assignee to task.");
+        return;
       }
-    );
-
+      dispatch(updateTaskField({ taskId: item.itemId, field: openAddAssignee.assigneeType, value: response.assignedToId }));
+    });
     setSelectedMember(null);
     setOpenAddAssignee({ open: false, assigneeType: null });
   };
 
   const handleRemoveAssignee = (assigneeId, assigneeType) => {
-    socket.emit(
-      "removeMembersFromItem",
-      {
-        itemId: item.itemId,
-        userId: assigneeId,
-        type: assigneeType,
-      },
-      (response) => {
-        if (!response) {
-          console.error("Error removing assignee from task.");
-        }
-
-        dispatch(
-          updateTaskField({
-            taskId: item.itemId,
-            field: assigneeType,
-            value: response.assignedToId,
-          })
-        );
+    socket.emit("removeMembersFromItem", { itemId: item.itemId, userId: assigneeId, type: assigneeType }, (response) => {
+      if (!response) {
+        console.error("Error removing assignee from task.");
+        return;
       }
-    );
+      dispatch(updateTaskField({ taskId: item.itemId, field: assigneeType, value: response.assignedToId }));
+    });
   };
 
   const getFieldDisplay = (field) => {
@@ -192,11 +139,11 @@ export default function TaskRow({ module, item, fields, isAdmin }) {
           </td>
         ))}
         <td className="border border-gray-300 px-1 py-1 w-10">
-          <Tooltip title={!isAdmin ? "You are not an admin" : "Delete Task"} arrow>
+          <CustomTooltip text={!isAdmin ? "You are not an admin" : "Delete Task"}>
             <span>
               <Trash2 className={`${isAdmin ? "text-red-500 hover:text-red-700 cursor-pointer" : "text-gray-400 cursor-not-allowed"}`} onClick={isAdmin ? handleDeleteTask : undefined} />
             </span>
-          </Tooltip>
+          </CustomTooltip>
         </td>
       </tr>
 

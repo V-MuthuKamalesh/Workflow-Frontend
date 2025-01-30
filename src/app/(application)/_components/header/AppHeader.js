@@ -72,10 +72,10 @@ export default function AppHeader({ module }) {
           WorkFlow <span className="font-light">{moduleName}</span>
         </h1>
 
-        <div className="hidden md:flex items-center bg-gray-100 px-5 py-3 rounded-full shadow-sm w-1/3">
+        {/* <div className="hidden md:flex items-center bg-gray-100 px-5 py-3 rounded-full shadow-sm w-1/3">
           <Search className="text-gray-500" size={16} />
           <input type="text" placeholder="Search..." className="ml-2 flex-grow bg-transparent text-gray-700 outline-none" />
-        </div>
+        </div> */}
 
         <div className="flex items-center space-x-6">
           <div className="relative cursor-pointer" onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}>
