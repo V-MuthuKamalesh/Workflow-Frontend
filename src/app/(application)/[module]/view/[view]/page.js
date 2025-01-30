@@ -5,10 +5,10 @@ import DevServiceDashboard from "../../../_components/dashboard/DevServiceDashbo
 import { cookies } from "next/headers";
 
 export default async function ViewPage({ params, searchParams }) {
-  const { module, view } = params;
-  let { userId, workspaceId } = searchParams;
+  const { module, view } = await params;
+  let { userId, workspaceId } = await searchParams;
 
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   userId = userId || cookieStore.get("userId")?.value;
 
   const isDashboardView = view === "dashboard";

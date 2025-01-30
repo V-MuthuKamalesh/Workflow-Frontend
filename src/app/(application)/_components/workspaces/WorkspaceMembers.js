@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Trash2, ArrowUpRight, ExternalLink } from "lucide-react";
 import { setMembers } from "@/redux/feautres/workspaceSlice";
 import { useDispatch } from "react-redux";
@@ -10,6 +10,7 @@ import Link from "next/link";
 import { groupMembers } from "@/app/_utils/helpers/helper";
 import { appBgColors, appButtonColors, appTextColors } from "@/app/_utils/constants/colors";
 import useCheckUserRole from "../../hooks/useCheckUserRole";
+import { socket } from "@/app/_utils/webSocket/webSocketConfig";
 
 export default function WorkspaceMembers({ module, workspaceId, members }) {
   const { isAdmin } = useCheckUserRole(Cookies.get("userId"), workspaceId);
@@ -21,6 +22,14 @@ export default function WorkspaceMembers({ module, workspaceId, members }) {
   const appTextColor = appTextColors[module];
   const appBgColor = appBgColors[module];
   const appButtonColor = appButtonColors[module];
+
+  useEffect(() => {
+    socket.on("memberAdded", (data) => {
+      dispatch(setMembers(data));
+    });
+
+    return () => socket.off("memberAdded");
+  }, [dispatch]);
 
   const handleMemberAction = async (action, userId) => {
     try {

@@ -11,7 +11,7 @@ export default function CreateWorkspaceButton() {
 
   return (
     <>
-      <button className="flex items-center justify-between w-full p-3 rounded-lg bg-gray-200 text-gray-800 hover:bg-gray-300 transition duration-200" onClick={toggleModal}>
+      <button className="mt-5 flex items-center justify-between w-full p-3 rounded-lg bg-gray-200 text-gray-800 hover:bg-gray-300 transition duration-200" onClick={toggleModal}>
         <span>Add Workspace</span>
         <Plus className="ml-auto" />
       </button>
