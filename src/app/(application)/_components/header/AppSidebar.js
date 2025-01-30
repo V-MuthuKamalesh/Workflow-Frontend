@@ -59,7 +59,7 @@ export default function AppSidebar({ module }) {
   };
 
   return (
-    <aside className="w-64 min-h-screen bg-white shadow-xl">
+    <aside className="w-64 max-h-screen bg-white shadow-xl">
       <div className={`${bgColor} shadow-lg min-h-screen p-4`}>
         {navLinks.map((item) => (
           <Link key={item.title} href={item.url} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200 transition duration-200">
