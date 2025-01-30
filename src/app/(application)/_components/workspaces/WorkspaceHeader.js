@@ -96,33 +96,25 @@ export default function WorkspaceHeader({ module, workspaceId, workspaceName, me
       <div className="text-white flex flex-col items-start space-y-3">
         <h1 className="text-3xl font-bold leading-tight">{workspaceName}</h1>
 
-        <CustomTooltip text={isAdmin ? "Edit workspace" : "You are not an admin. Editing workspace is not allowed."}>
-          <button onClick={() => isAdmin && setIsEditWorkspaceOpen(true)} className={`py-2 px-6 rounded-lg transition-colors duration-300 ${isAdmin ? "bg-gray-800 text-white hover:bg-gray-700" : "bg-gray-500 text-gray-300 cursor-not-allowed"}`} disabled={!isAdmin}>
-            <span>Edit Workspace</span>
-          </button>
-        </CustomTooltip>
+        <button title={isAdmin ? "Edit workspace" : "You are not an admin. Editing workspace is not allowed."} onClick={() => isAdmin && setIsEditWorkspaceOpen(true)} className={`py-2 px-6 rounded-lg transition-colors duration-300 ${isAdmin ? "bg-gray-800 text-white hover:bg-gray-700" : "bg-gray-500 text-gray-300 cursor-not-allowed"}`} disabled={!isAdmin}>
+          <span>Edit Workspace</span>
+        </button>
       </div>
 
       <div className="flex items-center gap-4">
-        <CustomTooltip text={isFavorite ? "Remove from favorites" : "Add to favorites"}>
-          <button onClick={toggleFavorite} className="text-yellow-400 hover:text-yellow-500 focus:outline-none">
-            {isFavorite ? <Star fill="yellow" size={24} /> : <Star fill="white" size={24} />}
-          </button>
-        </CustomTooltip>
+        <button title={isFavorite ? "Remove from favorites" : "Add to favorites"} onClick={toggleFavorite} className="text-yellow-400 hover:text-yellow-500 focus:outline-none">
+          {isFavorite ? <Star fill="yellow" size={24} /> : <Star fill="white" size={24} />}
+        </button>
 
         {isAdmin && (
-          <CustomTooltip text="Invite users into workspace">
-            <div className="flex items-center justify-center p-2 rounded-full hover:bg-gray-700 hover:text-gray-100 cursor-pointer transition duration-200" onClick={() => setIsInviteModalOpen(true)}>
-              <UserPlus fontSize="medium" />
-            </div>
-          </CustomTooltip>
+          <div title="Invite users into workspace" className="flex items-center justify-center p-2 rounded-full hover:bg-gray-700 hover:text-gray-100 cursor-pointer transition duration-200" onClick={() => setIsInviteModalOpen(true)}>
+            <UserPlus fontSize="medium" />
+          </div>
         )}
 
-        <CustomTooltip text="Exit Workspace">
-          <button onClick={handleExitWorkspace} className="text-red-400 hover:text-red-500 bg-white p-2 rounded-lg focus:outline-none">
-            <LogOut size={24} />
-          </button>
-        </CustomTooltip>
+        <button title="Exit Workspace" onClick={handleExitWorkspace} className="text-red-400 hover:text-red-500 bg-white p-2 rounded-lg focus:outline-none">
+          <LogOut size={24} />
+        </button>
       </div>
 
       <EditWorkspace isDialogOpen={isEditWorkspaceOpen} setIsDialogOpen={setIsEditWorkspaceOpen} module={module} workspaceId={workspaceId} workspaceName={workspaceName} />

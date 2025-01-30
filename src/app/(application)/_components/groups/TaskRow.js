@@ -139,11 +139,9 @@ export default function TaskRow({ module, item, fields, isAdmin }) {
           </td>
         ))}
         <td className="border border-gray-300 px-1 py-1 w-10">
-          <CustomTooltip text={!isAdmin ? "You are not an admin" : "Delete Task"}>
-            <span>
-              <Trash2 className={`${isAdmin ? "text-red-500 hover:text-red-700 cursor-pointer" : "text-gray-400 cursor-not-allowed"}`} onClick={isAdmin ? handleDeleteTask : undefined} />
-            </span>
-          </CustomTooltip>
+          <span title={!isAdmin ? "You are not an admin" : "Delete Task"}>
+            <Trash2 className={`${isAdmin ? "text-red-500 hover:text-red-700 cursor-pointer" : "text-gray-400 cursor-not-allowed"}`} onClick={isAdmin ? handleDeleteTask : undefined} />
+          </span>
         </td>
       </tr>
 

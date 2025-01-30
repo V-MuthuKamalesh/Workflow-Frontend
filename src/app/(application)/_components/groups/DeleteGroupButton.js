@@ -26,12 +26,8 @@ export default function DeleteGroupButton({ groupId, isAdmin }) {
   const tooltipText = isAdmin ? "Click to delete the group" : "You are not an admin";
 
   return (
-    <div className="relative group">
-      <button onClick={isAdmin ? handleDeleteGroup : () => {}} disabled={!isAdmin} className={`p-2 rounded-md shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-1 ${buttonClasses}`}>
-        <Trash2 className={`w-5 h-5 ${iconClasses}`} />
-      </button>
-
-      <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-max px-3 py-1 text-sm text-white bg-gray-900 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">{tooltipText}</div>
-    </div>
+    <button title={tooltipText} onClick={isAdmin ? handleDeleteGroup : () => {}} disabled={!isAdmin} className={`p-2 rounded-md shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-1 ${buttonClasses}`}>
+      <Trash2 className={`w-5 h-5 ${iconClasses}`} />
+    </button>
   );
 }

@@ -45,12 +45,9 @@ export default function Group({ module, boardType, group, isAdmin }) {
     }
 
     return (
-      <div className="relative group">
-        <span onClick={isAdmin ? () => setEditingGroupName(true) : () => {}} className={`cursor-pointer border border-transparent text-xl rounded-md px-2 py-1 transition ${isAdmin ? "hover:border-gray-400 text-lime-700" : "text-gray-400"}`}>
-          {groupName}
-        </span>
-        <div className="absolute hidden group-hover:block bg-gray-800 text-white text-sm rounded-md px-2 py-1 -bottom-8 left-1/2 transform -translate-x-1/2 whitespace-nowrap">{isAdmin ? "Click to edit group name" : "Only admins can edit the group name"}</div>
-      </div>
+      <span title={isAdmin ? "Click to edit group name" : "Only admins can edit the group name"} onClick={isAdmin ? () => setEditingGroupName(true) : () => {}} className={`cursor-pointer border border-transparent text-xl rounded-md px-2 py-1 transition ${isAdmin ? "hover:border-gray-400 text-lime-700" : "text-gray-400"}`}>
+        {groupName}
+      </span>
     );
   };
 
@@ -60,11 +57,9 @@ export default function Group({ module, boardType, group, isAdmin }) {
         {renderGroupName()}
 
         <div className="flex items-center space-x-6">
-          <CustomTooltip text="Export the group .xlsx">
-            <button onClick={() => handleExportGroup(group)} className="p-2 rounded-md bg-gray-500 text-white">
-              <Download className="w-5 h-5" />
-            </button>
-          </CustomTooltip>
+          <button onClick={() => handleExportGroup(group)} className="p-2 rounded-md bg-gray-500 text-white" title="Download Group">
+            <Download className="w-5 h-5" />
+          </button>
 
           <DeleteGroupButton groupId={group.groupId} isAdmin={isAdmin} />
         </div>

@@ -87,7 +87,7 @@ export default function WorkspaceMembers({ module, workspaceId, members }) {
               )}
 
               {isAdmin && member.role !== "admin" && (
-                <button onClick={() => handleMemberAction("promote", member.userId)} className="text-base text-white bg-zinc-700 hover:bg-zinc-800 p-2 rounded-lg transition-colors duration-200 flex items-center">
+                <button title={`Promote ${member.fullname} to Admin`} onClick={() => handleMemberAction("promote", member.userId)} className="text-base text-white bg-zinc-700 hover:bg-zinc-800 p-2 rounded-lg transition-colors duration-200 flex items-center">
                   <span>Promote</span>
                   <ArrowUpRight size={20} />
                 </button>

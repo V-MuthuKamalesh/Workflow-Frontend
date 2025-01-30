@@ -48,14 +48,11 @@ export default function AddTask({ module, groupId, isAdmin }) {
       <td colSpan="3">
         <form onSubmit={handleAddTask} className="flex items-center gap-2">
           <input type="text" placeholder="New task..." value={taskName} onChange={(e) => setTaskName(e.target.value)} className={`border rounded-md px-2 py-1 flex-grow focus:outline-none ${inputClasses}`} disabled={!isAdmin} />
-          <div className="relative group">
-            <button onClick={handleAddTask} disabled={!isAdmin} className={`flex items-center gap-1 px-2 py-1 rounded-md transition-all ${buttonClasses}`}>
-              <Plus className={`w-4 h-4 ${isAdmin ? "text-white" : "text-gray-100"}`} />
-              <span>Add Task</span>
-            </button>
 
-            <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-max px-3 py-1 text-sm text-white bg-gray-900 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">{tooltipText}</div>
-          </div>
+          <button title={tooltipText} onClick={handleAddTask} disabled={!isAdmin} className={`flex items-center gap-1 px-2 py-1 rounded-md transition-all ${buttonClasses}`}>
+            <Plus className={`w-4 h-4 ${isAdmin ? "text-white" : "text-gray-100"}`} />
+            <span>Add Task</span>
+          </button>
         </form>
       </td>
     </tr>

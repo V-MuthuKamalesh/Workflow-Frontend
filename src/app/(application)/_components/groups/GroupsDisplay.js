@@ -75,21 +75,16 @@ export default function GroupsDisplay({ module, workspaceId, boardId }) {
           {editingBoardName && isAdmin ? (
             <input type="text" value={boardName} onChange={handleBoardNameChange} onKeyDown={handleKeyDown} onBlur={handleBlur} className="text-center px-2 bg-transparent text-3xl font-extrabold text-indigo-600 focus:outline-none focus:ring focus:ring-indigo-400 focus:rounded-md" autoFocus />
           ) : (
-            <div className="relative group">
-              <h1 onClick={() => isAdmin && setEditingBoardName(true)} className={`text-3xl font-extrabold ${isAdmin ? "text-indigo-600 cursor-pointer border border-transparent rounded-md hover:border-gray-400" : "text-gray-400"} px-2 py-1 transition`}>
-                {boardName}
-              </h1>
-              <div className="absolute hidden group-hover:block bg-gray-800 text-white text-sm rounded-md px-2 py-1 -bottom-10 left-1/2 transform -translate-x-1/2 whitespace-nowrap">{isAdmin ? "Click to edit the board name" : "Only admins can edit the board name"}</div>
-            </div>
+            <h1 title={isAdmin ? "Click to edit the board name" : "Only admins can edit the board name"} onClick={() => isAdmin && setEditingBoardName(true)} className={`text-3xl font-extrabold ${isAdmin ? "text-indigo-600 cursor-pointer border border-transparent rounded-md hover:border-gray-400" : "text-gray-400"} px-2 py-1 transition`}>
+              {boardName}
+            </h1>
           )}
         </div>
 
         <div className="flex items-center space-x-6">
-          <CustomTooltip text="Download the board .xlsx">
-            <button onClick={() => handleExportBoard(boardData)} className="p-2 rounded-md bg-gray-500 text-white">
-              <Download className="w-5 h-5" />
-            </button>
-          </CustomTooltip>
+          <button title="Download the board .xlsx" onClick={() => handleExportBoard(boardData)} className="p-2 rounded-md bg-gray-500 text-white">
+            <Download className="w-5 h-5" />
+          </button>
           <AddGroupButton module={module} isAdmin={isAdmin} />
         </div>
       </div>
