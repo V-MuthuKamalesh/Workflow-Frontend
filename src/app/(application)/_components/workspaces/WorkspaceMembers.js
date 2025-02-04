@@ -39,7 +39,11 @@ export default function WorkspaceMembers({ module, workspaceId, members }) {
         depromote: "/users/dePromoteToMember",
       };
 
-      const response = await workflowBackend.post(endpoints[action], { workspaceId, userId, token: Cookies.get("authToken") }, { headers: { Authorization: `Bearer ${Cookies.get("authToken")}` } });
+      const response = await workflowBackend.post(
+        endpoints[action],
+        { workspaceId, userId, token: Cookies.get("authToken") },
+        { headers: { Authorization: `Bearer ${Cookies.get("authToken")}` } }
+      );
 
       if (response.status === 200) {
         let updatedMembers;
@@ -60,57 +64,68 @@ export default function WorkspaceMembers({ module, workspaceId, members }) {
   };
 
   return (
-    <div className="mt-6 p-4 bg-white shadow-md rounded-md">
-      <h3 className="text-xl font-semibold text-gray-700 mb-4">Workspace Members</h3>
-
-      <div className="flex space-x-2 border-b pb-2 mb-4">
+    <div className="mt-6 p-4 bg-white shadow-md rounded-md w-full">
+      <h3 className="text-xl font-semibold text-gray-700 mb-4 text-center md:text-left">Workspace Members</h3>
+      <div className="flex flex-wrap justify-center md:justify-start gap-2 border-b pb-2 mb-4">
         {Object.keys(groupedMembers).map((role) => (
-          <button key={role} onClick={() => setActiveTab(role)} className={`px-4 py-2 rounded-md text-sm font-medium ${activeTab === role ? `${appBgColor} text-white` : "bg-gray-100 text-gray-600 hover:bg-gray-200"} transition`}>
+          <button
+            key={role}
+            onClick={() => setActiveTab(role)}
+            className={`px-4 py-2 rounded-md text-sm font-medium ${
+              activeTab === role ? `${appBgColor} text-white` : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+            } transition`}
+          >
             {role.charAt(0).toUpperCase() + role.slice(1)} ({groupedMembers[role].length})
           </button>
         ))}
       </div>
-
       <ul className="space-y-2">
         {groupedMembers[activeTab].map((member) => (
-          <li key={member.userId} className="flex items-center p-3 h-14 bg-gray-50 rounded-md shadow-sm hover:shadow transition">
-            <div className={`flex-shrink-0 w-8 h-8 bg-blue-100 ${appTextColor} rounded-full flex items-center justify-center font-medium`}>{member.fullname.charAt(0)}</div>
-            <div className="ml-3 flex-grow">
+          <li
+            key={member.userId}
+            className="flex flex-col sm:flex-row items-center p-3 bg-gray-50 rounded-md shadow-sm hover:shadow transition space-y-2 sm:space-y-0 sm:space-x-4 w-full"
+          >
+            <div
+              className={`w-10 h-10 flex items-center justify-center rounded-full ${appTextColor} bg-blue-100 font-medium`}
+            >
+              {member.fullname.charAt(0)}
+            </div>
+            <div className="flex-grow text-center sm:text-left">
               <p className="text-sm font-medium text-gray-800">{member.fullname}</p>
               <p className="text-xs text-gray-500">{member.email}</p>
             </div>
-
-            <div className="flex items-center space-x-4">
-              {isAdmin && member.role === "member" && (
-                <Link href={`/${module}/view/dashboard?userId=${member.userId}&workspaceId=${workspaceId}`} className={`text-base text-white ${appButtonColor} p-2 rounded-lg transition-colors duration-200 flex items-center`}>
-                  <span>View Dashboard</span>
-                  <ExternalLink size={20} />
-                </Link>
-              )}
-
-              {isAdmin && member.role === "admin" && Cookies.get("userId") !== member.userId && (
-                <button onClick={() => handleMemberAction("depromote", member.userId)} className="text-base text-white bg-zinc-700 hover:bg-zinc-800 p-2 rounded-lg transition-colors duration-200 flex items-center">
-                  <span>Depromote</span>
-                  <ArrowUpRight size={20} />
-                </button>
-              )}
-
+            <div className="flex flex-wrap justify-center sm:justify-end gap-2">
               {isAdmin && member.role !== "admin" && (
-                <button title={`Promote ${member.fullname} to Admin`} onClick={() => handleMemberAction("promote", member.userId)} className="text-base text-white bg-zinc-700 hover:bg-zinc-800 p-2 rounded-lg transition-colors duration-200 flex items-center">
-                  <span>Promote</span>
-                  <ArrowUpRight size={20} />
+                <button
+                  onClick={() => handleMemberAction("promote", member.userId)}
+                  className="text-sm text-white bg-zinc-700 hover:bg-zinc-800 p-2 rounded-lg transition-colors flex items-center"
+                >
+                  Promote
                 </button>
               )}
-
+              {isAdmin && member.role === "admin" && Cookies.get("userId") !== member.userId && (
+                <button
+                  onClick={() => handleMemberAction("depromote", member.userId)}
+                  className="text-sm text-white bg-zinc-700 hover:bg-zinc-800 p-2 rounded-lg transition-colors flex items-center"
+                >
+                  Depromote
+                </button>
+              )}
               {isAdmin && member.role === "member" && (
-                <button onClick={() => handleMemberAction("delete", member.userId)} className="text-red-500 hover:text-red-600 transition-colors duration-200" title={`Remove ${member.fullname}`}>
-                  <Trash2 size={25} />
+                <button
+                  onClick={() => handleMemberAction("delete", member.userId)}
+                  className="text-red-500 hover:text-red-600 transition-colors text-sm"
+                  title={`Remove ${member.fullname}`}
+                >
+                  <Trash2 size={20} />
                 </button>
               )}
             </div>
           </li>
         ))}
-        {groupedMembers[activeTab].length === 0 && <p className="text-center text-gray-500 italic">No {activeTab} found.</p>}
+        {groupedMembers[activeTab].length === 0 && (
+          <p className="text-center text-gray-500 italic">No {activeTab} found.</p>
+        )}
       </ul>
     </div>
   );

@@ -7,7 +7,6 @@ export const fetchBoardsByWorkspaceId = createAsyncThunk("workspace/fetchBoardsB
       if (!response) {
         return rejectWithValue("Error fetching boards by workspace Id.");
       }
-      console.log(response);
       resolve(response);
     });
   });

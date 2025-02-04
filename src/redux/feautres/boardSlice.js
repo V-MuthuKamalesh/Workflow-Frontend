@@ -1,22 +1,19 @@
 import { socket } from "@/app/_utils/webSocket/webSocketConfig";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-export const fetchBoardData = createAsyncThunk(
-  "board/fetchBoardData",
-  async (boardId, { rejectWithValue }) => {
-    return new Promise((resolve) => {
-      socket.emit("getBoardById", { boardId }, (response) => {
-        if (response.error) {
-          return rejectWithValue(response.error);
-        }
+export const fetchBoardData = createAsyncThunk("board/fetchBoardData", async (boardId, { rejectWithValue }) => {
+  return new Promise((resolve) => {
+    socket.emit("getBoardById", { boardId }, (response) => {
+      if (response.error) {
+        return rejectWithValue(response.error);
+      }
 
-        console.log(response);
+      console.log(response);
 
-        resolve(response);
-      });
+      resolve(response);
     });
-  }
-);
+  });
+});
 
 export const boardSlice = createSlice({
   name: "board",
@@ -103,14 +100,6 @@ export const boardSlice = createSlice({
   },
 });
 
-export const {
-  setBoardData,
-  updateBoardName,
-  addGroup,
-  updateGroup,
-  addItemToGroup,
-  removeItemFromGroup,
-  updateTaskField,
-} = boardSlice.actions;
+export const { setBoardData, updateBoardName, addGroup, updateGroup, addItemToGroup, removeItemFromGroup, updateTaskField } = boardSlice.actions;
 
 export default boardSlice.reducer;

@@ -40,18 +40,18 @@ export default function WorkspaceDisplay({ module, workspaceId }) {
   return (
     <>
       <WorkspaceHeader module={module} workspaceId={workspaceId} workspaceName={workspaceName} members={members} />
-      <div className="container mx-auto px-4 py-8 space-y-8">
-        <section className="bg-white rounded-lg shadow-lg p-6 space-y-10">
+      <div className="container mx-auto px-4 py-6 sm:py-8 md:py-10 space-y-6 md:space-y-8">
+        <section className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8 space-y-6 md:space-y-10">
           <WorkspaceMembers module={module} workspaceId={workspaceId} members={members} />
-          <div className="space-y-8">
+          <div className="space-y-6 md:space-y-8">
             {isAdmin && (
               <div>
-                <h1 className="text-2xl font-semibold">Create Board</h1>
+                <h1 className="text-xl sm:text-2xl font-semibold">Create Board</h1>
                 <CreateBoard module={module} workspaceId={workspaceId} />
               </div>
             )}
             <div>
-              <h1 className="text-2xl font-semibold">Boards</h1>
+              <h1 className="text-xl sm:text-2xl font-semibold">Boards</h1>
               <BoardsDisplay module={module} />
             </div>
           </div>

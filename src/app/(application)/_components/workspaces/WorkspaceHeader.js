@@ -14,7 +14,6 @@ import { groupMembers } from "@/app/_utils/helpers/helper";
 import { appGradients } from "@/app/_utils/constants/colors";
 import { updateWorkspaceData } from "@/redux/feautres/workspaceSlice";
 import useCheckUserRole from "../../hooks/useCheckUserRole";
-import { CustomTooltip } from "../UI/CustomTooltip";
 
 export default function WorkspaceHeader({ module, workspaceId, workspaceName, members }) {
   const { isAdmin } = useCheckUserRole(Cookies.get("userId"), workspaceId);
@@ -31,7 +30,6 @@ export default function WorkspaceHeader({ module, workspaceId, workspaceName, me
     socket.on("workspaceNameUpdated", (data) => {
       dispatch(updateWorkspaceData({ field: "workspaceName", value: data.workspaceName }));
     });
-
     return () => {
       socket.off("workspaceNameUpdated");
     };
@@ -41,28 +39,22 @@ export default function WorkspaceHeader({ module, workspaceId, workspaceName, me
     socket.emit("isWorkspaceInFavourite", { workspaceId, type: module }, (response) => {
       if (response) {
         setIsFavorite(response.isFavourite);
-      } else {
-        console.error("Error checking if workspace is in favourite.");
       }
     });
   }, [workspaceId, module]);
 
   const toggleFavorite = () => {
     setIsFavorite((prev) => !prev);
-    socket.emit(isFavorite ? "removeFavouriteWorkspace" : "addFavouriteWorkspace", { workspaceId, type: module }, (response) => {
-      if (!response) {
-        console.error("Error toggling favorite workspace.");
-      }
-    });
+    socket.emit(isFavorite ? "removeFavouriteWorkspace" : "addFavouriteWorkspace", { workspaceId, type: module });
   };
 
   const handleExitWorkspace = async () => {
-    if (groupedMembers.admin.length === 1) {
-      if (groupedMembers.member.length === 0) {
-        alert("You cannot exit the workspace because you are the only admin, and there are no members left. Please delete the workspace instead.");
+    if (isAdmin) {
+      if (groupedMembers.admin.length === 1 && groupedMembers.member.length === 0) {
+        alert("You cannot exit the workspace as the only admin. Please delete it instead.");
         return;
-      } else {
-        alert("You cannot exit the workspace as the only admin. Please promote another member to admin before you leave.");
+      } else if (groupedMembers.admin.length === 1 && groupedMembers.member.length > 0) {
+        alert("You cannot exit the workspace as only admin have access. Please promote someone to admin first.");
         return;
       }
     }
@@ -70,16 +62,8 @@ export default function WorkspaceHeader({ module, workspaceId, workspaceName, me
     try {
       const response = await workflowBackend.post(
         "/users/removeMember",
-        {
-          workspaceId,
-          userId: Cookies.get("userId"),
-          token: Cookies.get("authToken"),
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("authToken")}`,
-          },
-        }
+        { workspaceId, userId: Cookies.get("userId") },
+        { headers: { Authorization: `Bearer ${Cookies.get("authToken")}` } }
       );
 
       if (response.status === 200) {
@@ -92,32 +76,52 @@ export default function WorkspaceHeader({ module, workspaceId, workspaceName, me
   };
 
   return (
-    <div className={`bg-gradient-to-r ${bgColor} w-full p-6 rounded-lg shadow-lg flex justify-between items-center`}>
-      <div className="text-white flex flex-col items-start space-y-3">
-        <h1 className="text-3xl font-bold leading-tight">{workspaceName}</h1>
+    <div
+      className={`bg-gradient-to-r ${bgColor} w-full p-4 md:p-6 rounded-lg shadow-lg flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0`}
+    >
+      <div className="text-white flex flex-col items-center md:items-start text-center md:text-left space-y-2">
+        <h1 className="text-2xl sm:text-3xl font-bold leading-tight">{workspaceName}</h1>
 
-        <button title={isAdmin ? "Edit workspace" : "You are not an admin. Editing workspace is not allowed."} onClick={() => isAdmin && setIsEditWorkspaceOpen(true)} className={`py-2 px-6 rounded-lg transition-colors duration-300 ${isAdmin ? "bg-gray-800 text-white hover:bg-gray-700" : "bg-gray-500 text-gray-300 cursor-not-allowed"}`} disabled={!isAdmin}>
-          <span>Edit Workspace</span>
+        <button
+          onClick={() => setIsEditWorkspaceOpen(true)}
+          className="py-2 px-4 md:px-6 rounded-lg bg-gray-800 text-white hover:bg-gray-700 text-sm md:text-base"
+          title={!isAdmin ? "You are not an admin" : ""}
+          disabled={!isAdmin}
+        >
+          Edit Workspace
         </button>
       </div>
 
-      <div className="flex items-center gap-4">
-        <button title={isFavorite ? "Remove from favorites" : "Add to favorites"} onClick={toggleFavorite} className="text-yellow-400 hover:text-yellow-500 focus:outline-none">
-          {isFavorite ? <Star fill="yellow" size={24} /> : <Star fill="white" size={24} />}
+      <div className="flex items-center gap-3 md:gap-4">
+        <button
+          title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+          onClick={toggleFavorite}
+          className="text-yellow-400 hover:text-yellow-500"
+        >
+          {isFavorite ? <Star fill="yellow" size={20} /> : <Star fill="white" size={20} />}
         </button>
 
         {isAdmin && (
-          <div title="Invite users into workspace" className="flex items-center justify-center p-2 rounded-full hover:bg-gray-700 hover:text-gray-100 cursor-pointer transition duration-200" onClick={() => setIsInviteModalOpen(true)}>
-            <UserPlus fontSize="medium" />
-          </div>
+          <button
+            onClick={() => setIsInviteModalOpen(true)}
+            className="p-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg"
+          >
+            <UserPlus size={20} />
+          </button>
         )}
 
-        <button title="Exit Workspace" onClick={handleExitWorkspace} className="text-red-400 hover:text-red-500 bg-white p-2 rounded-lg focus:outline-none">
-          <LogOut size={24} />
+        <button onClick={handleExitWorkspace} className="p-2 bg-red-500 hover:bg-red-400 text-white rounded-lg">
+          <LogOut size={20} />
         </button>
       </div>
 
-      <EditWorkspace isDialogOpen={isEditWorkspaceOpen} setIsDialogOpen={setIsEditWorkspaceOpen} module={module} workspaceId={workspaceId} workspaceName={workspaceName} />
+      <EditWorkspace
+        isDialogOpen={isEditWorkspaceOpen}
+        setIsDialogOpen={setIsEditWorkspaceOpen}
+        module={module}
+        workspaceId={workspaceId}
+        workspaceName={workspaceName}
+      />
       <Invite isOpen={isInviteModalOpen} onClose={() => setIsInviteModalOpen(false)} />
     </div>
   );

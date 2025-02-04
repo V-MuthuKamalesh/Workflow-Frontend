@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Search, Bell, RefreshCcw } from "lucide-react";
+import { Bell, RefreshCcw, Menu, X } from "lucide-react";
 import ModuleSwitcher from "./ModuleSwitcher";
 import UserProfile from "./UserProfile";
 import NotificationsModal from "./NotificationsModal";
@@ -10,8 +10,10 @@ import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 import Cookies from "js-cookie";
 import { appBgColors, moduleColors } from "@/app/_utils/constants/colors";
 import Image from "next/image";
+import AppSidebar from "./AppSidebar";
 
 export default function AppHeader({ module }) {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
@@ -23,12 +25,8 @@ export default function AppHeader({ module }) {
   const fetchUserDetails = useCallback(async () => {
     try {
       const response = await workflowBackend.get("/users/getuserdetails", {
-        params: {
-          userId: Cookies.get("userId"),
-        },
-        headers: {
-          Authorization: `Bearer ${Cookies.get("authToken")}`,
-        },
+        params: { userId: Cookies.get("userId") },
+        headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
       });
       setUserDetails(response.data);
     } catch (error) {
@@ -66,16 +64,17 @@ export default function AppHeader({ module }) {
     .join(" ");
 
   return (
-    <header className={`${bgColor} text-gray-700 h-16 flex items-center justify-between px-6 sticky top-0 z-50 border-b border-gray-200 shadow-sm`}>
-      <nav className="flex items-center justify-between w-full">
-        <h1 className="text-slate-800 text-2xl font-semibold">
-          WorkFlow <span className="font-light">{moduleName}</span>
-        </h1>
+    <>
+      <header className={`${bgColor} text-gray-700 h-16 flex items-center justify-between px-6 sticky top-0 z-50 border-b border-gray-200 shadow-sm`}>
+        <div className="flex items-center space-x-4">
+          <button onClick={() => setIsSidebarOpen(true)} className="md:hidden p-2 rounded-lg hover:bg-gray-200 transition">
+            <Menu className="text-gray-700" size={24} />
+          </button>
 
-        {/* <div className="hidden md:flex items-center bg-gray-100 px-5 py-3 rounded-full shadow-sm w-1/3">
-          <Search className="text-gray-500" size={16} />
-          <input type="text" placeholder="Search..." className="ml-2 flex-grow bg-transparent text-gray-700 outline-none" />
-        </div> */}
+          <h1 className="hidden sm:block text-slate-800 text-2xl font-semibold">
+            WorkFlow <span className="font-light">{moduleName}</span>
+          </h1>
+        </div>
 
         <div className="flex items-center space-x-6">
           <div className="relative cursor-pointer" onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}>
@@ -97,11 +96,26 @@ export default function AppHeader({ module }) {
             )}
           </div>
         </div>
-      </nav>
+      </header>
+
+      {isSidebarOpen && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex">
+          <div className="w-64 h-full bg-white shadow-lg transform transition-transform translate-x-0">
+            <div className="flex items-center justify-between p-4 bg-zinc-900">
+              <h1 className="pl-3 text-gray-100">{moduleName}</h1>
+              <button onClick={() => setIsSidebarOpen(false)} className="text-gray-600 hover:text-gray-800">
+                <X size={24} className="text-red-600" />
+              </button>
+            </div>
+            <AppSidebar module={module} />
+          </div>
+          <div className="flex-1" onClick={() => setIsSidebarOpen(false)}></div>
+        </div>
+      )}
 
       {isNotificationsOpen && <NotificationsModal isOpen={isNotificationsOpen} setIsOpen={setIsNotificationsOpen} setUnreadCount={setUnreadCount} notifications={notifications} setNotifications={setNotifications} bgColor={appBgColor} />}
       <ModuleSwitcher isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
       <UserProfile isProfileOpen={isProfileOpen} setIsProfileOpen={setIsProfileOpen} userDetails={userDetails} />
-    </header>
+    </>
   );
 }

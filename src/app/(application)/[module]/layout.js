@@ -13,11 +13,11 @@ export default async function Layout({ children, params }) {
       <AppHeader module={module} />
 
       <div className="flex flex-1">
-        <div className="w-64 fixed left-0 top-16 h-screen z-50">
+        <aside className="w-64 fixed left-0 top-16 h-screen hidden md:block">
           <AppSidebar module={module} />
-        </div>
+        </aside>
 
-        <main className="flex-1 ml-64 p-6">
+        <main className="flex-1 md:ml-64 p-4 md:p-6">
           <section className={`min-h-32 ${sectionBgColor} mb-5 rounded-lg p-6 shadow`}>{children}</section>
         </main>
       </div>

@@ -42,7 +42,7 @@ export default function AddTask({ module, groupId, isAdmin }) {
   const inputClasses = isAdmin ? "border-gray-300" : "border-gray-200 bg-gray-100 cursor-not-allowed";
 
   const tooltipText = isAdmin ? "Click to add a new task" : "You are not an admin";
-
+      
   return (
     <tr>
       <td colSpan="3">
@@ -57,4 +57,4 @@ export default function AddTask({ module, groupId, isAdmin }) {
       </td>
     </tr>
   );
-}
+} 
