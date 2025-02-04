@@ -15,6 +15,7 @@ export default function FavoriteWorkspacesAndBoards({ module }) {
 
   useEffect(() => {
     const userId = Cookies.get("userId");
+
     if (!userId) {
       console.error("User ID not found.");
       setIsLoading(false);

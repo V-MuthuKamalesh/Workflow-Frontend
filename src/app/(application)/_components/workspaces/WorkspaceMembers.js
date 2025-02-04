@@ -94,27 +94,29 @@ export default function WorkspaceMembers({ module, workspaceId, members }) {
               <p className="text-sm font-medium text-gray-800">{member.fullname}</p>
               <p className="text-xs text-gray-500">{member.email}</p>
             </div>
-            <div className="flex flex-wrap justify-center sm:justify-end gap-2">
+            <div className="flex flex-wrap justify-center sm:justify-end gap-3 w-full sm:w-auto">
+              {isAdmin && member.role === "member" && (
+                <Link
+                  href={`/${module}/view/dashboard?userId=${member.userId}&workspaceId=${workspaceId}`}
+                  className={`text-sm text-white ${appButtonColor} p-2 rounded-lg transition-colors duration-200 flex items-center justify-center w-full sm:w-auto`}
+                >
+                  <span>View Dashboard</span>
+                  <ExternalLink size={20} className="ml-1" />
+                </Link>
+              )}
               {isAdmin && member.role !== "admin" && (
                 <button
                   onClick={() => handleMemberAction("promote", member.userId)}
-                  className="text-sm text-white bg-zinc-700 hover:bg-zinc-800 p-2 rounded-lg transition-colors flex items-center"
+                  className="text-sm text-white bg-zinc-700 hover:bg-zinc-800 p-2 rounded-lg transition-colors flex items-center justify-center w-full sm:w-auto"
                 >
                   Promote
-                </button>
-              )}
-              {isAdmin && member.role === "admin" && Cookies.get("userId") !== member.userId && (
-                <button
-                  onClick={() => handleMemberAction("depromote", member.userId)}
-                  className="text-sm text-white bg-zinc-700 hover:bg-zinc-800 p-2 rounded-lg transition-colors flex items-center"
-                >
-                  Depromote
+                  <ArrowUpRight size={20} className="ml-1" />
                 </button>
               )}
               {isAdmin && member.role === "member" && (
                 <button
                   onClick={() => handleMemberAction("delete", member.userId)}
-                  className="text-red-500 hover:text-red-600 transition-colors text-sm"
+                  className="text-red-500 hover:text-red-600 transition-colors text-sm flex items-center justify-center w-full sm:w-auto"
                   title={`Remove ${member.fullname}`}
                 >
                   <Trash2 size={20} />
