@@ -70,7 +70,10 @@ export const createNewItem = (module, boardType, initialValue = "") => {
     },
   };
 
-  const newItem = typeof newItemTemplate[module] === "function" ? newItemTemplate[module]() : newItemTemplate[module]?.[boardType]?.() || {};
+  const newItem =
+    typeof newItemTemplate[module] === "function"
+      ? newItemTemplate[module]()
+      : newItemTemplate[module]?.[boardType]?.() || {};
 
   return newItem;
 };

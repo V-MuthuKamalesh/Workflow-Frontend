@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Trash2, ArrowUpRight, ExternalLink } from "lucide-react";
+import { Trash2, ArrowUpRight, ExternalLink, ArrowDown } from "lucide-react";
 import { setMembers } from "@/redux/feautres/workspaceSlice";
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
@@ -95,6 +95,15 @@ export default function WorkspaceMembers({ module, workspaceId, members }) {
               <p className="text-xs text-gray-500">{member.email}</p>
             </div>
             <div className="flex flex-wrap justify-center sm:justify-end gap-3 w-full sm:w-auto">
+              {isAdmin && member.role === "admin" && member.userId !== Cookies.get("userId") && (
+                <button
+                  onClick={() => handleMemberAction("depromote", member.userId)}
+                  className="text-sm text-white bg-zinc-700 hover:bg-zinc-800 p-2 rounded-lg transition-colors flex items-center justify-center w-full sm:w-auto"
+                >
+                  DePromote
+                  <ArrowDown size={20} className="ml-1" />
+                </button>
+              )}
               {isAdmin && member.role === "member" && (
                 <Link
                   href={`/${module}/view/dashboard?userId=${member.userId}&workspaceId=${workspaceId}`}

@@ -11,17 +11,25 @@ export default async function ApplicationLayout({ children }) {
 
   let userDetails;
 
-  if (userId && authToken) {
-    const response = await workflowBackend.get("/users/getuserdetails", {
-      params: {
-        userId,
-      },
-      headers: {
-        Authorization: `Bearer ${authToken}`,
-      },
+  try {
+    const response = await workflowBackend.post("/users/tokenexpired", {
+      token: authToken,
     });
 
-    userDetails = response.data;
+    if (response.status === 200 && userId && authToken) {
+      const response = await workflowBackend.get("/users/getuserdetails", {
+        params: {
+          userId,
+        },
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+
+      userDetails = response.data;
+    }
+  } catch (err) {
+    console.error("Error fetching user details:", err);
   }
 
   return (
