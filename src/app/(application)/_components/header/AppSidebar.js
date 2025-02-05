@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ChevronDown, Star, BarChart } from "lucide-react";
+import { ChevronDown, Star, BarChart, LogOut } from "lucide-react";
 import Link from "next/link";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,7 +15,7 @@ import CreateWorkspaceButton from "../workspaces/CreateWorkspaceButton";
 export default function AppSidebar({ module }) {
   const dispatch = useDispatch();
   const { workspaces } = useSelector((state) => state.userDetails);
-  const { workspaceId, workspaceName, loading, error } = useSelector((state) => state.workspace);
+  const { workspaceId, workspaceName, error } = useSelector((state) => state.workspace);
   const pathName = usePathname();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -64,7 +64,11 @@ export default function AppSidebar({ module }) {
     <aside className="w-64 max-h-screen bg-white shadow-xl">
       <div className={`${bgColor} shadow-lg min-h-screen p-4`}>
         {navLinks.map((item) => (
-          <Link key={item.title} href={item.url} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200 transition duration-200">
+          <Link
+            key={item.title}
+            href={item.url}
+            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200 transition duration-200"
+          >
             <item.icon className="text-gray-600" />
             <span className="font-medium text-gray-800">{item.title}</span>
           </Link>
@@ -72,8 +76,11 @@ export default function AppSidebar({ module }) {
 
         <CreateWorkspaceButton />
 
-        <div className="relative mt-4">
-          <button className="w-full flex justify-between items-center bg-gray-200 text-gray-800 hover:bg-gray-300 rounded-lg px-4 py-2" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+        <div className="mt-4">
+          <button
+            className="w-full flex justify-between items-center bg-gray-200 text-gray-800 hover:bg-gray-300 rounded-lg px-4 py-2"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          >
             <span>Select Workspace</span>
             <ChevronDown className={`ml-auto transition-transform ${isDropdownOpen ? "rotate-180" : "rotate-0"}`} />
           </button>
@@ -87,7 +94,15 @@ export default function AppSidebar({ module }) {
                 <ul className="space-y-1 p-2">
                   {workspaces.map((workspace) => (
                     <li key={workspace.workspaceId}>
-                      <Link href={`/${module}/workspace/${workspace.workspaceId}`} onClick={() => handleWorkspaceSelect(workspace.workspaceId)} className={`block px-4 py-2 rounded-md transition-colors duration-200 ${workspaceId === workspace.workspaceId ? `${bgColor} ${appTextColor} font-medium` : "hover:bg-gray-100"}`}>
+                      <Link
+                        href={`/${module}/workspace/${workspace.workspaceId}`}
+                        onClick={() => handleWorkspaceSelect(workspace.workspaceId)}
+                        className={`block px-4 py-2 rounded-md transition-colors duration-200 ${
+                          workspaceId === workspace.workspaceId
+                            ? `${bgColor} ${appTextColor} font-medium`
+                            : "hover:bg-gray-100"
+                        }`}
+                      >
                         {workspace.workspaceName}
                       </Link>
                     </li>

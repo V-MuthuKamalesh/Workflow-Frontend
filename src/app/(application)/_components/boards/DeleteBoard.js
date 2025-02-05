@@ -6,6 +6,7 @@ import { Trash2 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import useCheckUserRole from "../../hooks/useCheckUserRole";
 import Cookies from "js-cookie";
+import { removeBoardFromFavorites } from "@/redux/feautres/favoritesSlice";
 
 export default function DeleteBoard({ workspaceId, boardId }) {
   const dispatch = useDispatch();
@@ -21,11 +22,20 @@ export default function DeleteBoard({ workspaceId, boardId }) {
       }
 
       dispatch(removeBoard(boardId));
+      dispatch(removeBoardFromFavorites(boardId));
     });
   };
 
   return (
-    <div onClick={handleDelete} disabled={!isAdmin} aria-label="Delete board" title={isAdmin ? "Delete Board" : "Admin access required"} className={`text-gray-500 z-50 ${isAdmin ? "hover:text-red-500 transition duration-100 cursor-pointer" : "cursor-not-allowed"}`}>
+    <div
+      onClick={handleDelete}
+      disabled={!isAdmin}
+      aria-label="Delete board"
+      title={isAdmin ? "Delete Board" : "Admin access required"}
+      className={`text-gray-500 z-50 ${
+        isAdmin ? "hover:text-red-500 transition duration-100 cursor-pointer" : "cursor-not-allowed"
+      }`}
+    >
       <Trash2 />
     </div>
   );

@@ -46,14 +46,31 @@ export default function CreateWorkspace({ onClose }) {
         <p className="text-gray-600 mb-4 text-base">Start organizing your projects and collaborating seamlessly.</p>
 
         <div className="mb-4">
-          <input type="text" placeholder="Workspace Name" value={workspaceName} onChange={handleInputChange} className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base" />
+          <input
+            type="text"
+            placeholder="Workspace Name"
+            value={workspaceName}
+            onChange={handleInputChange}
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
+          />
         </div>
 
         <div className="flex justify-end gap-4">
-          <button onClick={onClose} className="px-5 py-2 border border-red-500 text-red-500 rounded-md hover:bg-red-50 focus:outline-none text-base">
+          <button
+            onClick={onClose}
+            className="px-5 py-2 border border-red-500 text-red-500 rounded-md hover:bg-red-50 focus:outline-none text-base"
+          >
             Cancel
           </button>
-          <button onClick={handleWorkspaceCreation} disabled={!workspaceName.trim()} className={`px-5 py-2 rounded-md flex items-center text-base ${workspaceName.trim() ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-gray-300 text-gray-500 cursor-not-allowed"}`}>
+          <button
+            onClick={handleWorkspaceCreation}
+            disabled={!workspaceName.trim()}
+            className={`px-5 py-2 rounded-md flex items-center text-base ${
+              workspaceName.trim()
+                ? "bg-blue-600 text-white hover:bg-blue-700"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            }`}
+          >
             <Plus size={16} className="mr-2" />
             Create Workspace
           </button>

@@ -16,7 +16,10 @@ export default function BoardCard({ module, workspaceId, workspaceName, boardId,
   };
 
   return (
-    <div className="max-w-xs border border-gray-300 rounded-md p-4 mb-10 hover:shadow-lg transition duration-200 relative cursor-pointer" onClick={handleBoardClick}>
+    <div
+      className="max-w-xs border border-gray-300 rounded-md p-4 mb-10 hover:shadow-lg transition duration-200 relative cursor-pointer"
+      onClick={handleBoardClick}
+    >
       <Image className="rounded-md" src="/board.webp" alt="board" height={500} width={500} priority />
 
       <div className="flex flex-col space-y-2 mt-2 ml-2">
@@ -25,7 +28,12 @@ export default function BoardCard({ module, workspaceId, workspaceName, boardId,
             <BarChartHorizontal className="text-gray-600" />
             <span>{boardName}</span>
           </div>
-          <TooltipButton onClick={toggleFavorite} tooltipText={isFavorite ? "Remove from Favorites" : "Add to Favorites"} isActive={isFavorite} activeClass="text-yellow-500">
+          <TooltipButton
+            onClick={toggleFavorite}
+            tooltipText={isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+            isActive={isFavorite}
+            activeClass="text-yellow-500"
+          >
             <Star fill={isFavorite ? "yellow" : "none"} className={isFavorite ? "text-yellow-500" : "text-gray-600"} />
           </TooltipButton>
         </h1>

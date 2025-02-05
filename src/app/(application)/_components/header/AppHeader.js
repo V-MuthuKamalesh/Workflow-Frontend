@@ -65,9 +65,14 @@ export default function AppHeader({ module }) {
 
   return (
     <>
-      <header className={`${bgColor} text-gray-700 h-16 flex items-center justify-between px-6 sticky top-0 z-50 border-b border-gray-200 shadow-sm`}>
+      <header
+        className={`${bgColor} text-gray-700 h-16 flex items-center justify-between px-6 sticky top-0 border-b border-gray-200 shadow-sm`}
+      >
         <div className="flex items-center space-x-4">
-          <button onClick={() => setIsSidebarOpen(true)} className="md:hidden p-2 rounded-lg hover:bg-gray-200 transition">
+          <button
+            onClick={() => setIsSidebarOpen(true)}
+            className="md:hidden p-2 rounded-lg hover:bg-gray-200 transition"
+          >
             <Menu className="text-gray-700" size={24} />
           </button>
 
@@ -79,7 +84,11 @@ export default function AppHeader({ module }) {
         <div className="flex items-center space-x-6">
           <div className="relative cursor-pointer" onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}>
             <Bell className="text-gray-600 hover:text-gray-800 transition" size={20} />
-            {unreadCount > 0 && <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1">{unreadCount}</span>}
+            {unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1">
+                {unreadCount}
+              </span>
+            )}
           </div>
 
           <div className="cursor-pointer hover:bg-gray-200 p-2 rounded-full" onClick={() => setIsModalOpen(true)}>
@@ -90,9 +99,21 @@ export default function AppHeader({ module }) {
             {loadingProfile ? (
               <div className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-200 animate-pulse"></div>
             ) : userDetails?.picture ? (
-              <Image src={userDetails.picture.startsWith("http") ? userDetails.picture : `data:image/png;base64,${userDetails.picture}`} alt="Profile" height={100} width={100} className="w-10 h-10 rounded-full" />
+              <Image
+                src={
+                  userDetails.picture.startsWith("http")
+                    ? userDetails.picture
+                    : `data:image/png;base64,${userDetails.picture}`
+                }
+                alt="Profile"
+                height={100}
+                width={100}
+                className="w-10 h-10 rounded-full"
+              />
             ) : (
-              <div className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-500 text-white text-lg">{userDetails?.fullname?.charAt(0).toUpperCase()}</div>
+              <div className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-500 text-white text-lg">
+                {userDetails?.fullname?.charAt(0).toUpperCase()}
+              </div>
             )}
           </div>
         </div>
@@ -113,7 +134,16 @@ export default function AppHeader({ module }) {
         </div>
       )}
 
-      {isNotificationsOpen && <NotificationsModal isOpen={isNotificationsOpen} setIsOpen={setIsNotificationsOpen} setUnreadCount={setUnreadCount} notifications={notifications} setNotifications={setNotifications} bgColor={appBgColor} />}
+      {isNotificationsOpen && (
+        <NotificationsModal
+          isOpen={isNotificationsOpen}
+          setIsOpen={setIsNotificationsOpen}
+          setUnreadCount={setUnreadCount}
+          notifications={notifications}
+          setNotifications={setNotifications}
+          bgColor={appBgColor}
+        />
+      )}
       <ModuleSwitcher isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
       <UserProfile isProfileOpen={isProfileOpen} setIsProfileOpen={setIsProfileOpen} userDetails={userDetails} />
     </>
