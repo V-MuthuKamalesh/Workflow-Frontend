@@ -82,10 +82,20 @@ export default function CreateBoard({ module, workspaceId }) {
   return (
     <form onSubmit={handleCreateBoard} className="mt-1 max-w-md">
       <div className="flex flex-col space-y-4">
-        <input type="text" value={boardName} onChange={handleInputChange("boardName")} placeholder="Enter board name" className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        <input
+          type="text"
+          value={boardName}
+          onChange={handleInputChange("boardName")}
+          placeholder="Enter board name"
+          className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
 
         {moduleOptions.length > 0 && (
-          <select value={boardType} onChange={handleInputChange("boardType")} className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <select
+            value={boardType}
+            onChange={handleInputChange("boardType")}
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
             <option value="" disabled>
               Select type
             </option>
@@ -97,7 +107,14 @@ export default function CreateBoard({ module, workspaceId }) {
           </select>
         )}
 
-        <button type="submit" disabled={isCreateDisabled} title={isCreateDisabled ? "Enter Board Name" : "Create Board"} className={`px-6 py-2 text-white rounded-lg ${isCreateDisabled ? "bg-gray-400 cursor-not-allowed" : appButtonColor}`}>
+        <button
+          type="submit"
+          disabled={isCreateDisabled}
+          title={isCreateDisabled ? "Enter Board Name" : "Create Board"}
+          className={`px-6 py-2 text-white rounded-lg ${
+            isCreateDisabled ? "bg-gray-400 cursor-not-allowed" : appButtonColor
+          }`}
+        >
           {loading ? "Creating..." : "Create"}
         </button>
 
