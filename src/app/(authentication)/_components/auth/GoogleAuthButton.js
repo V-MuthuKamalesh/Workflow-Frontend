@@ -1,7 +1,6 @@
 "use client";
 
 import { useGoogleLogin } from "@react-oauth/google";
-import { fetchUserInfo } from "@/app/_utils/api/googleAuth";
 import { workflowBackend } from "@/app/_utils/api/axiosConfig";
 import { useRouter } from "next/navigation";
 import { setCookies } from "@/app/_utils/helpers/cookies";
@@ -12,15 +11,7 @@ export default function GoogleAuthButton({ text, className, type }) {
 
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      const userInfoFromGoogle = await fetchUserInfo(
-        tokenResponse.token_type,
-        tokenResponse.access_token
-      );
-
-      const response = await workflowBackend.post(
-        "/users/oauth",
-        userInfoFromGoogle
-      );
+      const response = await workflowBackend.post("/users/oauth", { accessToken: tokenResponse.access_token });
 
       if (response.status === 200) {
         setCookies("fullName", response.data.userName);
