@@ -9,17 +9,11 @@ export async function middleware(request) {
   }
 
   try {
-    const response = await workflowBackend.post(
-      "/users/tokenexpired",
-      {
-        token: authToken.value,
+    const response = await workflowBackend.get("/users/tokenexpired", {
+      headers: {
+        Authorization: `Bearer ${authToken.value}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${authToken.value}`,
-        },
-      }
-    );
+    });
 
     if (response.status !== 200) {
       return NextResponse.redirect(new URL("/auth/signin", request.url));
@@ -54,9 +48,5 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: [
-    "/:module/view/:view",
-    "/:module/boards/:boardId",
-    "/:module/workspace/:workspaceId",
-  ],
+  matcher: ["/:module/view/:view", "/:module/boards/:boardId", "/:module/workspace/:workspaceId"],
 };

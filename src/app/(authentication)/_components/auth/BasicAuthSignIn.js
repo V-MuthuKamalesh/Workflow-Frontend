@@ -52,8 +52,26 @@ export default function BasicAuthSignIn() {
       )}
 
       <form onSubmit={handleSubmit} className="w-full flex flex-col items-center space-y-4">
-        <Input title="Your Email Address" type="email" placeholder="name@company.com" name="email" value={formData.email} onChange={handleFormDataChange} autoComplete="off" required />
-        <Input title="Your Password" type="password" placeholder="Password" minLength="5" name="password" value={formData.password} onChange={handleFormDataChange} required />
+        <Input
+          title="Your Email Address"
+          type="email"
+          placeholder="name@company.com"
+          name="email"
+          value={formData.email}
+          onChange={handleFormDataChange}
+          autoComplete="off"
+          required
+        />
+        <Input
+          title="Your Password"
+          type="password"
+          placeholder="Password"
+          minLength="5"
+          name="password"
+          value={formData.password}
+          onChange={handleFormDataChange}
+          required
+        />
         <Button buttonText="Log In" />
       </form>
     </div>

@@ -60,9 +60,11 @@ export default function WorkspaceHeader({ module, workspaceId, workspaceName, me
     }
 
     try {
-      const response = await workflowBackend.post(
+      const response = await workflowBackend.delete(
         "/users/removeMember",
-        { workspaceId, userId: Cookies.get("userId") },
+        {
+          params: { workspaceId, userId: Cookies.get("userId") },
+        },
         { headers: { Authorization: `Bearer ${Cookies.get("authToken")}` } }
       );
 

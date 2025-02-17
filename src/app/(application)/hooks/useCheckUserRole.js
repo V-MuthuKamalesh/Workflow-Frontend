@@ -11,7 +11,10 @@ export default function useCheckUserRole(userId, workspaceId) {
     if (!userId || !workspaceId) return setIsAdmin(false);
 
     try {
-      const { data } = await workflowBackend.post("/users/checkRole", { workspaceId, userId }, { headers: { Authorization: `Bearer ${Cookies.get("authToken")}` } });
+      const { data } = await workflowBackend.get("/users/checkRole", {
+        params: { workspaceId, userId },
+        headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
+      });
 
       setIsAdmin(data.role === "admin");
     } catch (error) {

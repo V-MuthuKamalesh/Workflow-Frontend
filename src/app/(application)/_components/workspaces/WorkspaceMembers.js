@@ -39,11 +39,20 @@ export default function WorkspaceMembers({ module, workspaceId, members }) {
         depromote: "/users/dePromoteToMember",
       };
 
-      const response = await workflowBackend.post(
-        endpoints[action],
-        { workspaceId, userId, token: Cookies.get("authToken") },
-        { headers: { Authorization: `Bearer ${Cookies.get("authToken")}` } }
-      );
+      let response;
+
+      if (action === "delete") {
+        response = await workflowBackend.delete(endpoints.delete, {
+          params: { workspaceId, userId },
+          headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
+        });
+      } else {
+        response = await workflowBackend.patch(
+          endpoints[action],
+          { workspaceId, userId },
+          { headers: { Authorization: `Bearer ${Cookies.get("authToken")}` } }
+        );
+      }
 
       if (response.status === 200) {
         let updatedMembers;

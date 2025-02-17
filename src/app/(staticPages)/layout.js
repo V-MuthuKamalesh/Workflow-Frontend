@@ -12,8 +12,10 @@ export default async function ApplicationLayout({ children }) {
   let userDetails;
 
   try {
-    const response = await workflowBackend.post("/users/tokenexpired", {
-      token: authToken,
+    const response = await workflowBackend.get("/users/tokenexpired", {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
     });
 
     if (response.status === 200 && userId && authToken) {

@@ -9,7 +9,6 @@ import Priority from "../UI/Priority";
 import RequestType from "../UI/RequestType";
 import Status from "../UI/Status";
 import { socket } from "@/app/_utils/webSocket/webSocketConfig";
-import { CustomTooltip } from "../UI/CustomTooltip";
 
 export default function TaskRow({ module, item, fields, isAdmin }) {
   const [editingField, setEditingField] = useState(null);
